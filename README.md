@@ -1,33 +1,39 @@
-# MERN Auth Starter
+# Nile
 
-This is a small MERN authentication package for my students. Recently updated to incorporate React v18.
+## Table of Contents
+- [License](#license)
+- [Description](#description)
+- [Motivation](#motivation)
+- [Technologies](#technologies)
+- [Features](#features)
+- [Examples](#examples)
+- [Installation](#installation)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
 
-## The Authentication Process
+## License
+This project is licensed under the MIT license.
 
-### Someone signs up as a user
-- They fill out a form with name, email, password, etc. 
-- This form is submitted 
-- Our Express API receives this request
-- Based on the password, we create a salt and a hash for the user record
-- We delete the password, then save the salt and hash w/ other user info
-- Done!
+## Description
+Nile is a digital platform that allows businesses to sell their products online directly to customers.
 
+## Motivation
+I wanted practice with creating a full stack E-Commerce website.
 
-### Someone attempts to login
-- They fill out a login form with their email and password 
-- This form is submitted
-- Our Express API receives this request
-- First we verify the user exists based on email address
-- Then we compare the password against the salt and hash
-- If all matches, we have a valid login
-- We create a token which will be sent back to the browser in the response header
+## Technologies
+React, Stripe, MongoDB, Mongoose
 
-In React:
-  - If the login is successful, we'll receive a token value back 
-  - We will set the token as a cookie
+## Features
+Users can purchase goods from this website and psuedo pay using fake credit cards.
 
+## Examples
+IP
 
-### Someone is accessing any page on our site and we want to see if they're logged in
-- We look to see if we have a token stored as a cookie. If not, we know they're not logged in. If a login is required, we send them to the login page.
+## Installation
+They can visit the deployment link when I can get it deployed to Heroku
 
-- If we do have a token, we need to make sure this token, and the user it belongs to, is still valid. So we query the api to verify the token and user are still valid.
+## Troubleshooting
+None so far!
+
+## Contributing
+Simply fork the repository and add anythink you think might make the project better!

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import cookie from "js-cookie"
-import { Header, Wrapper } from "./components"
+import { Header } from "./components"
 import { HomePage, LoginPage, ProfilePage, SignupPage } from "./pages";
 import { UserContext } from "./contexts/UserContext";
 
@@ -36,8 +36,7 @@ function App() {
     return (
         <BrowserRouter>
             <UserContext.Provider value={[user, setUser]}>
-                <Wrapper>
-                    <Header user={user} />
+                    <Header />
                     <div className="pt-3 px-4">
                         <Routes>
                             <Route path="/" element={<HomePage />} />
@@ -47,7 +46,6 @@ function App() {
                             <Route path="/test" element={<TestComponent />} />
                         </Routes>
                     </div>
-                </Wrapper>
             </UserContext.Provider>
         </BrowserRouter>
     );

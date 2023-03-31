@@ -17,3 +17,8 @@ p, li, td, th, blockquote, label, input, textarea, select {
 p {
   margin-bottom: 1rem;
 }
+
+body {
+  height: 100vh;
+  background-color: #111;
+}

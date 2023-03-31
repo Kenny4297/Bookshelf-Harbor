@@ -1,6 +1,11 @@
 import cookie from "js-cookie"
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {useContext} from 'react'
+import { UserContext } from "../contexts/UserContext";
 
-const Header = ({user}) => {
+const Header = () => {
+  const [user, setUser] = useContext(UserContext);
 
   const logout = () => {
     cookie.remove("auth-token")
@@ -8,45 +13,60 @@ const Header = ({user}) => {
   }
 
   return (
-    <header className="px-2 pb-0 mb-0" style={{ borderBottom: "1px solid #333" }}>
-      <nav className="navbar navbar-dark navbar-expand-md bg-body-secondary" data-bs-theme="dark">
-        <div className="container-fluid">
-          {/* <a className="navbar-brand" href="##">Navbar</a> */}
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="/">Home</a>
-              </li>
-              
-              { !user ? (
-                <>
-                  <li className="nav-item">
-                    <a className="nav-link" href="/signup">Signup</a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="/login">Login</a>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li className="nav-item">
-                    <a className="nav-link" href="/profile">Profile</a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="##" onClick={logout}>Logout</a>
-                  </li>
-                </>
-              )}
-              
-            </ul>
-          </div>
+    <header >
+      <Navbar bg="dark" expand="md" className="d-flex justify-content-between">
+        <Navbar.Brand href="/">
+          <h2>Project Title</h2>
+        </Navbar.Brand>
+        <div className="d-flex flex-grow-1 ml-auto float-right justify-content-end">
         </div>
-      </nav>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ml-auto justify-content-end" style={{
+    display: "flex",
+    justifyContent: "center",
+    flexGrow: "1",
+  }}>
+            <Nav.Link href="/" style={{color: 'white'}}>Home</Nav.Link>
+            {!user ? (
+              <>
+                <Nav.Link href="/signup" style={{color: 'white'}}>Signup</Nav.Link>
+                <Nav.Link href="/login" style={{color: 'white'}}>Login</Nav.Link>
+              </>
+            ) : (
+              <>
+                <Nav.Link href={`/profile/${user._id}`} style={{color: 'white'}}>Profile</Nav.Link>
+                <Nav.Link href="##" onClick={logout} style={{color: 'white'}}>
+                  Logout
+                </Nav.Link>
+                {!user.profileImage ? (
+                  <Nav.Link href="/profileImage" style={{color: 'white'}}>Add a profile Image!</Nav.Link>
+                ) : (
+                  <NavDropdown
+                    title={
+                      <img
+                        src={user.profileImage}
+                        alt="The users profile pic"
+                        style={{ width: '40px', borderRadius: '20px' }}
+                      />
+                    }
+                    id="basic-nav-dropdown"
+                  >
+                    <NavDropdown.Item href={`/profile/${user._id}`}>
+                      Profile
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="##" onClick={logout}>
+                      Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                )}
+              </>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
     </header>
-  )
+  );
 }
 
 

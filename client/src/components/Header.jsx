@@ -19,7 +19,7 @@ const Header = () => {
         <Navbar.Brand href="/" style={{paddingRight: '15vw', paddingLeft:'20px'}}>
           <h2>Bookshelf Harbor</h2>
         </Navbar.Brand>
-        <Form inline>
+        <Form inline="true">
           <div style={{ display: "flex", alignItems: "center" }}>
             <FormControl type="text" placeholder="Search" style={{width: '35vw'}}className="mr-sm-2" />
             <Button variant="outline-success">Search</Button>

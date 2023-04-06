@@ -19,19 +19,19 @@ const HomePage = () => {
   
     const handleInputChange = event => {
         console.log(searchTerm)
-      setSearchTerm(event.target.value);
+        setSearchTerm(event.target.value);
     };
   
     const handleFormSubmit = event => {
-      event.preventDefault();
-      const query = searchTerm.replace(/ /g, '+');
-      const url = `https://openlibrary.org/search.json?title=${query}`;
-      fetch(url)
-        .then(response => response.json())
-        
-        //This saves the data as bookData, and we use this variable to map through it later on
-        .then(data => setBookData(data.docs));
-      setSearchTerm('');
+        event.preventDefault();
+        const query = searchTerm.replace(/ /g, '+');
+        const url = `https://openlibrary.org/search.json?title=${query}`;
+        fetch(url)
+            .then(response => response.json())
+            
+            //This saves the data as bookData, and we use this variable to map through it later on
+            .then(data => setBookData(data.docs));
+        setSearchTerm('');
     };
 
     return (

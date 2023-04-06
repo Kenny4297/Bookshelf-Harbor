@@ -1,4 +1,4 @@
-# Nile
+# Bookshelf Harbor
 
 ## Table of Contents
 - [License](#license)
@@ -15,25 +15,25 @@
 This project is licensed under the MIT license.
 
 ## Description
-Nile is a digital platform that allows businesses to sell their products online directly to customers.
+Bookshelf Harbor is a digital platform that allows users to purchase any book from the Open Library API using Stripe, a mock credit card library. 
 
 ## Motivation
-I wanted practice with creating a full stack E-Commerce website.
+I wanted practice with creating a full stack E-Commerce website, since I have not created one before!
 
 ## Technologies
-React, Stripe, MongoDB, Mongoose
+React, Stripe, MongoDB, Mongoose, Open Library API
 
 ## Features
-Users can purchase goods from this website and psuedo pay using fake credit cards.
+On the home page, users can either search for a book using the books title, author, category, or key words, or they can browse through the list of book categories. They can add their book selections to a shopping cart and end up purchasing the books! 
 
 ## Examples
 IP
 
 ## Installation
-They can visit the deployment link when I can get it deployed to Heroku
+They can visit the deployment link once it is deployed
 
 ## Troubleshooting
 None so far!
 
 ## Contributing
-Simply fork the repository and add anythink you think might make the project better!
+Simply fork the repository and add anything you think might make the project better!

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import cookie from "js-cookie"
 import { Header } from "./components"
-import { HomePage, LoginPage, ProfilePage, SignupPage } from "./pages";
+import { CategoriesPage, HomePage, LoginPage, ProfilePage, SignupPage } from "./pages";
 import { UserContext } from "./contexts/UserContext";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -39,11 +39,12 @@ function App() {
                     <Header />
                     <div className="pt-3 px-4">
                         <Routes>
-                            <Route path="/" element={<HomePage />} />
+                            <Route path="/" element={<CategoriesPage />} />
                             <Route path="/login" element={<LoginPage />} />
                             <Route path="/profile" element={<ProfilePage />} />
                             <Route path="/signup" element={<SignupPage />} />
                             <Route path="/test" element={<TestComponent />} />
+                            <Route path="/categories" element={<CategoriesPage />} />
                         </Routes>
                     </div>
             </UserContext.Provider>

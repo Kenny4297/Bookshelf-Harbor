@@ -64,6 +64,7 @@ const SignupPage = (props) => {
       { signupResult === "success" && (
         <div className="alert alert-success" role="alert">
           Signup successful!
+          {window.location.href="/"}
         </div>
       )}
 

@@ -1,5 +1,6 @@
 const User = require('./User');
-const Book = require('./Book')
+const ShoppingCart = require('./ShoppingCart')
+
 
 module.exports = { User };
-module.exports = { Book };
+module.exports = { ShoppingCart };

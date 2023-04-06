@@ -14,18 +14,20 @@ function BookCarousel(props) {
 
   return (
     <Carousel>
-      {books.map((book, index) => (
+    {books.map((book, index) => (
         <Carousel.Item key={index}>
+        <div className="text-center">
             <img
-            className="d-block w-100"
-            src={`https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`}
+            className="d-block mx-auto"
+            src={`https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg`}
             alt={`Cover for ${book.title}`}
             />
-          <Carousel.Caption>
+            <Carousel.Caption className="mt-2">
             <h3>{book.title}</h3>
-          </Carousel.Caption>
+            </Carousel.Caption>
+        </div>
         </Carousel.Item>
-      ))}
+    ))}
     </Carousel>
   );
 }

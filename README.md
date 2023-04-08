@@ -15,7 +15,7 @@
 This project is licensed under the MIT license.
 
 ## Description
-Bookshelf Harbor is a digital platform that allows users to purchase any book from the Open Library API using Stripe, a mock credit card library. 
+Bookshelf Harbor is a digital platform that allows users to purchase any book from the Open Library API using Stripe, a mock credit card library. Due to Open Library having over 4.4 million books in its database, I choose to not to include a Book model, and simply use API fetch requests for getting data on a particular book. 
 
 ## Motivation
 I wanted practice with creating a full stack E-Commerce website, since I have not created one before!

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useParams } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import cookie from "js-cookie"
 import { Header } from "./components"
-import { CategoriesPage, HomePage, LoginPage, ProfilePage, SignupPage } from "./pages";
+import { CategoriesPage, HomePage, LoginPage, ProfilePage, SignupPage, BookDetailsPage } from "./pages";
 import { UserContext } from "./contexts/UserContext";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -45,6 +45,7 @@ function App() {
                             <Route path="/signup" element={<SignupPage />} />
                             <Route path="/test" element={<TestComponent />} />
                             <Route path="/categories" element={<CategoriesPage />} />
+                            <Route path="/books/works/:id" element={<BookDetailsPage />} />
                         </Routes>
                     </div>
             </UserContext.Provider>

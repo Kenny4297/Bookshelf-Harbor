@@ -14,6 +14,7 @@ export default function BookDisplay() {
         const responseMystery = await axios.get(
           'https://openlibrary.org/subjects/mystery.json?limit=10'
         );
+		console.log(responseMystery.data);
         setMystery(responseMystery.data.works);
 
         const responseDrama = await axios.get(

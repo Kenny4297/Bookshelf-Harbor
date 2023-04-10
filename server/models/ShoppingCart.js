@@ -1,18 +1,9 @@
 const { Schema, model } = require('mongoose');
 
-const userSchema = new Schema({
-  name: {
-    type: String
-  },
-  location: {
-    type: String
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
+const shoppingCartSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   },
   books: [{
@@ -26,5 +17,5 @@ const userSchema = new Schema({
   }]
 });
 
-const User = model('User', userSchema);
-module.exports = User;
+const ShoppingCart = model('ShoppingCart', shoppingCartSchema);
+module.exports = ShoppingCart;

@@ -5,6 +5,8 @@ function BookDetailsPage() {
   const { id } = useParams();
   const [book, setBook] = useState(null);
   const [authors, setAuthors] = useState([]);
+  const [firstPublishDate, setFirstPublishDate] = useState(null);
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     fetch(`https://openlibrary.org/works/${id}.json`)
@@ -22,6 +24,15 @@ function BookDetailsPage() {
       })
       .catch((error) => console.log(error));
   }, [id]);
+
+  useEffect(() => {
+    if (book && book.created) {
+      const createdDate = new Date(book.created.value);
+      const options = { month: 'long', day: 'numeric', year: 'numeric' };
+      const formattedDate = createdDate.toLocaleDateString('en-US', options);
+      setFirstPublishDate(formattedDate);
+    }
+  }, [book]);
 
   useEffect(() => {
     console.log(book);
@@ -49,6 +60,12 @@ function BookDetailsPage() {
     }
   }, [book]);
 
+  useEffect(() => {
+    if (book && book.description) {
+      setDescription(book.description);
+    }
+  }, [book]);
+
   if (!book) {
     return <div style={{ color: "white" }}>Loading...</div>;
   }
@@ -67,9 +84,8 @@ function BookDetailsPage() {
             </span>
           ))}
       </p>
-      <p>Publisher: {book.publishers && book.publishers[0].name}</p>
-      <p>Publication Date: {book.publish_date}</p>
-      <p>Number of Pages: {book.number_of_pages}</p>
+      <p>Publication Date: {firstPublishDate}</p>
+      <p>Description: {description}</p>
     </div>
   );
 }

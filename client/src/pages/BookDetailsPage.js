@@ -116,9 +116,9 @@ function BookDetailsPage() {
 
     return (
         <div>
-            {/* <h1>Book Details Page</h1> */}
-            {/* <h2>{book.title}</h2> */}
-            {/* <p>
+            <h1>Book Details Page</h1>
+            <h2>{book.title}</h2>
+            <p>
                 Author:{" "}
                 {authors.length > 0 &&
                     authors.map((author, index) => (
@@ -127,19 +127,23 @@ function BookDetailsPage() {
                             {index < authors.length - 1 ? ", " : ""}
                         </span>
                     ))}
-            </p> */}
+            </p>
             <p>Publication Date: {firstPublishDate}</p>
-            <p>Description: {description}</p>
-            {/* <p>Book Price: ${calculateBookPrice(book.title)}</p> */}
-              {/* {cover ? (
+            <p>Description: {
+                typeof description === 'object' 
+                    ? description.value.split('Contains:')[0].trim() 
+                    : description
+                }</p>
+            <p>Book Price: ${calculateBookPrice(book.title)}</p>
+            {cover ? (
                 <img
-                  className="d-block mx-auto"
-                  src={`https://covers.openlibrary.org/b/id/${cover.docs[0].cover_i}-L.jpg`}
-                  alt={`Cover for ${book.title}`}
+                    className="d-block mx-auto"
+                    src={`https://covers.openlibrary.org/b/id/${cover.docs[0].cover_i}-L.jpg`}
+                    alt={`Cover for ${book.title}`}
                 />
-              ) : (
+                ) : (
                 <p>Loading cover image...</p>
-              )} */}
+            )}
 
         </div>
     );

@@ -1,6 +1,8 @@
 import cookie from "js-cookie"
+import { Link } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from "react-router-dom";
 import React, {useContext, useEffect, useState} from 'react';
 import { UserContext } from "../contexts/UserContext";
 
@@ -22,22 +24,25 @@ const Header = () => {
 
     //Here we are keeping track of the book data. Once the book changes, the state is the updated. 
     const [bookData, setBookData] = useState([]);
+
+    const navigate = useNavigate();
   
     const handleInputChange = event => {
-        console.log(searchTerm)
-        setSearchTerm(event.target.value);
+      console.log(event.target.value);
+      setSearchTerm((prev) => [event.target.value, ...prev]);
     };
-  
+
+
     const handleFormSubmit = event => {
-        event.preventDefault();
-        const query = searchTerm.replace(/ /g, '+');
-        const url = `https://openlibrary.org/search.json?title=${query}`;
-        fetch(url)
-            .then(response => response.json())
-            
-            //This saves the data as bookData, and we use this variable to map through it later on
-            .then(data => setBookData(data.docs));
-        setSearchTerm('');
+      event.preventDefault();
+      const query = searchTerm.join(' ').replace(/ /g, '+');
+      const url = `https://openlibrary.org/search.json?title=${query}`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          setBookData(data.docs);
+          navigate(`/individual-book/${query}`, { state: { searchTerm } }); // Navigate to the new page and pass the searchTerm value as state
+        });
     };
 
 
@@ -47,9 +52,14 @@ const Header = () => {
         <Navbar.Brand href="/" style={{paddingRight: '15vw', paddingLeft:'20px'}}>
           <h2>Bookshelf Harbor</h2>
         </Navbar.Brand>
-        <Form inline={true} onSubmit={handleFormSubmit}>
+
+
+        <Form inline='true' onSubmit={handleFormSubmit}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <FormControl type="text" placeholder="Search" style={{ width: '35vw' }} className="mr-sm-2" onChange={handleInputChange} />
+
+            <Link to={`/individual-book/${searchTerm}`}></Link>
+
             <Button variant="outline-success" type="submit">Search</Button>
           </div>
         </Form>

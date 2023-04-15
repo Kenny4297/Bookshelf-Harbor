@@ -17,9 +17,8 @@ function BookDetailsPage() {
         const priceRange = MAX_PRICE - MIN_PRICE;
         const priceIncrement = priceRange / (100 * titleLength);
         const price = MIN_PRICE + priceIncrement * 100;
-        return Number(price.toFixed(2));
-    }
-
+        return price.toFixed(2);
+      }
     useEffect(() => {
         fetch(`https://openlibrary.org/works/${id}.json`)
             .then((response) => {

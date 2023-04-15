@@ -62,6 +62,7 @@ module.exports = {
 //post)('/api/users/auth)
   async authUser({ body }, res) {
 
+    console.log(User)
     // Find the user by the email address
     const user = await User.findOne({
       email: body.email
@@ -167,3 +168,4 @@ module.exports = {
     }
   },
 }
+

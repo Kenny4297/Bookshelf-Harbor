@@ -39,12 +39,12 @@ function App() {
                     <Header />
                     <div className="pt-3 px-4">
                         <Routes>
-                            <Route path="/" element={<CategoriesPage />} />
+                            <Route path="/" element={<HomePage />} />
                             <Route path="/login" element={<LoginPage />} />
                             <Route path="/profile" element={<ProfilePage />} />
                             <Route path="/signup" element={<SignupPage />} />
                             <Route path="/test" element={<TestComponent />} />
-                            <Route path="/categories" element={<CategoriesPage />} />
+                            {/* <Route path="/categories" element={<CategoriesPage />} /> */}
                             <Route path="/books/works/:id" element={<BookDetailsPage />} />
                         </Routes>
                     </div>

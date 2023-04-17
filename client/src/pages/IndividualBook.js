@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-function BookDetailsPage() {
-    const { id } = useParams();
+function IndividualBook({ searchTerm }) {
+    // const { id } = useParams();
     const [book, setBook] = useState(null);
     const [authors, setAuthors] = useState([]);
     const [firstPublishDate, setFirstPublishDate] = useState(null);
@@ -18,9 +18,10 @@ function BookDetailsPage() {
         const priceIncrement = priceRange / (100 * titleLength);
         const price = MIN_PRICE + priceIncrement * 100;
         return price.toFixed(2);
-      }
+    }
+
     useEffect(() => {
-        fetch(`https://openlibrary.org/works/${id}.json`)
+        fetch(`https://openlibrary.org/search.json?title=${searchTerm}`)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
@@ -34,7 +35,7 @@ function BookDetailsPage() {
                 }
             })
             .catch((error) => console.log(error));
-    }, [id]);
+    }, [searchTerm]);
 
     useEffect(() => {
         if (book && book.created) {
@@ -81,37 +82,42 @@ function BookDetailsPage() {
     }, [book]);
 
     useEffect(() => {
-      console.log(book)
-      if (!book) {
-        return; // book state has not been set yet
-      } else {
-      const url = `https://openlibrary.org/search.json?title=${book.title}`;
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          // Do something with the book data here
-          console.log(data);
-          setCover(data)
-        })
-        .catch(error => {
-          // Handle any errors here
-          console.error(error);
-        });
-      }
+        console.log(book);
+        if (!book) {
+            return; // book state has not been set yet
+        } else {
+            const url = `https://openlibrary.org/search.json?title=${book.title}`;
+            fetch(url)
+                .then((response) => response.json())
+                .then((data) => {
+                    // Do something with the book data here
+                    console.log(data);
+                    setCover(data);
+                })
+                .catch((error) => {
+                    // Handle any errors here
+                    console.error(error);
+                });
+        }
     }, [book]);
-    
+
     useEffect(() => {
-      if (!cover) {
-        return;
-      } else {
-        console.log(cover.docs[0].cover_i)
-      }
-    }, [cover])
+        if (!cover) {
+            return;
+        } else {
+            console.log(cover.docs[0].cover_i);
+        }
+    }, [cover]);
 
-
+    useEffect(() => {
+        console.log(`Book is :${book}`)
+    }, [book])
+ 
     if (!book) {
         return <div style={{ color: "white" }}>Loading...</div>;
     }
+
+
 
     return (
         <div>
@@ -128,11 +134,12 @@ function BookDetailsPage() {
                     ))}
             </p>
             <p>Publication Date: {firstPublishDate}</p>
-            <p>Description: {
-                typeof description === 'object' 
-                    ? description.value.split('Contains:')[0].trim() 
-                    : description
-                }</p>
+            <p>
+                Description:{" "}
+                {typeof description === "object"
+                    ? description.value.split("Contains:")[0].trim()
+                    : description}
+            </p>
             <p>Book Price: ${calculateBookPrice(book.title)}</p>
             {cover ? (
                 <img
@@ -140,12 +147,11 @@ function BookDetailsPage() {
                     src={`https://covers.openlibrary.org/b/id/${cover.docs[0].cover_i}-L.jpg`}
                     alt={`Cover for ${book.title}`}
                 />
-                ) : (
+            ) : (
                 <p>Loading cover image...</p>
             )}
-
         </div>
     );
 }
 
-export default BookDetailsPage;
+export default IndividualBook;

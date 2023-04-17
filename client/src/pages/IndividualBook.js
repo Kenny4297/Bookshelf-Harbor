@@ -112,7 +112,7 @@ function IndividualBook({ searchTerm }) {
     useEffect(() => {
         console.log(`Book is :${book}`)
     }, [book])
-
+ 
     if (!book) {
         return <div style={{ color: "white" }}>Loading...</div>;
     }

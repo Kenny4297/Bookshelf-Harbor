@@ -1,157 +1,60 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-function IndividualBook({ searchTerm }) {
-    // const { id } = useParams();
-    const [book, setBook] = useState(null);
-    const [authors, setAuthors] = useState([]);
-    const [firstPublishDate, setFirstPublishDate] = useState(null);
-    const [description, setDescription] = useState("");
-    const [cover, setCover] = useState(null);
-
-    const MIN_PRICE = 5.0; // $5.00
-    const MAX_PRICE = 20.0; // $20.00
-
-    function calculateBookPrice(title) {
-        const titleLength = title.length;
-        const priceRange = MAX_PRICE - MIN_PRICE;
-        const priceIncrement = priceRange / (100 * titleLength);
-        const price = MIN_PRICE + priceIncrement * 100;
-        return price.toFixed(2);
-    }
-
-    useEffect(() => {
-        fetch(`https://openlibrary.org/search.json?title=${searchTerm}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log(data);
-                if (data) {
-                    setBook(data);
-                }
-            })
-            .catch((error) => console.log(error));
-    }, [searchTerm]);
-
-    useEffect(() => {
-        if (book && book.created) {
-            const createdDate = new Date(book.created.value);
-            const options = { month: "long", day: "numeric", year: "numeric" };
-            const formattedDate = createdDate.toLocaleDateString(
-                "en-US",
-                options
-            );
-            setFirstPublishDate(formattedDate);
+function IndividualBook() {
+  const { state: { searchTerm } } = useLocation();
+  const [book, setBook] = useState(null);
+  
+  useEffect(() => {
+    fetch(`https://openlibrary.org/search.json?title=${searchTerm}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
-    }, [book]);
-
-    useEffect(() => {
-        console.log(book);
-        console.log(book?.authors);
-        console.log(book?.authors[0]?.author?.key); // "/authors/OL21594A"
-
-        if (book && book.authors) {
-            const fetchAuthor = (author) => {
-                const authorKey = author.author.key;
-                return fetch(`https://openlibrary.org${authorKey}.json`)
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error("Network response was not ok");
-                        }
-                        return response.json();
-                    })
-                    .catch((error) => console.log(error));
-            };
-
-            Promise.all(book.authors.map(fetchAuthor))
-                .then((authors) => {
-                    setAuthors(authors.filter(Boolean));
-                })
-                .catch((error) => console.log(error));
+        return response.json();
+      })
+      .then((data) => {
+        if (data.docs) {
+          setBook(data.docs);
         }
-    }, [book]);
+      })
+      .catch((error) => console.log(error));
+  }, [searchTerm]);
 
-    useEffect(() => {
-        if (book && book.description) {
-            setDescription(book.description);
-        }
-    }, [book]);
+  useEffect(() => {
+    console.log(book)
+  }, [book])
 
-    useEffect(() => {
-        console.log(book);
-        if (!book) {
-            return; // book state has not been set yet
-        } else {
-            const url = `https://openlibrary.org/search.json?title=${book.title}`;
-            fetch(url)
-                .then((response) => response.json())
-                .then((data) => {
-                    // Do something with the book data here
-                    console.log(data);
-                    setCover(data);
-                })
-                .catch((error) => {
-                    // Handle any errors here
-                    console.error(error);
-                });
-        }
-    }, [book]);
+  if (!book) {
+    return <div>Loading...</div>;
+  }
+  const oldestPublishYear = book.reduce((acc, cur) => {
+    if (!cur.publish_year || cur.publish_year.length === 0) return acc;
+    const oldest = cur.publish_year.reduce((oldestYear, currentYear) => {
+      return currentYear < oldestYear ? currentYear : oldestYear;
+    });
+    return oldest < acc ? oldest : acc;
+  }, Infinity);
 
-    useEffect(() => {
-        if (!cover) {
-            return;
-        } else {
-            console.log(cover.docs[0].cover_i);
-        }
-    }, [cover]);
-
-    useEffect(() => {
-        console.log(`Book is :${book}`)
-    }, [book])
- 
-    if (!book) {
-        return <div style={{ color: "white" }}>Loading...</div>;
-    }
-
-
-
-    return (
-        <div>
-            <h1>Book Details Page</h1>
-            <h2>{book.title}</h2>
-            <p>
-                Author:{" "}
-                {authors.length > 0 &&
-                    authors.map((author, index) => (
-                        <span key={author.key}>
-                            {author.name}
-                            {index < authors.length - 1 ? ", " : ""}
-                        </span>
-                    ))}
-            </p>
-            <p>Publication Date: {firstPublishDate}</p>
-            <p>
-                Description:{" "}
-                {typeof description === "object"
-                    ? description.value.split("Contains:")[0].trim()
-                    : description}
-            </p>
-            <p>Book Price: ${calculateBookPrice(book.title)}</p>
-            {cover ? (
-                <img
-                    className="d-block mx-auto"
-                    src={`https://covers.openlibrary.org/b/id/${cover.docs[0].cover_i}-L.jpg`}
-                    alt={`Cover for ${book.title}`}
-                />
+  return (
+    <>
+      {book.map((bookItem, index) => (
+        <div key={index}>
+          <h2>Title: {bookItem.title}</h2>
+          <p>Author: {bookItem.author_name && bookItem.author_name.join(", ")}</p>
+          {bookItem.cover_i ? (
+            <img src={`https://covers.openlibrary.org/b/id/${bookItem.cover_i}-M.jpg`} style={{width: '200px', height: '200px'}}alt='book cover' />
             ) : (
-                <p>Loading cover image...</p>
+                <p>No cover available</p>
             )}
+                    {/* 8236295 */}
+        {/* http://covers.openlibrary.org/b/id/8236295-M.jpg */}
+          <p>First Published: {oldestPublishYear}</p>
         </div>
-    );
+      ))}
+    </>
+  );
 }
+
 
 export default IndividualBook;

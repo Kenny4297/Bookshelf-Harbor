@@ -29,22 +29,27 @@ const Header = () => {
   
     const handleInputChange = event => {
       console.log(event.target.value);
-      setSearchTerm((prev) => [event.target.value, ...prev]);
+      setSearchTerm(event.target.value);
     };
 
 
     const handleFormSubmit = event => {
       event.preventDefault();
-      const query = searchTerm.join(' ').replace(/ /g, '+');
+      const query = searchTerm.replace(/ /g, '+');
       const url = `https://openlibrary.org/search.json?title=${query}`;
       fetch(url)
         .then(response => response.json())
         .then(data => {
           setBookData(data.docs);
-          navigate(`/individual-book/${query}`, { state: { searchTerm } }); // Navigate to the new page and pass the searchTerm value as state
+          navigate(`/individual-book/${query}`, { state: { searchTerm: searchTerm.replace(/[+,]/g, '') } });
         });
     };
 
+    useEffect(() => {
+      console.log(`Search term is ${searchTerm}`)
+      console.log(`Search term is ${bookData}`)
+      
+    }, [searchTerm, bookData])
 
   return (
     <header>

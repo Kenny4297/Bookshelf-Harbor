@@ -15,9 +15,9 @@ const Header = () => {
   }
 
     // This useEffect is used for debugging purposes. It only runs when the component is mounted (the first time it is rendered) and if the user variable changes. 
-    useEffect(() => {
-        console.log(user);
-    }, [user]);
+    // useEffect(() => {
+    //     console.log(user);
+    // }, [user]);
 
     //Here we are keeping track of the data in the search bar. If it changes, the state will be updated
     const [searchTerm, setSearchTerm] = useState('');
@@ -33,6 +33,7 @@ const Header = () => {
     };
 
 
+    // Search bar in Header logic
     const handleFormSubmit = event => {
       event.preventDefault();
       const query = searchTerm.replace(/ /g, '+');
@@ -45,11 +46,11 @@ const Header = () => {
         });
     };
 
-    useEffect(() => {
-      console.log(`Search term is ${searchTerm}`)
-      console.log(`Search term is ${bookData}`)
+    // useEffect(() => {
+    //   console.log(`Search term is ${searchTerm}`)
+    //   console.log(`Search term is ${bookData}`)
       
-    }, [searchTerm, bookData])
+    // }, [searchTerm, bookData])
 
   return (
     <header>

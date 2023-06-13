@@ -15,15 +15,10 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  books: [{
-    title: String,
-    author: String,
-    price: Number,
-    cover_id: Number,
-    edition_count: Number,
-    first_publish_year: Number,
-    subject: [String]
-  }]
+  shoppingCart: {
+    type: Schema.Types.ObjectId,
+    ref: 'ShoppingCart',
+  },
 });
 
 const User = model('User', userSchema);

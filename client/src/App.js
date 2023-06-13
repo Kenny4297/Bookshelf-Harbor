@@ -17,7 +17,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/global.css";
 import TestComponent from "./components/testComponent";
 
-function App() {
+const App = () => {
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -55,6 +55,7 @@ function App() {
             <Route path="/test" element={<TestComponent />} />
             {/* <Route path="/categories" element={<CategoriesPage />} /> */}
             <Route path="/books/works/:id" element={<BookDetailsPage />} />
+            <Route path="/book-details/:key" element={<BookDetailsPage />} />
             <Route
               path="/individual-book/:id"
               element={<IndividualBook searchTerm={searchTerm} />}

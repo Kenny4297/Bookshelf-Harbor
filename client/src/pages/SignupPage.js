@@ -1,4 +1,5 @@
 import { useState } from "react"
+import cookie from "js-cookie"
 
 const SignupPage = (props) => {
 
@@ -19,14 +20,20 @@ const SignupPage = (props) => {
         "Content-Type": "application/json"
       }
     })
-
+  
     if( !query.ok ) {
       setSignupResult("fail")
     } else {
       const result = await query.json()
-      setSignupResult("success")
+      if( result && !result.err && result.data && result.data.token ){
+        setSignupResult("success")
+        cookie.set("auth-token", result.data.token, { expires: 3 })
+      } else {
+        setSignupResult("fail")
+      }
     }
-  }
+  }  
+  
 
   return (
     <>

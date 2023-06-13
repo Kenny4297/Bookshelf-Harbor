@@ -1,5 +1,4 @@
 const { User } = require("../models");
-
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -24,8 +23,16 @@ module.exports = {
     // if the user is not created, return an error
     if (!user)
       return res.status(400).json({ message: "Unable to create user" });
-    // Return the user
-    res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone });
+
+    const token = jwt.sign({
+      email: user.email,
+      id: user._id,
+      sameSite: "none",
+      secure: true,
+    }, process.env.JWT_SECRET)
+
+    // Return the user and token
+    res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone, data: { user, token } });
   },
 
   // the user is updated by the id
@@ -167,5 +174,91 @@ module.exports = {
       res.status(500).json({ message: "Server error" });
     }
   },
+
+  // ADDING TO SHOPPING CART
+  //post('/api/users/:id/cart')
+  //* add to shopping cart
+  async addToCart({ body, params }, res) {
+    console.log('addToCart server received:', body);
+    const { title, author, price, cover_id, edition_count, first_publish_year, subject } = body;
+  
+    // Data validation
+    if (!title || typeof title !== 'string') {
+      return res.status(400).json({ message: 'Invalid or missing title' });
+    }
+    if (!author || (typeof author !== 'string' && !(Array.isArray(author) && author.every(a => typeof a === 'string')))) {
+      return res.status(400).json({ message: 'Invalid or missing author' });
+    }
+
+    if (price === undefined || typeof price !== 'number') {
+      return res.status(400).json({ message: 'Invalid or missing price' });
+    }
+    // Add more checks for the remaining fields if necessary
+    
+    // Find the user by the id
+    const user = await User.findById(params.userId);
+  
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+  
+    // Construct the book object
+    const book = { title, author, price, cover_id, edition_count, first_publish_year, subject };
+  
+    // Add the book to the ShoppingCart
+    user.shoppingCart.books.push(book);
+  
+    // Save the user
+    try {
+      const updatedUser = await user.save();
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'There was an error saving the user.' });
+    }
+  
+    if (!updatedUser) {
+      return res.status(500).json({ message: 'Could not update user' });
+    }
+  
+    // Return the updated user
+    res.status(200).json(updatedUser);
+  },
+
+  //* Remove Book from cart
+  async removeFromCart({ body, params }, res) {
+    const { bookId } = body;
+  
+    // Data validation
+    if (!bookId || typeof bookId !== 'string') {
+      return res.status(400).json({ message: 'Invalid or missing bookId' });
+    }
+  
+    // Find the user by the id
+    const user = await User.findById(params.userId);
+  
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+  
+    // Find the book in the shopping cart
+    const bookIndex = user.shoppingCart.books.findIndex((book) => book._id.toString() === bookId);
+  
+    if (bookIndex === -1) {
+      return res.status(404).json({ message: 'Book not found in the cart' });
+    }
+  
+    // Remove the book from the ShoppingCart
+    user.shoppingCart.books.splice(bookIndex, 1);
+  
+    // Save the user
+    const updatedUser = await user.save();
+  
+    if (!updatedUser) {
+      return res.status(500).json({ message: 'Could not update user' });
+    }
+  
+    // Return the updated user
+    res.status(200).json(updatedUser);
+  }
 }
 

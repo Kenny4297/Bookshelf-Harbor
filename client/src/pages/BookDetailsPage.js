@@ -1,26 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
+import axios from "axios";
 
-function BookDetailsPage() {
-    const { id } = useParams();
+const BookDetailsPage = () => {
+    const { key } = useParams();
     const [book, setBook] = useState(null);
     const [authors, setAuthors] = useState([]);
     const [firstPublishDate, setFirstPublishDate] = useState(null);
     const [description, setDescription] = useState("");
     const [cover, setCover] = useState(null);
+    const [user, setUser] = useContext(UserContext);
 
     const MIN_PRICE = 5.0; // $5.00
     const MAX_PRICE = 20.0; // $20.00
 
-    function calculateBookPrice(title) {
+    const calculateBookPrice = (title) => {
         const titleLength = title.length;
         const priceRange = MAX_PRICE - MIN_PRICE;
         const priceIncrement = priceRange / (100 * titleLength);
         const price = MIN_PRICE + priceIncrement * 100;
         return price.toFixed(2);
-      }
+    }
     useEffect(() => {
-        fetch(`https://openlibrary.org/works/${id}.json`)
+        // fetch(`https://openlibrary.org/works/${"/works/" + key}.json`)
+        // fetch(`https://openlibrary.org${key}.json`)
+        const url = key.startsWith("/works/") ? `https://openlibrary.org${key}.json` : `https://openlibrary.org/works/${key}.json`;
+        fetch(url)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
@@ -34,7 +40,7 @@ function BookDetailsPage() {
                 }
             })
             .catch((error) => console.log(error));
-    }, [id]);
+    }, [key]);
 
     useEffect(() => {
         if (book && book.created) {
@@ -80,37 +86,69 @@ function BookDetailsPage() {
         }
     }, [book]);
 
+    // This useEffect is used for debugging purposes. It only runs when the component is mounted (the first time it is rendered) and if the user variable changes. 
     useEffect(() => {
-      console.log(book)
-      if (!book) {
-        return; // book state has not been set yet
-      } else {
-      const url = `https://openlibrary.org/search.json?title=${book.title}`;
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          // Do something with the book data here
-          console.log(data);
-          setCover(data)
-        })
-        .catch(error => {
-          // Handle any errors here
-          console.error(error);
-        });
-      }
-    }, [book]);
-    
-    useEffect(() => {
-      if (!cover) {
-        return;
-      } else {
-        console.log(cover.docs[0].cover_i)
-      }
-    }, [cover])
+        console.log(user);
+    }, [user]);
 
+
+    useEffect(() => {
+        console.log(book);
+        if (!book) {
+            return; 
+        } else {
+            const url = `https://openlibrary.org/search.json?title=${book.title}`;
+            fetch(url)
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    setCover(data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }, [book]);
+
+    useEffect(() => {
+        if (!cover) {
+            return;
+        } else {
+            console.log(cover.docs[0].cover_i);
+        }
+    }, [cover]);
 
     if (!book) {
         return <div style={{ color: "white" }}>Loading...</div>;
+    }
+
+
+    const addToCart = () => {
+        // create book object
+        const bookToAdd = {
+            title: book.title,
+            author: authors.map(author => author.name),
+            first_publish_year: firstPublishDate,
+            cover_i: cover.docs[0].cover_i,
+            price: parseFloat(calculateBookPrice(book.title)),
+            key: book.key,
+            description: typeof description === "object"
+                ? description.value.split("Contains:")[0].trim()
+                : description,
+        };
+
+        console.log('addToCart bookDetails:', bookToAdd);
+        console.log(user._id)
+        
+        axios.post(`/api/user/${user._id}/cart`, bookToAdd)
+            .then(response => {
+                console.log(response);
+                alert('Book added to cart!');
+            })
+            .catch(error => {
+                console.error(error);
+                alert('There was an error adding the book to the cart.');
+            });
     }
 
     return (
@@ -128,11 +166,12 @@ function BookDetailsPage() {
                     ))}
             </p>
             <p>Publication Date: {firstPublishDate}</p>
-            <p>Description: {
-                typeof description === 'object' 
-                    ? description.value.split('Contains:')[0].trim() 
-                    : description
-                }</p>
+            <p>
+                Description:{" "}
+                {typeof description === "object"
+                    ? description.value.split("Contains:")[0].trim()
+                    : description}
+            </p>
             <p>Book Price: ${calculateBookPrice(book.title)}</p>
             {cover ? (
                 <img
@@ -140,10 +179,11 @@ function BookDetailsPage() {
                     src={`https://covers.openlibrary.org/b/id/${cover.docs[0].cover_i}-L.jpg`}
                     alt={`Cover for ${book.title}`}
                 />
-                ) : (
+            ) : (
                 <p>Loading cover image...</p>
             )}
 
+            <button onClick={addToCart}>Add to Cart</button>
         </div>
     );
 }

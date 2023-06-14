@@ -27,7 +27,7 @@ const SignupPage = (props) => {
       const result = await query.json()
       if( result && !result.err && result.data && result.data.token ){
         setSignupResult("success")
-        cookie.set("auth-token", result.data.token, { expires: 3 })
+        localStorage.setItem('auth-token', result.data.token) // Set token to local storage
       } else {
         setSignupResult("fail")
       }

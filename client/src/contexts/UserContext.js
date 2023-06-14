@@ -7,7 +7,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    console.log("Testing hte UserContext useEffect?")
+    console.log("Testing the UserContext useEffect?")
     // This route fetches the user data associated with the JWT in the cookie
     axios.get(`/api/user/me`)
     console.log("Testing hte UserContext request?")

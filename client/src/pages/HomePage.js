@@ -8,6 +8,10 @@ const HomePage = () => {
     // This useEffect is used for debugging purposes. It only runs when the component is mounted (the first time it is rendered) and if the user variable changes. 
     useEffect(() => {
         console.log(user);
+        if (user) {
+            console.log(user._id);
+            console.log(user.shoppingCart.books);
+        }
     }, [user]);
 
     //Here we are keeping track of the data in the search bar. If it changes, the state will be updated
@@ -43,7 +47,8 @@ const HomePage = () => {
                 <>
                     <p>The user is logged in.</p>
                     <p>UserID: {user._id}</p>
-                    <p>Users Shopping Cart: {user.shoppingCart}</p>
+                    <p>Users Shopping Cart: {JSON.stringify(user.shoppingCart.books)}</p>
+                    
                     <Link to="/test">Go to Test Component</Link>
                 </>
             )}

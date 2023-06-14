@@ -54,8 +54,8 @@ module.exports = {
 //* User Token request
 
 async getCurrentUserWithToken(req, res) {
-  // Extract the JWT token from the cookie
-  const token = req.cookies.token;
+  // Extract the JWT token from the header
+  const token = req.headers["auth-token"];
 
   // If no token exists, return an error
   if (!token) {
@@ -129,6 +129,8 @@ async getCurrentUserWithToken(req, res) {
 
 
 
+
+
   //post('/api/users/auth)
   async authUser({ body }, res) {
     // Find the user by the email address
@@ -145,8 +147,6 @@ async getCurrentUserWithToken(req, res) {
     const token = jwt.sign({
       email: user.email,
       id: user._id,
-      sameSite: "none",
-      secure: true,
     }, process.env.JWT_SECRET)
 
     res.header("auth-token", token).json({ error: null, data: { user, token }})

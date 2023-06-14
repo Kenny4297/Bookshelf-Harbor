@@ -11,25 +11,47 @@ const LoginPage = (props) => {
     setFormData({...formData, [e.target.name]: e.target.value})
   }
 
-  const handleFormSubmit = async (e) => {
-    console.log(formData)
-    e.preventDefault()
-    const query = await fetch("/api/user/auth", {
-      method: "post",
-      body: JSON.stringify(formData),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    const result = await query.json()
+  //! Before using shitty chat
+  // const handleFormSubmit = async (e) => {
+  //   console.log(formData)
+  //   e.preventDefault()
+  //   const query = await fetch("/api/user/auth", {
+  //     method: "post",
+  //     body: JSON.stringify(formData),
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //   const result = await query.json()
 
-    if( result && !result.err && result.data && result.data.token ){
-      setLoginResult("success")
-      cookie.set("auth-token", result.data.token, { expires: 3 })
-    } else {
-      setLoginResult("fail")
-    }
-  }
+  //   if( result && !result.err && result.data && result.data.token ){
+  //     setLoginResult("success")
+  //     cookie.set("auth-token", result.data.token, { expires: 3 })
+  //   } else {
+  //     setLoginResult("fail")
+  //   }
+  // }
+
+      const handleFormSubmit = async (e) => {
+        console.log(formData);
+        e.preventDefault();
+        const query = await fetch("/api/user/auth", {
+          method: "post",
+          body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        const result = await query.json();
+      
+        if (result && !result.err && result.data && result.data.token) {
+          setLoginResult("success");
+          localStorage.setItem("auth-token", result.data.token); // Store token in local storage
+        } else {
+          setLoginResult("fail");
+        }
+      };
+  
 
   return (
     <>

@@ -10,12 +10,14 @@ const {
   getUserById,
   deleteUser,
   updateProfileImage,
+  getCurrentUserWithToken,
   addToCart,
   removeFromCart
 } = require('../../controllers/user-controller');
 
 // Routes
 router.route('/').post(createUser).get(getAllUsers);
+router.route('/me').get(getCurrentUserWithToken);
 router.route('/auth').post(authUser);
 router.route('/verify').post(verifyUser);
 router.route('/:id').put(updateUser).get(getUserById).delete(deleteUser);

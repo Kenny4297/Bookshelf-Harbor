@@ -141,14 +141,23 @@ const BookDetailsPage = () => {
         console.log(user._id)
         
         axios.post(`/api/user/${user._id}/cart`, bookToAdd)
-            .then(response => {
-                console.log(response);
-                alert('Book added to cart!');
-            })
-            .catch(error => {
-                console.error(error);
-                alert('There was an error adding the book to the cart.');
-            });
+        .then(response => {
+            console.log(response);
+            axios.get(`/api/user/${user._id}`) // the url to get user by id
+                .then(response => {
+                    console.log(response.data); // the updated user data
+                    setUser(response.data); // update your user state with the updated user data
+                    alert('Book added to cart!');
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('There was an error fetching the updated user data.');
+                });
+        })
+        .catch(error => {
+            console.error(error);
+            alert('There was an error adding the book to the cart.');
+        });
     }
 
     return (

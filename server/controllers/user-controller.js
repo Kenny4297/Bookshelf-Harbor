@@ -49,6 +49,54 @@ module.exports = {
 },
 
 
+
+
+//* User Token request
+
+async getCurrentUserWithToken(req, res) {
+  // Extract the JWT token from the cookie
+  const token = req.cookies.token;
+
+  // If no token exists, return an error
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized: No token provided" });
+  }
+
+  let payload;
+  try {
+    // If a token does exist, verify it and get the payload
+    payload = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    // If the token is invalid (for instance, if it is expired), return an error
+    return res.status(401).json({ message: "Unauthorized: Invalid token", error: error.message });
+  }
+
+  // The payload should contain an ID, if it doesn't, that's an error
+  if (!payload || !payload.id) {
+    return res.status(401).json({ message: "Unauthorized: Invalid token, no payload" });
+  }
+
+  try {
+    // Retrieve the user by their ID
+    const user = await User.findById(payload.id).populate({ path: "shoppingCart", populate: { path: "books" } });
+
+    // If no user is found, return an error
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // If a user is found, return their data
+    res.json(user);
+  } catch (error) {
+    // If there's an error while fetching the user, return it
+    console.error("Error while fetching the user: ", error); // Log the error
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+},
+
+
+
+
   // the user is updated by the id
   //put('/api/users/:id')
   async updateUser({ body, params }, res) {
@@ -62,8 +110,6 @@ module.exports = {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       // Update the user
-      //is there a way to do something like the input change in react?
-      //({...formData, [e.target.name]: e.target.value}) like this?
       userToUpdate = { ...userToUpdate, password: hashedPassword, name: name, phone: phone };
     }
 
@@ -80,14 +126,15 @@ module.exports = {
     // Return the user
     res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone });
   },
-//post)('/api/users/auth)
-  async authUser({ body }, res) {
 
-    console.log(User)
+
+
+  //post('/api/users/auth)
+  async authUser({ body }, res) {
     // Find the user by the email address
     const user = await User.findOne({
       email: body.email
-    });
+    }).populate('shoppingCart');
 
     if (!user) return res.status(400).json({ message: 'Unable to authenticate user' });
 
@@ -100,12 +147,13 @@ module.exports = {
       id: user._id,
       sameSite: "none",
       secure: true,
-      
-
     }, process.env.JWT_SECRET)
 
     res.header("auth-token", token).json({ error: null, data: { user, token }})
   },
+  
+
+
   //post('/api/users/verify')
   async verifyUser(req, res){
     const token = req.headers["auth-token"]
@@ -120,6 +168,10 @@ module.exports = {
     
     return res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone, profileImage: user.profileImage})
   },
+
+
+
+
   //get('/api/users')
     async getAllUsers(req, res) {
       try {
@@ -134,21 +186,32 @@ module.exports = {
       }
     },
 
+
+
+
+
   //this is the route that is called when the user clicks on the profile button
   //get('/api/users/:id')
   async getUserById(req, res) {
     try {
+      console.log("Testing GetUserById function!")
       const dbUser = await User.findById(req.params.id)
-      .populate('pets')
+      .populate('pets');
+      console.log('getUserById', dbUser);
       res
         .status(200)
-        .json(dbUser)
+        .json(dbUser);
     } catch (error) {
       res
         .status(500)
         .json(error)
     }
   },
+
+
+
+
+
 
 //delete('/api/users/:id')
  async deleteUser(req, res) {
@@ -163,6 +226,11 @@ module.exports = {
         .json(error)
     }
   },
+
+
+
+
+
 
   async updateProfileImage(req, res) {
     const userId = req.params.userId;
@@ -189,8 +257,13 @@ module.exports = {
     }
   },
 
+
+
+
+
+
   // ADDING TO SHOPPING CART
-  //post('/api/users/:id/cart')
+  //post('/api/user/:id/cart')
   //* add to shopping cart
   async addToCart({ body, params }, res) {
     console.log('addToCart server received:', body);

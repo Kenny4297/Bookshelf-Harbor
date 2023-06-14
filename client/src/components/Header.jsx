@@ -53,16 +53,16 @@ const Header = () => {
     // }, [searchTerm, bookData])
 
   return (
-    <header>
-      <Navbar bg="dark" expand="md" className="d-flex justify-content-center align-items-center">
-        <Navbar.Brand href="/" style={{paddingRight: '15vw', paddingLeft:'20px'}}>
-          <h2>Bookshelf Harbor</h2>
+    <header style={{width: '100%'}}>
+      <Navbar bg="dark" expand="md"className="d-flex justify-content-center align-items-center">
+        <Navbar.Brand href="/">
+          <h2 style={{marginLeft:'2rem'}} >Bookshelf Harbor</h2>
         </Navbar.Brand>
 
 
         <Form inline='true' onSubmit={handleFormSubmit}>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <FormControl type="text" placeholder="Search" style={{ width: '35vw' }} className="mr-sm-2" onChange={handleInputChange} />
+            <FormControl type="text" placeholder="Search" style={{width:'30vw'}} className="mr-sm-2" onChange={handleInputChange} />
 
             <Link to={`/individual-book/${searchTerm}`}></Link>
 
@@ -98,6 +98,7 @@ const Header = () => {
                 <Nav.Link href="##" onClick={logout} style={{ color: 'white' }}>
                   Logout
                 </Nav.Link>
+                <Nav.Link href={`/shoppingCart/${user._id}`} style={{ color: 'white' }}>Shopping Cart</Nav.Link>
                 {!user.profileImage ? (
                   <Nav.Link href="/profileImage" style={{ color: 'white' }}>Add a profile Image!</Nav.Link>
                 ) : (

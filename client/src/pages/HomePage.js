@@ -43,6 +43,7 @@ const HomePage = () => {
                 <>
                     <p>The user is logged in.</p>
                     <p>UserID: {user._id}</p>
+                    <p>Users Shopping Cart: {user.shoppingCart}</p>
                     <Link to="/test">Go to Test Component</Link>
                 </>
             )}

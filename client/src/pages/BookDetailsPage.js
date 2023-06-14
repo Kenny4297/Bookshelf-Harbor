@@ -128,7 +128,7 @@ const BookDetailsPage = () => {
         const bookToAdd = {
             title: book.title,
             author: authors.map(author => author.name),
-            first_publish_year: firstPublishDate,
+            first_publish_year: new Date(firstPublishDate).getFullYear(),
             cover_i: cover.docs[0].cover_i,
             price: parseFloat(calculateBookPrice(book.title)),
             key: book.key,

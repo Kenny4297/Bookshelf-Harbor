@@ -49,6 +49,8 @@ const HomePage = () => {
 
             <p>Testing the Open Book API</p>
 
+            <Link to="/categories">Categories</Link>
+
             <div>
                 <form onSubmit={handleFormSubmit}>
                     <input type="text" value={searchTerm} style={{color: 'black'}} onChange={handleInputChange} />

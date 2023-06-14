@@ -1,6 +1,7 @@
 const { User } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { ShoppingCart } = require("../models")
 require("dotenv").config();
 
 module.exports = {
@@ -8,32 +9,45 @@ module.exports = {
   //post('/api/users')
   async createUser({ body }, res) {
     const { email, password, name, phone } = body;
-    // Check if the user already exists
-    const salt = await bcrypt.genSalt(10);
+
     // Hash the password
+    const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    // the password is hashed and the salt is stored in the database
-    const userToInsert = { 
-      email: email,
-      password: hashedPassword,
-      name: name,
-      phone: phone };
-    // Create the user
-    const user = await User.create(userToInsert);
-    // if the user is not created, return an error
-    if (!user)
-      return res.status(400).json({ message: "Unable to create user" });
 
-    const token = jwt.sign({
-      email: user.email,
-      id: user._id,
-      sameSite: "none",
-      secure: true,
-    }, process.env.JWT_SECRET)
+    const userToInsert = {
+        email: email,
+        password: hashedPassword,
+        name: name,
+        phone: phone,
+    };
 
-    // Return the user and token
+    let user = await User.create(userToInsert);
+
+    if (!user) {
+        return res.status(400).json({ message: "Unable to create user" });
+    }
+
+    // Create a new ShoppingCart
+    const newCart = new ShoppingCart({ user: user._id });
+    await newCart.save();
+
+    // Add the shoppingCart to the user
+    user.shoppingCart = newCart._id;
+    await user.save();
+
+    const token = jwt.sign(
+        {
+            email: user.email,
+            id: user._id,
+            sameSite: "none",
+            secure: true,
+        },
+        process.env.JWT_SECRET
+    );
+
     res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone, data: { user, token } });
-  },
+},
+
 
   // the user is updated by the id
   //put('/api/users/:id')
@@ -182,6 +196,18 @@ module.exports = {
     console.log('addToCart server received:', body);
     const { title, author, price, cover_id, edition_count, first_publish_year, subject } = body;
   
+    // Find the user by the id
+    const user = await User.findById(params.userId).populate('shoppingCart');
+  
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+  
+    if (!user.shoppingCart) {
+      // No shopping cart associated with the user
+      return res.status(400).json({ message: 'No shopping cart associated with the user' });
+    }
+  
     // Data validation
     if (!title || typeof title !== 'string') {
       return res.status(400).json({ message: 'Invalid or missing title' });
@@ -189,40 +215,37 @@ module.exports = {
     if (!author || (typeof author !== 'string' && !(Array.isArray(author) && author.every(a => typeof a === 'string')))) {
       return res.status(400).json({ message: 'Invalid or missing author' });
     }
-
+  
     if (price === undefined || typeof price !== 'number') {
       return res.status(400).json({ message: 'Invalid or missing price' });
     }
+    
+    // Check if the first_publish_year is a number or can be converted to a number
+    const publishYear = Number(first_publish_year);
+    if (isNaN(publishYear)) {
+      return res.status(400).json({ message: 'Invalid or missing first_publish_year' });
+    }
     // Add more checks for the remaining fields if necessary
     
-    // Find the user by the id
-    const user = await User.findById(params.userId);
-  
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-  
     // Construct the book object
-    const book = { title, author, price, cover_id, edition_count, first_publish_year, subject };
+    const book = { title, author, price, cover_id, edition_count, first_publish_year: publishYear, subject };
   
     // Add the book to the ShoppingCart
     user.shoppingCart.books.push(book);
   
-    // Save the user
+    // Save the shopping cart
     try {
-      const updatedUser = await user.save();
+      await user.shoppingCart.save();
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: 'There was an error saving the user.' });
+      return res.status(500).json({ message: 'There was an error saving the shopping cart.' });
     }
-  
-    if (!updatedUser) {
-      return res.status(500).json({ message: 'Could not update user' });
-    }
-  
-    // Return the updated user
-    res.status(200).json(updatedUser);
+    
+    // Return the updated shopping cart
+    res.status(200).json(user.shoppingCart);
   },
+  
+  
 
   //* Remove Book from cart
   async removeFromCart({ body, params }, res) {

@@ -8,7 +8,7 @@ const shoppingCartSchema = new Schema({
   },
   books: [{
     title: String,
-    author: String,
+    author: [String],
     price: Number,
     cover_id: Number,
     edition_count: Number,

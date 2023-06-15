@@ -22,25 +22,9 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // ! Before using shitty chat
-  // useEffect(() => {
-  //   console.log("Testing App.js UseEffect for the'/me/' route")
-  //   axios.get(`/api/user/me`, {
-  //     headers: {
-  //       'auth-token': localStorage.getItem('auth-token') // Get token from local storage
-  //     }
-  //   })
-  //     .then(response => {
-  //       setUser(response.data);
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     });
-  // }, []);
-
   useEffect(() => {
     console.log("Testing App.js UseEffect for the'/me/' route");
-    const authToken = localStorage.getItem("auth-token"); // Get token from local storage
+    const authToken = localStorage.getItem("auth-token"); 
     if (authToken) {
       axios
         .get(`/api/user/me`, {

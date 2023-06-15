@@ -12,7 +12,8 @@ const {
   updateProfileImage,
   getCurrentUserWithToken,
   addToCart,
-  removeFromCart
+  removeFromCart,
+  getUsersShoppingCartData // Import the new function here
 } = require('../../controllers/user-controller');
 
 // Routes
@@ -24,5 +25,6 @@ router.route('/:id').put(updateUser).get(getUserById).delete(deleteUser);
 router.route('/:userId/cart').post(addToCart);
 router.route('/:userId/cart/remove').delete(removeFromCart);
 router.route('/:userId/profile').put(updateProfileImage);
+router.route('/:userId/cart/data').get(getUsersShoppingCartData);
 
 module.exports = router;

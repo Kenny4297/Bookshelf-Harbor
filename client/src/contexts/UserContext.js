@@ -4,16 +4,18 @@ import axios from 'axios';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({ userId: null, shoppingCart: null });
 
   useEffect(() => {
     console.log("Testing the UserContext useEffect?")
     // This route fetches the user data associated with the JWT in the cookie
     axios.get(`/api/user/me`)
-    console.log("Testing hte UserContext request?")
       .then(response => {
-        // Update state with the received user data
-        setUser(response.data);
+        // Extract necessary user data
+        const { _id: userId, shoppingCart } = response.data;
+
+        // Update state with the extracted user data
+        setUser({ userId, shoppingCart });
       })
       .catch(error => {
         // Log any errors

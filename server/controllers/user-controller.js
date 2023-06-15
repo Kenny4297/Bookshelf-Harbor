@@ -48,52 +48,78 @@ module.exports = {
     res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone, data: { user, token } });
 },
 
+      // Function to fetch a user's shopping cart
+      //  '/:userId/cart/data
+      async getUsersShoppingCartData(req, res){
+        try {
+          // Assuming the user's id is being sent as a param in the request
+          const userId = req.params.userId; // use req.params.userId here
+      
+          // Fetch the user from the database and populate the 'shoppingCart' field
+          const user = await User.findById(userId).populate('shoppingCart');
+      
+          // If user not found, return an error
+          if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+          }
+      
+          // If the user doesn't have a shopping cart, return an error
+          if (!user.shoppingCart) {
+            return res.status(404).json({ message: 'No shopping cart found for user' });
+          }
+      
+          // Send the shopping cart in the response
+          res.json(user.shoppingCart);
+        } catch (error) {
+          // Log the error and send a server error status code
+          console.error(error);
+          res.status(500).json({ message: 'Server error' });
+        }
+      },      
 
 
+    //* User Token request
+    //* Just for testing so I can see the user data. This will only return the userId and is only used in the userContext. 
+    async getCurrentUserWithToken(req, res) {
+      // Extract the JWT token from the header
+      const token = req.headers["auth-token"];
 
-//* User Token request
+      // If no token exists, return an error
+      if (!token) {
+        return res.status(401).json({ message: "Unauthorized: No token provided" });
+      }
 
-async getCurrentUserWithToken(req, res) {
-  // Extract the JWT token from the header
-  const token = req.headers["auth-token"];
+      let payload;
+      try {
+        // If a token does exist, verify it and get the payload
+        payload = jwt.verify(token, process.env.JWT_SECRET);
+      } catch (error) {
+        // If the token is invalid (for instance, if it is expired), return an error
+        return res.status(401).json({ message: "Unauthorized: Invalid token", error: error.message });
+      }
 
-  // If no token exists, return an error
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized: No token provided" });
-  }
+      // The payload should contain an ID, if it doesn't, that's an error
+      if (!payload || !payload.id) {
+        return res.status(401).json({ message: "Unauthorized: Invalid token, no payload" });
+      }
 
-  let payload;
-  try {
-    // If a token does exist, verify it and get the payload
-    payload = jwt.verify(token, process.env.JWT_SECRET);
-  } catch (error) {
-    // If the token is invalid (for instance, if it is expired), return an error
-    return res.status(401).json({ message: "Unauthorized: Invalid token", error: error.message });
-  }
+      try {
+        // Retrieve the user by their ID
+        const user = await User.findById(payload.id).select("_id shoppingCart").populate({ path: "shoppingCart", populate: { path: "books" } });
 
-  // The payload should contain an ID, if it doesn't, that's an error
-  if (!payload || !payload.id) {
-    return res.status(401).json({ message: "Unauthorized: Invalid token, no payload" });
-  }
+        // If no user is found, return an error
+        if (!user) {
+          return res.status(404).json({ message: "User not found" });
+        }
 
-  try {
-    // Retrieve the user by their ID
-    const user = await User.findById(payload.id).populate({ path: "shoppingCart", populate: { path: "books" } });
-
-    // If no user is found, return an error
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // If a user is found, return their data
-    res.json(user);
-  } catch (error) {
-    // If there's an error while fetching the user, return it
-    console.error("Error while fetching the user: ", error); // Log the error
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-},
-
+        // If a user is found, return their data
+        res.json(user);
+      } catch (error) {
+        // If there's an error while fetching the user, return it
+        console.error("Error while fetching the user: ", error); // Log the error
+        res.status(500).json({ message: "Server error", error: error.message });
+      }
+    },
 
 
 
@@ -267,7 +293,7 @@ async getCurrentUserWithToken(req, res) {
   //* add to shopping cart
   async addToCart({ body, params }, res) {
     console.log('addToCart server received:', body);
-    const { title, author, price, cover_id, edition_count, first_publish_year, subject } = body;
+    const { title, author, price, cover_id, edition_count, first_publish_year, subject, key, description } = body;
   
     // Find the user by the id
     const user = await User.findById(params.userId).populate('shoppingCart');

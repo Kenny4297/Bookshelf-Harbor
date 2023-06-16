@@ -26,7 +26,7 @@ router.route('/verify').post(verifyUser);
 router.route('/:id').put(updateUser).get(getUserById).delete(deleteUser);
 router.route('/:userId/cart').post(addToCart);
 router.route('/:userId/cart/create').post(createShoppingCart); 
-router.route('/:userId/cart/remove').delete(removeFromCart);
+router.route('/:userId/cart/remove').post(removeFromCart);
 router.route('/:userId/profile').put(updateProfileImage);
 router.route('/:userId/cart/data').get(getUsersShoppingCartData);
 router.route('/:userId/cart/clear').post(clearShoppingCart); 

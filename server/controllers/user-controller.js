@@ -425,46 +425,57 @@ async addToCart(req, res) {
 
   //* Remove Book from cart
 // '/:userId/cart/remove'
+// '/:userId/cart/remove'
 async removeFromCart({ body, params }, res) {
+  console.log("Endpoint '/:userId/cart/remove' hit"); // To check if this endpoint is being hit
   const { bookId } = body;
+  console.log("Book id for individual deletion", bookId)
 
   // Data validation
   if (!bookId || typeof bookId !== 'string') {
+    console.log("Invalid or missing bookId"); // To check if the bookId validation fails
     return res.status(400).json({ message: 'Invalid or missing bookId' });
   }
 
   // Find the user by the id
   const user = await User.findById(params.userId).populate('shoppingCart');
+  console.log("Found user", user); // To check if the user is found and their details
 
   if (!user) {
+    console.log("User not found"); // To check if the user isn't found
     return res.status(404).json({ message: 'User not found' });
   }
 
   if (!user.shoppingCart) {
+    console.log("No shopping cart associated with the user"); // To check if the user doesn't have a shopping cart
     return res.status(400).json({ message: 'No shopping cart associated with the user' });
   }
 
   // Find the book in the shopping cart
   const bookIndex = user.shoppingCart.books.findIndex((book) => book._id.toString() === bookId); // changed
+  console.log("Book index", bookIndex); // To check if the book is found in the cart
 
   if (bookIndex === -1) {
+    console.log("Book not found in the cart"); // To check if the book isn't found in the cart
     return res.status(404).json({ message: 'Book not found in the cart' });
   }
 
   // Remove the book from the ShoppingCart
   user.shoppingCart.books.splice(bookIndex, 1);
+  console.log("Book removed, updated cart", user.shoppingCart.books); // To check if the book is removed and see the updated cart
 
   // Save the shopping cart
   try {
     await user.shoppingCart.save();
   } catch (error) {
-    console.error(error);
+    console.error("Error saving shopping cart", error); // To check if there's an error saving the cart
     return res.status(500).json({ message: 'There was an error saving the shopping cart.' });
   }
 
   // Return the updated shopping cart
   res.status(200).json(user.shoppingCart);
 },
+
 
 
 

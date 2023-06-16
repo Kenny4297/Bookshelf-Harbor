@@ -29,7 +29,7 @@ const ShoppingCart = () => {
     };
   
     fetchShoppingCartData();
-  }, [userId]);
+  }, [userId, user?.shoppingCart]); // Adding the optional chaining operator '?'
 
   useEffect(() => {
     console.log(cartItems);
@@ -39,20 +39,34 @@ const ShoppingCart = () => {
     console.log(user);
   });
 
-
-
   const removeFromCart = (bookId) => {
+    console.log("Book ID to remove:", bookId);
+    console.log("removeFromCart function called")
     axios
-      .post(`/api/user/${userId}/cart/remove`, { bookId }) // pass the bookId as a parameter in the request body
+      .post(`/api/user/${userId}/cart/remove`, { bookId }) 
       .then((response) => {
-        // update your cartItems state to reflect the book removal
-        setCartItems(cartItems.filter((book) => book._id !== response.data._id)); // changed
+        console.log("Response from server: ", response.data); // Add this line
+        
+        // Filter out the removed book from your local state by comparing book ID
+        const updatedCartItems = cartItems.filter((book) => book._id !== bookId); 
+        setCartItems(updatedCartItems);
+  
+        // also update the shoppingCart in the user context
+        if(user?.shoppingCart) { // Adding the check for user?.shoppingCart
+          setUser(prevUser => ({
+            ...prevUser,
+            shoppingCart: {
+              ...prevUser.shoppingCart,
+              books: updatedCartItems
+            }
+          }));
+        }
       })
       .catch((error) => {
         console.error("Error removing book: ", error);
       });
   }
-  
+
   const clearCart = () => {
     axios.post(`/api/user/${userId}/cart/clear`)
       .then(response => {

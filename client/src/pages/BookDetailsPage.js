@@ -11,6 +11,7 @@ const BookDetailsPage = () => {
     const [description, setDescription] = useState("");
     const [cover, setCover] = useState(null);
     const [user, setUser] = useContext(UserContext);
+    const [cartItems, setCartItems] = useState(user?.shoppingCart?.books || []);
 
     const MIN_PRICE = 5.0; // $5.00
     const MAX_PRICE = 20.0; // $20.00
@@ -22,9 +23,8 @@ const BookDetailsPage = () => {
         const price = MIN_PRICE + priceIncrement * 100;
         return price.toFixed(2);
     }
+
     useEffect(() => {
-        // fetch(`https://openlibrary.org/works/${"/works/" + key}.json`)
-        // fetch(`https://openlibrary.org${key}.json`)
         const url = key.startsWith("/works/") ? `https://openlibrary.org${key}.json` : `https://openlibrary.org/works/${key}.json`;
         fetch(url)
             .then((response) => {
@@ -43,22 +43,19 @@ const BookDetailsPage = () => {
     }, [key]);
 
     useEffect(() => {
+        setCartItems(user?.shoppingCart?.books || []);
+    }, [user]);
+
+    useEffect(() => {
         if (book && book.created) {
             const createdDate = new Date(book.created.value);
             const options = { month: "long", day: "numeric", year: "numeric" };
-            const formattedDate = createdDate.toLocaleDateString(
-                "en-US",
-                options
-            );
+            const formattedDate = createdDate.toLocaleDateString("en-US", options);
             setFirstPublishDate(formattedDate);
         }
     }, [book]);
 
     useEffect(() => {
-        console.log(book);
-        console.log(book?.authors);
-        console.log(book?.authors[0]?.author?.key); // "/authors/OL21594A"
-
         if (book && book.authors) {
             const fetchAuthor = (author) => {
                 const authorKey = author.author.key;
@@ -86,16 +83,13 @@ const BookDetailsPage = () => {
         }
     }, [book]);
 
-    // This useEffect is used for debugging purposes. It only runs when the component is mounted (the first time it is rendered) and if the user variable changes. 
     useEffect(() => {
         console.log(user);
     }, [user]);
 
-
     useEffect(() => {
-        console.log(book);
         if (!book) {
-            return; 
+            return;
         } else {
             const url = `https://openlibrary.org/search.json?title=${book.title}`;
             fetch(url)
@@ -122,35 +116,25 @@ const BookDetailsPage = () => {
         return <div style={{ color: "white" }}>Loading...</div>;
     }
 
-
     const addToCart = () => {
-        // create book object
         const bookToAdd = {
             title: book.title,
             author: authors.map(author => author.name),
             first_publish_year: new Date(firstPublishDate).getFullYear(),
             cover_i: cover.docs[0].cover_i,
             price: parseFloat(calculateBookPrice(book.title)),
-            key: book.key.slice(7), 
+            key: book.key.slice(7),
             description: typeof description === "object" ? description.value.split("Contains:")[0].trim() : description,
         };
         
         console.log('addToCart bookDetails:', bookToAdd);
-        console.log(user._id)
+        console.log(user._id);
         
         axios.post(`/api/user/${user._id}/cart`, bookToAdd)
         .then(response => {
             console.log(response);
-            axios.get(`/api/user/${user._id}`) // the url to get user by id
-                .then(response => {
-                    console.log(response.data); // the updated user data
-                    setUser(response.data); // update your user state with the updated user data
-                    alert('Book added to cart!');
-                })
-                .catch(error => {
-                    console.error(error);
-                    alert('There was an error fetching the updated user data.');
-                });
+            setCartItems(prevItems => [...prevItems, bookToAdd]);
+            alert('Book added to cart!');
         })
         .catch(error => {
             console.error(error);

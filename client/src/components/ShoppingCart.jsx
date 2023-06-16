@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { UserContext } from "../contexts/UserContext";
 
 const ShoppingCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const { userId } = useParams(); // Get userId from URL parameters
+  const [user, setUser] = useContext(UserContext);
 
   useEffect(() => {
     const fetchShoppingCartData = async () => {
@@ -15,7 +17,7 @@ const ShoppingCart = () => {
   
       try {
         const response = await axios.get(`/api/user/${userId}/cart/data`);
-        const books = Array.isArray(response.data.books) ? response.data.books : [];
+        const books = Array.isArray(response.data.shoppingCart.books) ? response.data.shoppingCart.books : [];
         setCartItems(books);
       } catch (error) {
         if (error.response && error.response.status === 404) {
@@ -33,18 +35,24 @@ const ShoppingCart = () => {
     console.log(cartItems);
   });
 
+  useEffect(() => {
+    console.log(user);
+  });
+
+
+
   const removeFromCart = (bookId) => {
     axios
       .post(`/api/user/${userId}/cart/remove`, { bookId }) // pass the bookId as a parameter in the request body
       .then((response) => {
         // update your cartItems state to reflect the book removal
-        setCartItems(cartItems.filter((book) => book._id !== bookId));
+        setCartItems(cartItems.filter((book) => book._id !== response.data._id)); // changed
       })
       .catch((error) => {
         console.error("Error removing book: ", error);
       });
   }
-
+  
   const clearCart = () => {
     axios.post(`/api/user/${userId}/cart/clear`)
       .then(response => {
@@ -78,7 +86,9 @@ const ShoppingCart = () => {
                 <h3>Author: {book.author.join(', ')}</h3>
                 <p>First published year: {book.first_publish_year}</p>
                 <p>Price: ${book.price}</p>
+                <button onClick={() => removeFromCart(book._id)}>Remove from Cart</button>
               </li>
+              
             ))}
           </ul>
           <button onClick={clearCart}>Clear Cart</button>

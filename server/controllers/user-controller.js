@@ -171,23 +171,19 @@ module.exports = {
   // the user is updated by the id
   //put('/api/user/:id')
   async updateUser({ body, params }, res) {
-    const { email, password, name, phone, shoppingCart } = body;
+    // Create the userToUpdate object directly from the request body
+    let userToUpdate = { ...body };
   
-    // Find the user by the id
-    let userToUpdate = { email: email };
-  
-    // if the password is not empty, the password is hashed and the salt is stored in the database
-    if (password?.length) {
-      // Hash the password
+    // Hash the password if it is provided
+    if (body.password?.length) {
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-  
-      // Update the user
-      userToUpdate = { ...userToUpdate, password: hashedPassword, name: name, phone: phone };
+      const hashedPassword = await bcrypt.hash(body.password, salt);
+      userToUpdate.password = hashedPassword;
     }
   
-    if (shoppingCart) {
-      userToUpdate = { ...userToUpdate, shoppingCart: shoppingCart };
+    // Remove password field from userToUpdate if no password is provided to avoid overwriting existing password
+    else {
+      delete userToUpdate.password;
     }
   
     const user = await User.findOneAndUpdate(
@@ -205,6 +201,7 @@ module.exports = {
     // Return the user
     res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone });
   },
+  
   
 
 
@@ -353,66 +350,63 @@ module.exports = {
 
   // ADDING TO SHOPPING CART
   //post('/api/user/:id/cart')
-  //* add to shopping cart
-  async addToCart(req, res) {
-    const { userId } = req.params;
-    const body = req.body;
-  
-    console.log('addToCart server received:', body);
-    console.log('addToCart server user:', userId);
-  
-    const { title, author, price, cover_i, first_publish_year, key, description } = body;
-  
-    // Find the user by the id
-    const user = await User.findById(userId).populate('shoppingCart');
-  
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-  
-    if (!user.shoppingCart) {
-      // No shopping cart associated with the user
-      return res.status(400).json({ message: 'No shopping cart associated with the user' });
-    }
-  
-    // Data validation
-    if (!title || typeof title !== 'string') {
-      return res.status(400).json({ message: 'Invalid or missing title' });
-    }
-    if (!author || (typeof author !== 'string' && !(Array.isArray(author) && author.every(a => typeof a === 'string')))) {
-      return res.status(400).json({ message: 'Invalid or missing author' });
-    }
-  
-    if (price === undefined || typeof price !== 'number') {
-      return res.status(400).json({ message: 'Invalid or missing price' });
-    }
-  
-    if (!cover_i || typeof cover_i !== 'number') {
-      return res.status(400).json({ message: 'Invalid or missing cover_i' });
-    }
-  
-    // Check if the first_publish_year is a number or can be converted to a number
-    const publishYear = Number(first_publish_year);
-    if (isNaN(publishYear)) {
-      return res.status(400).json({ message: 'Invalid or missing first_publish_year' });
-    }
-  
-    if (!key || typeof key !== 'string') {
-      return res.status(400).json({ message: 'Invalid or missing key' });
-    }
-  
-    if (!description || typeof description !== 'string') {
-      return res.status(400).json({ message: 'Invalid or missing description' });
-    }
-  
-    // Add more checks for the remaining fields if necessary
-  
-    // Construct the book object
-    const newBook = { title, author, price, cover_i, first_publish_year: publishYear, key, description };
-  
+//* add to shopping cart
+async addToCart(req, res) {
+  const { userId } = req.params;
+  const body = req.body;
+
+  const { title, author, price, cover_i, first_publish_year, key, description } = body;
+
+  // Find the user by the id
+  const user = await User.findById(userId).populate('shoppingCart');
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  if (!user.shoppingCart) {
+    // No shopping cart associated with the user
+    return res.status(400).json({ message: 'No shopping cart associated with the user' });
+  }
+
+  // Data validation
+  if (!title || typeof title !== 'string') {
+    return res.status(400).json({ message: 'Invalid or missing title' });
+  }
+  if (!author || (typeof author !== 'string' && !(Array.isArray(author) && author.every(a => typeof a === 'string')))) {
+    return res.status(400).json({ message: 'Invalid or missing author' });
+  }
+
+  if (price === undefined || typeof price !== 'number') {
+    return res.status(400).json({ message: 'Invalid or missing price' });
+  }
+
+  if (!cover_i || typeof cover_i !== 'number') {
+    return res.status(400).json({ message: 'Invalid or missing cover_i' });
+  }
+
+  // Check if the first_publish_year is a number or can be converted to a number
+  const publishYear = Number(first_publish_year);
+  if (isNaN(publishYear)) {
+    return res.status(400).json({ message: 'Invalid or missing first_publish_year' });
+  }
+
+  if (!key || typeof key !== 'string') {
+    return res.status(400).json({ message: 'Invalid or missing key' });
+  }
+
+  if (!description || typeof description !== 'string') {
+    return res.status(400).json({ message: 'Invalid or missing description' });
+  }
+
+  // Add more checks for the remaining fields if necessary
+
+  // Construct the book object
+  const newBook = { title, author, price, cover_i, first_publish_year: publishYear, key, description };
+
     // Add the book to the ShoppingCart
     user.shoppingCart.books.push(newBook);
-  
+
     // Save the shopping cart
     try {
       await user.shoppingCart.save();
@@ -420,51 +414,58 @@ module.exports = {
       console.error(error);
       return res.status(500).json({ message: 'There was an error saving the shopping cart.' });
     }
-  
+
     // Return the updated shopping cart
     res.status(200).json(user.shoppingCart);
-  },
+},
+
   
   
   
 
   //* Remove Book from cart
-  //'/:userId/cart/remove'
-  async removeFromCart({ body, params }, res) {
-    const { bookId } = body;
-  
-    // Data validation
-    if (!bookId || typeof bookId !== 'string') {
-      return res.status(400).json({ message: 'Invalid or missing bookId' });
-    }
-  
-    // Find the user by the id
-    const user = await User.findById(params.userId);
-  
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-  
-    // Find the book in the shopping cart
-    const bookIndex = user.shoppingCart.books.findIndex((book) => book._id.toString() === bookId);
-  
-    if (bookIndex === -1) {
-      return res.status(404).json({ message: 'Book not found in the cart' });
-    }
-  
-    // Remove the book from the ShoppingCart
-    user.shoppingCart.books.splice(bookIndex, 1);
-  
-    // Save the user
-    const updatedUser = await user.save();
-  
-    if (!updatedUser) {
-      return res.status(500).json({ message: 'Could not update user' });
-    }
-  
-    // Return the updated user
-    res.status(200).json(updatedUser);
-  },
+// '/:userId/cart/remove'
+async removeFromCart({ body, params }, res) {
+  const { bookId } = body;
+
+  // Data validation
+  if (!bookId || typeof bookId !== 'string') {
+    return res.status(400).json({ message: 'Invalid or missing bookId' });
+  }
+
+  // Find the user by the id
+  const user = await User.findById(params.userId).populate('shoppingCart');
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  if (!user.shoppingCart) {
+    return res.status(400).json({ message: 'No shopping cart associated with the user' });
+  }
+
+  // Find the book in the shopping cart
+  const bookIndex = user.shoppingCart.books.findIndex((book) => book._id.toString() === bookId); // changed
+
+  if (bookIndex === -1) {
+    return res.status(404).json({ message: 'Book not found in the cart' });
+  }
+
+  // Remove the book from the ShoppingCart
+  user.shoppingCart.books.splice(bookIndex, 1);
+
+  // Save the shopping cart
+  try {
+    await user.shoppingCart.save();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'There was an error saving the shopping cart.' });
+  }
+
+  // Return the updated shopping cart
+  res.status(200).json(user.shoppingCart);
+},
+
 
 
 

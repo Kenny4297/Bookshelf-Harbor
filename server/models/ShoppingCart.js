@@ -11,6 +11,7 @@ const shoppingCartSchema = new Schema({
     author: [String],
     price: Number,
     cover_id: Number,
+    key: String,
     edition_count: Number,
     first_publish_year: Number,
     subject: [String]

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 const HomePage = () => {
     const [user, setUser] = useContext(UserContext);
@@ -10,7 +11,7 @@ const HomePage = () => {
         console.log(user);
         if (user) {
             console.log(user._id);
-            console.log(user.shoppingCart.books);
+            // console.log(user.shoppingCart.books);
         }
     }, [user]);
 
@@ -37,6 +38,21 @@ const HomePage = () => {
         setSearchTerm('');
     };
 
+    useEffect(() => {
+        // Only run if a user is logged in
+        if (user && user.userId) {
+            console.log("Checking new useEffect!")
+            // Fetch shopping cart
+            axios.get(`/api/user/${user.userId}/cart/data`)
+                .then(response => {
+                    const { shoppingCart } = response.data;
+                    // Update the user context
+                    setUser({ ...user, shoppingCart });
+                })
+                .catch(error => console.error(error));
+        }
+    }, [user, setUser]);
+
     return (
         <>
             <h1>Home Page</h1>
@@ -47,7 +63,7 @@ const HomePage = () => {
                 <>
                     <p>The user is logged in.</p>
                     <p>UserID: {user._id}</p>
-                    <p>Users Shopping Cart: {JSON.stringify(user.shoppingCart.books)}</p>
+                    {/* <p>Users Shopping Cart: {JSON.stringify(user.shoppingCart.books)}</p> */}
                     
                     <Link to="/test">Go to Test Component</Link>
                 </>

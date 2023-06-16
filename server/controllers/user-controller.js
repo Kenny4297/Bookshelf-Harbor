@@ -6,7 +6,7 @@ require("dotenv").config();
 
 module.exports = {
 
-  //post('/api/users')
+  //post('/api/user')
   async createUser({ body }, res) {
     const { email, password, name, phone } = body;
 
@@ -63,9 +63,9 @@ module.exports = {
             return res.status(404).json({ message: 'User not found' });
           }
       
-          // If the user doesn't have a shopping cart, return an error
-          if (!user.shoppingCart) {
-            return res.status(404).json({ message: 'No shopping cart found for user' });
+          // If the user doesn't have a shopping cart or the cart is empty, return an empty array
+          if (!user.shoppingCart || user.shoppingCart.books.length === 0) {
+            return res.status(200).json({ books: [] });
           }
       
           // Send the shopping cart in the response
@@ -80,6 +80,7 @@ module.exports = {
 
     //* User Token request
     //* Just for testing so I can see the user data. This will only return the userId and is only used in the userContext. 
+    // 'api/user/me'
     async getCurrentUserWithToken(req, res) {
       // Extract the JWT token from the header
       const token = req.headers["auth-token"];
@@ -124,34 +125,43 @@ module.exports = {
 
 
   // the user is updated by the id
-  //put('/api/users/:id')
+  //put('/api/user/:id')
   async updateUser({ body, params }, res) {
-    const { email, password, name, phone } = body;
-
+    const { email, password, name, phone, shoppingCart } = body;
+  
     // Find the user by the id
     let userToUpdate = { email: email };
+  
     // if the password is not empty, the password is hashed and the salt is stored in the database
     if (password?.length) {
       // Hash the password
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
+  
       // Update the user
       userToUpdate = { ...userToUpdate, password: hashedPassword, name: name, phone: phone };
     }
-
-    const user = await User.updateOne(
+  
+    if (shoppingCart) {
+      userToUpdate = { ...userToUpdate, shoppingCart: shoppingCart };
+    }
+  
+    const user = await User.findOneAndUpdate(
       // Find the user by the id
       { _id: params.id },
       userToUpdate,
       // Return the updated user
       { new: true }
     );
+  
     // if the user is not updated, return an error
     if (!user)
       return res.status(400).json({ message: "Unable to update user" });
+  
     // Return the user
     res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone });
   },
+  
 
 
 
@@ -293,20 +303,20 @@ module.exports = {
   //* add to shopping cart
   async addToCart({ body, params }, res) {
     console.log('addToCart server received:', body);
-    const { title, author, price, cover_id, edition_count, first_publish_year, subject, key, description } = body;
-  
+    const { title, author, price, cover_i, first_publish_year, key, description } = body;
+
     // Find the user by the id
     const user = await User.findById(params.userId).populate('shoppingCart');
-  
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-  
+
     if (!user.shoppingCart) {
       // No shopping cart associated with the user
       return res.status(400).json({ message: 'No shopping cart associated with the user' });
     }
-  
+
     // Data validation
     if (!title || typeof title !== 'string') {
       return res.status(400).json({ message: 'Invalid or missing title' });
@@ -314,20 +324,33 @@ module.exports = {
     if (!author || (typeof author !== 'string' && !(Array.isArray(author) && author.every(a => typeof a === 'string')))) {
       return res.status(400).json({ message: 'Invalid or missing author' });
     }
-  
+
     if (price === undefined || typeof price !== 'number') {
       return res.status(400).json({ message: 'Invalid or missing price' });
     }
-    
+
+    if (!cover_i || typeof cover_i !== 'number') {
+      return res.status(400).json({ message: 'Invalid or missing cover_i' });
+    }
+
     // Check if the first_publish_year is a number or can be converted to a number
     const publishYear = Number(first_publish_year);
     if (isNaN(publishYear)) {
       return res.status(400).json({ message: 'Invalid or missing first_publish_year' });
     }
+
+    if (!key || typeof key !== 'string') {
+      return res.status(400).json({ message: 'Invalid or missing key' });
+    }
+
+    if (!description || typeof description !== 'string') {
+      return res.status(400).json({ message: 'Invalid or missing description' });
+    }
+
     // Add more checks for the remaining fields if necessary
     
     // Construct the book object
-    const book = { title, author, price, cover_id, edition_count, first_publish_year: publishYear, subject };
+    const book = { title, author, price, cover_i, first_publish_year: publishYear, key, description };
   
     // Add the book to the ShoppingCart
     user.shoppingCart.books.push(book);
@@ -342,11 +365,12 @@ module.exports = {
     
     // Return the updated shopping cart
     res.status(200).json(user.shoppingCart);
-  },
+},
   
   
 
   //* Remove Book from cart
+  //'/:userId/cart/remove'
   async removeFromCart({ body, params }, res) {
     const { bookId } = body;
   
@@ -381,6 +405,66 @@ module.exports = {
   
     // Return the updated user
     res.status(200).json(updatedUser);
+  },
+
+
+
+// user/:userId/cart/clear'
+  async clearShoppingCart(req, res) {
+    try {
+      // Assuming the user's id is being sent as a param in the request
+      const userId = req.params.userId;
+
+      // Fetch the user from the database and populate the 'shoppingCart' field
+      const user = await User.findById(userId).populate('shoppingCart');
+
+      // If user not found, return an error
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // If the user doesn't have a shopping cart, return an error
+      if (!user.shoppingCart) {
+        return res.status(404).json({ message: 'No shopping cart found for user' });
+      }
+
+      // Clear the books from the ShoppingCart
+      user.shoppingCart.books = [];
+
+      // Save the ShoppingCart
+      const updatedCart = await user.shoppingCart.save();
+
+      // If the ShoppingCart is not updated, return an error
+      if (!updatedCart)
+        return res.status(400).json({ message: "Unable to update shopping cart" });
+
+      // Return the ShoppingCart
+      res.status(200).json(updatedCart);
+
+    } catch (error) {
+      // Log the error and send a server error status code
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  },
+
+
+  // '/:userId/cart/create'
+  async createShoppingCart (req, res){
+    const { userId } = req.params;
+  
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+  
+    const newShoppingCart = new ShoppingCart();
+    await newShoppingCart.save();
+  
+    user.shoppingCart = newShoppingCart;
+    await user.save();
+  
+    res.json({ shoppingCart: newShoppingCart });
   }
 }
 

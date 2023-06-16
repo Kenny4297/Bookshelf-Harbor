@@ -7,21 +7,35 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState({ userId: null, shoppingCart: null });
 
   useEffect(() => {
-    console.log("Testing the UserContext useEffect?")
-    // This route fetches the user data associated with the JWT in the cookie
-    axios.get(`/api/user/me`)
-      .then(response => {
-        // Extract necessary user data
-        const { _id: userId, shoppingCart } = response.data;
+    console.log("Testing the UserContext useEffect?");
 
-        // Update state with the extracted user data
-        setUser({ userId, shoppingCart });
-      })
-      .catch(error => {
-        // Log any errors
-        console.error(error);
-      });
-  }, []); // This empty array as a second argument ensures this useEffect runs only once on component mount
+    const fetchUser = async () => {
+        try {
+            console.log("fetch user async function")
+            // This route fetches the user data associated with the JWT in the cookie
+            const response = await axios.get(`/api/user/me`);
+
+            // Extract necessary user data
+            let { _id: userId, shoppingCart } = response.data;
+
+            // Check if the user has a shoppingCart, if not, create one
+            if (!shoppingCart) {
+                console.log("route to create shopping cart")
+                const cartResponse = await axios.post(`/api/user/${userId}/cart/create`);
+                shoppingCart = cartResponse.data.shoppingCart;
+            }
+
+            // Update state with the extracted user data
+            setUser({ userId, shoppingCart });
+        } catch (error) {
+            // Log any errors
+            console.error(error);
+        }
+    };
+
+    fetchUser();
+}, []);
+
 
   return (
     <UserContext.Provider value={[user, setUser]}>

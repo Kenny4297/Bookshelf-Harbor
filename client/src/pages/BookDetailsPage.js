@@ -131,13 +131,10 @@ const BookDetailsPage = () => {
             first_publish_year: new Date(firstPublishDate).getFullYear(),
             cover_i: cover.docs[0].cover_i,
             price: parseFloat(calculateBookPrice(book.title)),
-            key: book.key.slice(7),  // here we're storing just the 'OL362694W' part of the key
-            // adjust as needed if you decide to store the full '/works/OL362694W' key
-            description: typeof description === "object"
-                ? description.value.split("Contains:")[0].trim()
-                : description,
+            key: book.key.slice(7), 
+            description: typeof description === "object" ? description.value.split("Contains:")[0].trim() : description,
         };
-    
+        
         console.log('addToCart bookDetails:', bookToAdd);
         console.log(user._id)
         

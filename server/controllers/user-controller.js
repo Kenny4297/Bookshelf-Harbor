@@ -7,6 +7,7 @@ require("dotenv").config();
 module.exports = {
 
   //post('/api/user')
+  // create user
   async createUser({ body }, res) {
     const { email, password, name, phone } = body;
 
@@ -48,34 +49,73 @@ module.exports = {
     res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone, data: { user, token } });
 },
 
+
+
+
+
+
+
+
+
+
+
       // Function to fetch a user's shopping cart
       //  '/:userId/cart/data
-      async getUsersShoppingCartData(req, res){
+      async getUsersShoppingCartData(req, res) {
         try {
-          // Assuming the user's id is being sent as a param in the request
-          const userId = req.params.userId; // use req.params.userId here
-      
-          // Fetch the user from the database and populate the 'shoppingCart' field
-          const user = await User.findById(userId).populate('shoppingCart');
-      
-          // If user not found, return an error
-          if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-          }
-      
-          // If the user doesn't have a shopping cart or the cart is empty, return an empty array
-          if (!user.shoppingCart || user.shoppingCart.books.length === 0) {
-            return res.status(200).json({ books: [] });
-          }
-      
-          // Send the shopping cart in the response
-          res.json(user.shoppingCart);
+            console.log("Get shopping cart data API function firing!")
+            const userId = req.params.userId;
+    
+            console.log(userId)
+    
+            // Fetch the user from the database
+            let user = await User.findById(userId);
+    
+            // If user not found, return an error
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+    
+            // Check if user's email exists
+            if (!user.email) {
+                console.log('User email not found');
+                return res.status(400).json({ message: 'User email is required' });
+            }
+    
+            // If the user doesn't have a shopping cart, create an empty one
+            if (!user.shoppingCart) {
+              console.log('User does not have a shopping cart. Creating one...');
+              const shoppingCart = new ShoppingCart({ books: [], user: userId }); // Include the user's id
+              await shoppingCart.save();
+              user.shoppingCart = shoppingCart._id;
+              await user.save();
+              // Fetch the user again after adding the cart
+              user = await User.findById(userId).populate('shoppingCart');
+            } else {
+              // Fetch the user with the populated shopping cart
+              user = await User.findById(userId).populate('shoppingCart');
+            }
+    
+            if (user.shoppingCart) {
+                console.log('Populated shoppingCart:', user.shoppingCart);
+            } else {
+                console.log('User does not have a shopping cart');
+                // Send a response indicating the user doesn't have a shopping cart
+                return res.json({ shoppingCart: null });
+            }
+    
+            // Send the shopping cart in the response
+            res.json({ shoppingCart: user.shoppingCart });
         } catch (error) {
-          // Log the error and send a server error status code
-          console.error(error);
-          res.status(500).json({ message: 'Server error' });
+            console.error(error);
+            res.status(500).json({ message: 'Server error' });
         }
-      },      
+    },
+    
+    
+      
+      
+          
 
 
     //* User Token request
@@ -84,12 +124,12 @@ module.exports = {
     async getCurrentUserWithToken(req, res) {
       // Extract the JWT token from the header
       const token = req.headers["auth-token"];
-
+    
       // If no token exists, return an error
       if (!token) {
         return res.status(401).json({ message: "Unauthorized: No token provided" });
       }
-
+    
       let payload;
       try {
         // If a token does exist, verify it and get the payload
@@ -98,21 +138,21 @@ module.exports = {
         // If the token is invalid (for instance, if it is expired), return an error
         return res.status(401).json({ message: "Unauthorized: Invalid token", error: error.message });
       }
-
+    
       // The payload should contain an ID, if it doesn't, that's an error
       if (!payload || !payload.id) {
         return res.status(401).json({ message: "Unauthorized: Invalid token, no payload" });
       }
-
+    
       try {
         // Retrieve the user by their ID
-        const user = await User.findById(payload.id).select("_id shoppingCart").populate({ path: "shoppingCart", populate: { path: "books" } });
-
+        const user = await User.findById(payload.id).select("_id email shoppingCart").populate({ path: "shoppingCart", populate: { path: "books" } });
+    
         // If no user is found, return an error
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         }
-
+    
         // If a user is found, return their data
         res.json(user);
       } catch (error) {
@@ -121,6 +161,10 @@ module.exports = {
         res.status(500).json({ message: "Server error", error: error.message });
       }
     },
+    
+
+
+
 
 
 
@@ -168,25 +212,34 @@ module.exports = {
 
 
   //post('/api/users/auth)
+  // user login
   async authUser({ body }, res) {
     // Find the user by the email address
     const user = await User.findOne({
       email: body.email
     }).populate('shoppingCart');
-
+  
     if (!user) return res.status(400).json({ message: 'Unable to authenticate user' });
-
+  
     // We want to verify the password & kick them out if it fails
-    const isValid = await bcrypt.compare(body.password, user.password)
-    if( !isValid ) return res.status(400).json({ message: 'Unable to authenticate user' });
-
+    const isValid = await bcrypt.compare(body.password, user.password);
+    if (!isValid) return res.status(400).json({ message: 'Unable to authenticate user' });
+  
+    if (!user.shoppingCart) {
+      const shoppingCart = new ShoppingCart({ user: user._id, books: [] });
+      await shoppingCart.save();
+      user.shoppingCart = shoppingCart._id;
+      await user.save();
+    }
+  
     const token = jwt.sign({
       email: user.email,
       id: user._id,
-    }, process.env.JWT_SECRET)
-
-    res.header("auth-token", token).json({ error: null, data: { user, token }})
+    }, process.env.JWT_SECRET);
+  
+    res.header("auth-token", token).json({ error: null, data: { user, token }});
   },
+  
   
 
 
@@ -301,22 +354,27 @@ module.exports = {
   // ADDING TO SHOPPING CART
   //post('/api/user/:id/cart')
   //* add to shopping cart
-  async addToCart({ body, params }, res) {
+  async addToCart(req, res) {
+    const { userId } = req.params;
+    const body = req.body;
+  
     console.log('addToCart server received:', body);
+    console.log('addToCart server user:', userId);
+  
     const { title, author, price, cover_i, first_publish_year, key, description } = body;
-
+  
     // Find the user by the id
-    const user = await User.findById(params.userId).populate('shoppingCart');
-
+    const user = await User.findById(userId).populate('shoppingCart');
+  
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
+  
     if (!user.shoppingCart) {
       // No shopping cart associated with the user
       return res.status(400).json({ message: 'No shopping cart associated with the user' });
     }
-
+  
     // Data validation
     if (!title || typeof title !== 'string') {
       return res.status(400).json({ message: 'Invalid or missing title' });
@@ -324,36 +382,36 @@ module.exports = {
     if (!author || (typeof author !== 'string' && !(Array.isArray(author) && author.every(a => typeof a === 'string')))) {
       return res.status(400).json({ message: 'Invalid or missing author' });
     }
-
+  
     if (price === undefined || typeof price !== 'number') {
       return res.status(400).json({ message: 'Invalid or missing price' });
     }
-
+  
     if (!cover_i || typeof cover_i !== 'number') {
       return res.status(400).json({ message: 'Invalid or missing cover_i' });
     }
-
+  
     // Check if the first_publish_year is a number or can be converted to a number
     const publishYear = Number(first_publish_year);
     if (isNaN(publishYear)) {
       return res.status(400).json({ message: 'Invalid or missing first_publish_year' });
     }
-
+  
     if (!key || typeof key !== 'string') {
       return res.status(400).json({ message: 'Invalid or missing key' });
     }
-
+  
     if (!description || typeof description !== 'string') {
       return res.status(400).json({ message: 'Invalid or missing description' });
     }
-
+  
     // Add more checks for the remaining fields if necessary
-    
+  
     // Construct the book object
-    const book = { title, author, price, cover_i, first_publish_year: publishYear, key, description };
+    const newBook = { title, author, price, cover_i, first_publish_year: publishYear, key, description };
   
     // Add the book to the ShoppingCart
-    user.shoppingCart.books.push(book);
+    user.shoppingCart.books.push(newBook);
   
     // Save the shopping cart
     try {
@@ -362,10 +420,11 @@ module.exports = {
       console.error(error);
       return res.status(500).json({ message: 'There was an error saving the shopping cart.' });
     }
-    
+  
     // Return the updated shopping cart
     res.status(200).json(user.shoppingCart);
-},
+  },
+  
   
   
 
@@ -450,21 +509,39 @@ module.exports = {
 
 
   // '/:userId/cart/create'
-  async createShoppingCart (req, res){
+  // create shopping cart
+  // add shopping cart
+  async createShoppingCart(req, res) {
     const { userId } = req.params;
-  
+
+    console.log('User ID:', userId);
+
     const user = await User.findById(userId);
     if (!user) {
+      console.log('User not found');
       return res.status(404).json({ message: 'User not found' });
     }
-  
-    const newShoppingCart = new ShoppingCart();
+
+    // Add this code
+    if (!user.email) {
+      console.log('User email not found');
+      return res.status(400).json({ message: 'User email is required' });
+    }
+
+    const newShoppingCart = new ShoppingCart({ books: [], user: userId }); 
     await newShoppingCart.save();
-  
-    user.shoppingCart = newShoppingCart;
+
+    console.log('New Shopping Cart:', newShoppingCart);
+
+    user.shoppingCart = newShoppingCart._id;
     await user.save();
-  
+
+    console.log('Updated User:', user);
+
     res.json({ shoppingCart: newShoppingCart });
-  }
+}
+
+  
+  
 }
 

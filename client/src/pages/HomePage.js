@@ -8,11 +8,13 @@ const HomePage = () => {
 
     // This useEffect is used for debugging purposes. It only runs when the component is mounted (the first time it is rendered) and if the user variable changes. 
     useEffect(() => {
+        console.log("Checking to see if the user is being updated")
         console.log(user);
         if (user) {
             console.log(user._id);
             // console.log(user.shoppingCart.books);
         }
+        // user
     }, [user]);
 
     //Here we are keeping track of the data in the search bar. If it changes, the state will be updated
@@ -39,19 +41,28 @@ const HomePage = () => {
     };
 
     useEffect(() => {
-        // Only run if a user is logged in
-        if (user && user.userId) {
-            console.log("Checking new useEffect!")
-            // Fetch shopping cart
-            axios.get(`/api/user/${user.userId}/cart/data`)
-                .then(response => {
+        if (user && user._id) {
+          axios.get(`/api/user/${user._id}/cart/data`)
+            .then(response => {
+              console.log(response.data);
+              const { shoppingCart } = response.data;
+              if (shoppingCart === null) { // Check if shoppingCart is null
+                // If the shopping cart doesn't exist, create a new one
+                axios.post(`/api/user/${user._id}/cart/create`)
+                  .then(response => {
                     const { shoppingCart } = response.data;
-                    // Update the user context
                     setUser({ ...user, shoppingCart });
-                })
-                .catch(error => console.error(error));
+                  })
+                  .catch(error => console.error(error));
+              } else {
+                // If shopping cart exists, set the shopping cart in the user context
+                setUser({ ...user, shoppingCart });
+              }
+            })
+            .catch(error => console.error(error));
         }
-    }, [user, setUser]);
+      }, [user && user._id]);
+      
 
     return (
         <>
@@ -63,6 +74,7 @@ const HomePage = () => {
                 <>
                     <p>The user is logged in.</p>
                     <p>UserID: {user._id}</p>
+                    <p>Email: {user.email}</p>
                     {/* <p>Users Shopping Cart: {JSON.stringify(user.shoppingCart.books)}</p> */}
                     
                     <Link to="/test">Go to Test Component</Link>

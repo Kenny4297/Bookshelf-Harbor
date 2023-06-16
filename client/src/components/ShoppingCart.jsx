@@ -15,7 +15,8 @@ const ShoppingCart = () => {
   
       try {
         const response = await axios.get(`/api/user/${userId}/cart/data`);
-        setCartItems(response.data.books);
+        const books = Array.isArray(response.data.books) ? response.data.books : [];
+        setCartItems(books);
       } catch (error) {
         if (error.response && error.response.status === 404) {
           setCartItems([]);

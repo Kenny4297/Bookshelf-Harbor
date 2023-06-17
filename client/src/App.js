@@ -21,7 +21,7 @@ import TestComponent from './components/testComponent';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API);
 
-// sk_test_51NJm9JJXLJk5zPyzAKOcwz6xQ4u9KoumIYfLPXrREqvHtRyVKVNTjWjtienkeUDa6wvu5hYXYmt90eJDlBDgutsp00VuvePqDf
+// 
 
 // Above is Stripes secret key for the back end
 

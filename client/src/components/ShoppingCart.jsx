@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { UserContext } from "../contexts/UserContext";
 
 const ShoppingCart = () => {
@@ -110,6 +110,7 @@ const ShoppingCart = () => {
       ) : (
         <p>Your shopping cart is empty.</p>
       )}
+      <Link to={`/checkout/${userId}`}> Go to Checkout</Link>
     </div>
   );
 }

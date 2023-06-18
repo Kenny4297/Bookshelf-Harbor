@@ -2,12 +2,31 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import { UserContext } from "../contexts/UserContext";
-import { CartContext } from "../contexts/CartContext";
+import { 
+    calculateSalesTax, 
+    calculateTotalWithoutTax, 
+    calculateTotalWithTaxAndShipping, 
+    calculateShippingCost 
+} from '../utils/cartCalculations'; 
 
 const ShoppingCart = () => {
 const [cartItems, setCartItems] = useState([]);
 const { userId } = useParams(); // Get userId from URL parameters
 const [user, setUser] = useContext(UserContext);
+
+const calculateTotals = () => {
+	const preTaxTotal = calculateTotalWithoutTax(cartItems).toFixed(2);
+	const salesTax = calculateSalesTax(cartItems).toFixed(2);
+	const shippingCost = calculateShippingCost(cartItems).toFixed(2);
+	const totalWithTaxAndShipping = calculateTotalWithTaxAndShipping(cartItems).toFixed(2);
+	
+	return {
+		preTaxTotal,
+		salesTax,
+		shippingCost,
+		totalWithTaxAndShipping
+	}
+}
 
 useEffect(() => {
 	const fetchShoppingCartData = async () => {
@@ -109,18 +128,11 @@ const clearCart = () => {
 	const calculateShippingCost = () => {
 	const shippingCostPerBook = 5; // $5 shipping cost per book
 	return cartItems.length * shippingCostPerBook;
-	};
+	}
 
-	const cartItemsContext = cartItems;
-	
+	const totals = calculateTotals();
+
 	return (
-	<CartContext.Provider value={{ //provide the context
-		cartItemsContext, 
-		calculateTotalWithoutTax, 
-		calculateSalesTax, 
-		calculateShippingCost, 
-		calculateTotalWithTaxAndShipping
-	}}>
 		<div>
 			<h1>Shopping Cart</h1>
 			{cartItems.length > 0 ? (
@@ -136,19 +148,18 @@ const clearCart = () => {
 					</li>
 				))}
 				</ul>
-				<p>Pre-tax total: ${calculateTotalWithoutTax().toFixed(2)}</p>
-				<p>Sales tax (6%): ${calculateSalesTax().toFixed(2)}</p>
-				<p>Shipping Cost: ${calculateShippingCost().toFixed(2)}</p>
-				<hr />
-				<p>Total with tax and shipping: ${calculateTotalWithTaxAndShipping().toFixed(2)}</p>
-				<button onClick={clearCart}>Clear Cart</button>
+					<p>Pre-tax total: ${totals.preTaxTotal}</p>
+					<p>Sales tax (6%): ${totals.salesTax}</p>
+					<p>Shipping Cost: ${totals.shippingCost}</p>
+					<hr />
+					<p>Total with tax and shipping: ${totals.totalWithTaxAndShipping}</p>
+					<button onClick={clearCart}>Clear Cart</button>
 			</>
 			) : (
 			<p>Your shopping cart is empty.</p>
 			)}
 			<Link to={`/checkout/${userId}`}> Go to Checkout</Link>
 		</div>
-	</CartContext.Provider>
 	);
 }
 

@@ -2,8 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Orders = require('../models/Orders');
 
- // GET /api/orders/:userId
+ 
 module.exports = {
+  // GET /api/orders/
     async getUserOrders(req, res) {
     try {
       const userId = req.params.userId;
@@ -24,38 +25,61 @@ module.exports = {
     }
   },
 
-    // POST /api/orders
-    async createOrder(req, res){
+    // POST /api/orders/
+        async createOrder(req, res){
+          console.log("Create order function firing!")
+          try {
+              const { user, books, total } = req.body;
+              console.log("CreateOrder body:", req.body)
+      
+              const orderToInsert = {
+                  user: mongoose.Types.ObjectId(user), 
+                  books: books.map(item => ({
+                      book: {
+                          title: item.book.title,
+                          author: item.book.author,
+                          first_publish_year: item.book.first_publish_year,
+                          key: item.book.key,
+                          price: item.book.price,
+                          subject: item.book.subject,
+                          _id: mongoose.Types.ObjectId(item.book._id), 
+                      },
+                      quantity: item.quantity,
+                  })),
+                  total: total,
+                  date: new Date(), 
+              };
+      
+              const newOrder = new Orders(orderToInsert);
+      
+              const savedOrder = await newOrder.save();
+      
+              res.status(201).json(savedOrder);
+          } catch (err) {
+              console.error(err);
+              res.status(500).json({ error: 'An error occurred while creating the order.' });
+          }
+      },
+
+      // GET /api/orders/:userId/last
+      async getLastUserOrder(req, res) {
         try {
-            const { user, cartItems, total } = req.body;
+          const userId = req.params.userId;
 
-            const orderToInsert = {
-                user: mongoose.Types.ObjectId(user._id), 
-                books: cartItems.map(item => ({
-                    book: {
-                        title: item.title,
-                        author: item.author,
-                        first_publish_year: item.first_publish_year,
-                        key: item.key,
-                        price: item.price,
-                        subject: item.subject,
-                        _id: mongoose.Types.ObjectId(item._id), 
-                    },
-                    quantity: item.quantity,
-                })),
-                total: total,
-                date: new Date(), 
-            };
+          // Fetch the latest order for the user from the database
+          let order = await Orders.findOne({ user: userId }).sort({ date: -1 });
 
-            const newOrder = new Orders(orderToInsert);
+          // If no order found, return a not found response
+          if (!order) {
+            return res.status(404).json({ message: 'No orders found for this user' });
+          }
 
-            const savedOrder = await newOrder.save();
-
-            res.status(201).json(savedOrder);
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'An error occurred while creating the order.' });
+          // Return the order
+          res.status(200).json(order);
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: 'Server error' });
         }
-        }
+      }
     }
 

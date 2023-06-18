@@ -1,9 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
+import React, { useContext, useEffect, useState } from 'react';
+import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { UserContext } from '../contexts/UserContext';
-import { useParams } from 'react-router-dom';
-import { CartContext } from '../contexts/CartContext'; 
+import { useParams, useNavigate } from 'react-router-dom';
+import { 
+    calculateSalesTax, 
+    calculateTotalWithoutTax, 
+    calculateTotalWithTaxAndShipping, 
+    calculateShippingCost 
+} from '../utils/cartCalculations';
 
 const CheckoutFormInner = () => {
 	const stripe = useStripe();
@@ -11,8 +16,7 @@ const CheckoutFormInner = () => {
 	const [user, setUser] = useContext(UserContext);
 	const { userId } = useParams(); 
 	const [cartItems, setCartItems] = useState([]);
-	const { calculateTotalWithoutTax, calculateSalesTax, calculateShippingCost, calculateTotalWithTaxAndShipping } = useContext(CartContext);
-
+	const navigate = useNavigate();
 
 	const getPaymentIntent = async () => {
 		// Replace with your server route that creates a payment intent.
@@ -20,23 +24,37 @@ const CheckoutFormInner = () => {
 		return response.data.clientSecret;
 	}
 
+	const calculateTotals = () => {
+        const preTaxTotal = calculateTotalWithoutTax(cartItems).toFixed(2);
+        const salesTax = calculateSalesTax(cartItems).toFixed(2);
+        const shippingCost = calculateShippingCost(cartItems).toFixed(2);
+        const totalWithTaxAndShipping = calculateTotalWithTaxAndShipping(cartItems).toFixed(2);
+        
+        return {
+            preTaxTotal,
+            salesTax,
+            shippingCost,
+            totalWithTaxAndShipping
+        }
+    }
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-
+	
 		const clientSecret = await getPaymentIntent();
-
+	
 		const result = await stripe.confirmCardPayment(clientSecret, {
 			payment_method: {
 				card: elements.getElement(CardElement)
 			}
 		});
-
+	
 		if (result.error) {
 			console.log(result.error.message);
 		} else {
 			if (result.paymentIntent.status === 'succeeded') {
 				const orderToInsert = {
-					user: user._id, 
+					user: user._id, // this is the current user's id
 					books: cartItems.map(item => ({
 						book: {
 							title: item.title,
@@ -49,18 +67,21 @@ const CheckoutFormInner = () => {
 						},
 						quantity: item.quantity,
 					})),
-					total: cartItems.reduce((total, item) => total + item.price * item.quantity, 0),
+					total: parseFloat(totals.totalWithTaxAndShipping),
 					date: new Date(), 
 				};
-
+	
+				// changed this line to make a POST request to /api/orders
 				const response = await axios.post(`/api/orders`, orderToInsert);
-
+	
 				if(response.status === 201) {
 					console.log("Order created successfully");
+					navigate(`/thankYou/${userId}`)
+					
 				} else {
 					console.error("Error creating order");
 				}
-
+	
 				console.log("Payment successful");
 			}
 		}
@@ -109,10 +130,12 @@ const CheckoutFormInner = () => {
 		console.log(cartItems);
 	});
 
+	const totals = calculateTotals();
 
 	return (
 			<>
 				<div>
+					<p>Enter a credit card: (Note: Again, this is just to mock credit card transactions. <span>Do not use a read credit card number.</span> Instead please use the following credit card number: 4242 4242 4242 4242, 05/39, 123 (CSV))</p>
 					<form onSubmit={handleSubmit} >
 						<CardElement options={cardStyle} />
 						<button type="submit">Submit Payment</button>
@@ -137,12 +160,11 @@ const CheckoutFormInner = () => {
 
 						<div>
 							{/* display the cart information */}
-							<p>Pre-tax total: ${calculateTotalWithoutTax().toFixed(2)}</p>
-							<p>Sales tax (6%): ${calculateSalesTax().toFixed(2)}</p>
-							<p>Shipping Cost: ${calculateShippingCost().toFixed(2)}</p>
+							<p>Pre-tax total: ${totals.preTaxTotal}</p>
+							<p>Sales tax (6%): ${totals.salesTax}</p>
+							<p>Shipping Cost: ${totals.shippingCost}</p>
 							<hr />
-							<p>Total with tax and shipping: ${calculateTotalWithTaxAndShipping().toFixed(2)}</p>
-							{/* rest of your Checkout component */}
+							<p>Total with tax and shipping: ${totals.totalWithTaxAndShipping}</p>
 						</div>
 					</>
 				) : (

@@ -3,11 +3,14 @@ const path = require('path');
 const db = require('./config/connection');
 const routes = require('./routes');
 const Stripe = require('stripe');
-require('dotenv').config()
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+require('dotenv').config();
+const cors = require('cors');
 
 const app = express();
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+app.use(cors());
+
 const PORT = process.env.PORT || 3001;
 
 app.use(express.urlencoded({ extended: true }));

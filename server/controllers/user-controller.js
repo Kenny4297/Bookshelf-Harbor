@@ -551,9 +551,6 @@ async removeFromCart({ body, params }, res) {
     console.log('Updated User:', user);
 
     res.json({ shoppingCart: newShoppingCart });
-}
-
-  
-  
+  }
 }
 

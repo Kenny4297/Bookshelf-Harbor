@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { UserContext } from '../contexts/UserContext';
@@ -8,7 +8,8 @@ function CheckoutFormInner() {
   const stripe = useStripe();
   const elements = useElements();
   const [user, setUser] = useContext(UserContext);
-  const { userId } = useParams(); // Get userId from URL parameters
+  const { userId } = useParams(); 
+  const [cartItems, setCartItems] = useState([]);
 
 
   const getPaymentIntent = async () => {
@@ -42,7 +43,7 @@ function CheckoutFormInner() {
       base: {
         color: '#ffffff',
         '::placeholder': {
-          color: '#abcdef', // This is for placeholder color
+          color: '#abcdef', 
         },
       },
       invalid: {
@@ -52,13 +53,65 @@ function CheckoutFormInner() {
     },
   };
 
+  useEffect(() => {
+    const fetchShoppingCartData = async () => {
+      if (!userId) {
+        console.error("userId is undefined");
+        return;
+      }
+  
+      try {
+        const response = await axios.get(`/api/user/${userId}/cart/data`);
+        const books = Array.isArray(response.data.shoppingCart.books) ? response.data.shoppingCart.books : [];
+        setCartItems(books);
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          setCartItems([]);
+        } else {
+          console.error("Error fetching data: ", error);
+        }
+      }
+    };
+  
+    fetchShoppingCartData();
+  }, [userId, user?.shoppingCart]); // Adding the optional chaining operator '?'
+
+  useEffect(() => {
+    console.log(cartItems);
+  });
+
+
   return (
     <>
-    <p>Test test?</p>
-      <form onSubmit={handleSubmit} >
-          <CardElement options={cardStyle} />
-          <button type="submit">Submit Payment</button>
-      </form>
+        <div>
+            <form onSubmit={handleSubmit} >
+                <CardElement options={cardStyle} />
+                <button type="submit">Submit Payment</button>
+            </form>
+        </div>
+
+        <div style={{display: 'flex'}}>
+            {cartItems.length > 0 ? (
+            <>
+            <ul>
+            {/* <ul style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}> */}
+                {cartItems.map((book, index) => (
+                <li key={index}>
+                    <h2>{book.title}</h2>
+                    <h3>Author: {book.author.join(', ')}</h3>
+                    <p>First published year: {book.first_publish_year}</p>
+                    <p>Price: ${book.price}</p>
+                </li>
+                
+                ))}
+            </ul>
+            </>
+        ) : (
+            <p>Your shopping cart is empty.</p>
+        )}
+
+        </div>
+
     </>
   );
 }

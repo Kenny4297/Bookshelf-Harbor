@@ -8,6 +8,12 @@ const ThankYou = () => {
   const [order, setOrder] = useState(null);
   const [user, setUser] = useContext(UserContext);
 
+  const [isReceiptRequested, setIsReceiptRequested] = useState(false);
+
+  const handleReceiptRequest = () => {
+    setIsReceiptRequested(true);
+  };
+
   useEffect(() => {
     console.log(user);
     });
@@ -38,6 +44,16 @@ const ThankYou = () => {
         </div>
       ))}
       <h2>Total: ${order.total}</h2>
+
+      {isReceiptRequested ? (
+        <p>
+          Thank you for your mock purchase! If this were a real eCommerce site, a receipt would be sent to your email. However, for the purpose of this demonstration and to protect your privacy, no email will be sent.
+        </p>
+      ) : (
+        <button onClick={handleReceiptRequest}>
+          "Send" me an email receipt (but not really)
+        </button>
+      )}
     </div>
   );
 };

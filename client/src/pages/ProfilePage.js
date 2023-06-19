@@ -8,7 +8,8 @@ import { Link, useParams } from "react-router-dom"
 			<div>
 				<h2>Profile</h2>
 				<Link to={`/profile/account/${userId}`}>Account</Link>
-				{/* Add link to Orders */}
+				<Link to={`/profile/orders/${userId}`}>View Orders</Link>
+
 
 			</div>
 		)

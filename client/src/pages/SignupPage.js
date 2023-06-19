@@ -1,18 +1,17 @@
 import { useState } from "react"
-import cookie from "js-cookie"
 
 const SignupPage = (props) => {
 
-  const defForm = { email: "", password: "" }
+  const defForm = { name: "", email: "", password: "" }
   const [ formData, setFormData ] = useState(defForm)
   const [ signupResult, setSignupResult ] = useState("")
 
-  const handleInputChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value})
+  const handleInputChange = (event) => {
+    setFormData({...formData, [event.target.name]: event.target.value})
   }
 
-  const handleFormSubmit = async(e) => {
-    e.preventDefault()
+  const handleFormSubmit = async(event) => {
+    event.preventDefault()
     const query = await fetch("/api/user", {
       method: "post",
       body: JSON.stringify(formData),
@@ -40,6 +39,18 @@ const SignupPage = (props) => {
       <h1>Signup Page</h1>
 
       <form className="form mb-3">
+        <div className="form-group">
+          <label>Name</label>
+          <input   
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            className="form-control"
+            value={formData.name}
+            onChange={handleInputChange}
+          />
+        </div>
+
         <div className="form-group">
           <label>Email Address</label>
           <input   

@@ -285,7 +285,6 @@ async createUser({ body }, res) {
 
 
 
-  //this is the route that is called when the user clicks on the profile button
   //get('/api/users/:id')
   async getUserById(req, res) {
     try {
@@ -489,7 +488,7 @@ async removeFromCart({ body, params }, res) {
 
 
 
-// user/:userId/cart/clear'
+  // user/:userId/cart/clear'
   async clearShoppingCart(req, res) {
     try {
       // Assuming the user's id is being sent as a param in the request

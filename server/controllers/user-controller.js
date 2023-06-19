@@ -7,46 +7,55 @@ require("dotenv").config();
 module.exports = {
 
   //post('/api/user')
-  // create user
-  async createUser({ body }, res) {
-    const { email, password, name, phone } = body;
+// create user
+async createUser({ body }, res) {
+  const { email, password, name, phone, address, profileImage } = body;
 
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+  // Check if the email already exists
+  let userExists = await User.findOne({ email });
 
-    const userToInsert = {
-        email: email,
-        password: hashedPassword,
-        name: name,
-        phone: phone,
-    };
+  if (userExists) {
+    return res.status(400).json({ message: "User with this email already exists" });
+  }
 
-    let user = await User.create(userToInsert);
+  // Hash the password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
-    if (!user) {
-        return res.status(400).json({ message: "Unable to create user" });
-    }
+  const userToInsert = {
+    email: email,
+    password: hashedPassword,
+    name: name,
+    phone: phone,
+    address: address,
+    profileImage: profileImage,
+  };
 
-    // Create a new ShoppingCart
-    const newCart = new ShoppingCart({ user: user._id });
-    await newCart.save();
+  let user = await User.create(userToInsert);
 
-    // Add the shoppingCart to the user
-    user.shoppingCart = newCart._id;
-    await user.save();
+  if (!user) {
+    return res.status(400).json({ message: "Unable to create user" });
+  }
 
-    const token = jwt.sign(
-        {
-            email: user.email,
-            id: user._id,
-            sameSite: "none",
-            secure: true,
-        },
-        process.env.JWT_SECRET
-    );
+  // Create a new ShoppingCart
+  const newCart = new ShoppingCart({ user: user._id });
+  await newCart.save();
 
-    res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone, data: { user, token } });
+  // Add the shoppingCart to the user
+  user.shoppingCart = newCart._id;
+  await user.save();
+
+  const token = jwt.sign(
+    {
+      email: user.email,
+      id: user._id,
+      sameSite: "none",
+      secure: true,
+    },
+    process.env.JWT_SECRET
+  );
+
+  res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone, address: user.address, profileImage: user.profileImage, data: { user, token } });
 },
 
 
@@ -170,22 +179,23 @@ module.exports = {
 
   // the user is updated by the id
   //put('/api/user/:id')
+  // the user is updated by the id
   async updateUser({ body, params }, res) {
     // Create the userToUpdate object directly from the request body
     let userToUpdate = { ...body };
-  
+
     // Hash the password if it is provided
     if (body.password?.length) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(body.password, salt);
       userToUpdate.password = hashedPassword;
     }
-  
+
     // Remove password field from userToUpdate if no password is provided to avoid overwriting existing password
     else {
       delete userToUpdate.password;
     }
-  
+
     const user = await User.findOneAndUpdate(
       // Find the user by the id
       { _id: params.id },
@@ -193,15 +203,14 @@ module.exports = {
       // Return the updated user
       { new: true }
     );
-  
+
     // if the user is not updated, return an error
     if (!user)
       return res.status(400).json({ message: "Unable to update user" });
-  
+
     // Return the user
-    res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone });
+    res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone, address: user.address, profileImage: user.profileImage });
   },
-  
   
 
 

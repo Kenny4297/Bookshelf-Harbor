@@ -4,7 +4,7 @@ const userSchema = new Schema({
   name: {
     type: String
   },
-  location: {
+  address: {
     type: String
   },
   email: {
@@ -15,9 +15,15 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  phoneNumber: {
+    type: String,
+  },
   shoppingCart: {
     type: Schema.Types.ObjectId,
     ref: 'ShoppingCart',
+  },
+  profileImage: { 
+    type: String,
   },
 });
 

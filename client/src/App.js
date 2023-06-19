@@ -17,6 +17,7 @@ import { ShoppingCart, CheckoutForm, ThankYou } from './components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/global.css';
 import TestComponent from './components/testComponent';
+import Account from './components/profile/Account';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -49,7 +50,10 @@ const App = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            
+            <Route path="/profile/:userId" element={<ProfilePage />} />
+            <Route path="/profile/account/:userId" element={<Account />} />
+            
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/test" element={<TestComponent />} />
             <Route path="/categories" element={<CategoriesPage />} />

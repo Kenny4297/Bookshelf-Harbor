@@ -52,10 +52,10 @@ const Header = () => {
     };
 
   return (
-    <header style={{width: '100%'}}>
+    <header style={{width: '100%', height:'5vh'}}>
       <Navbar bg="dark" expand="md"className="d-flex justify-content-center align-items-center">
         <Navbar.Brand href="/">
-          <h2 style={{marginLeft:'2rem'}} >Bookshelf Harbor</h2>
+          <h2 style={{marginLeft:'2rem'}} >Nile</h2>
         </Navbar.Brand>
 
         <Form inline='true' onSubmit={handleFormSubmit}>

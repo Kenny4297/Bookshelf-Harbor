@@ -6,14 +6,14 @@ function BookCarousel(props) {
   const { books } = props;
 
   return (
-    <Carousel>
+    <Carousel indicators={false}>
       {books.map((book, index) => (
         <Carousel.Item key={index}>
           <div className="text-center">
             <Link to={`/books${book.key}`}> {/* make sure `book.key` is correctly passed */}
               <img
                 className="d-block mx-auto"
-                src={`https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg`}
+                src={`https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`}
                 alt={`Cover for ${book.title}`}
               />
               <Carousel.Caption className="mt-2">

@@ -21,4 +21,95 @@ p {
 body {
   height: 100vh;
   background-color: #111;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.pt-3, .px-4 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* Featured Section */
+
+.featured-novels-container {
+  height: 45rem;
+}
+
+.featured-novels-image {
+  width: auto;
+  margin: 0 auto;
+  text-align: center;
+  border: 2px solid green;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.featured-novels-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.featured-novels-card {
+  width: 25rem;
+}
+
+.featured-novel-author {
+  color: black;
+}
+
+
+#featured-books-carousel .carousel-control-next-icon,
+#featured-books-carousel .carousel-control-prev-icon {
+    background-color: black;
+}
+
+#featured-books-carousel .carousel-control-next,
+#featured-books-carousel .carousel-control-prev {
+    position: absolute;
+    bottom: -35rem;
+    width: auto;
+}
+
+#featured-books-carousel .carousel-control-prev {
+    left: 20rem;
+}
+
+#featured-books-carousel .carousel-control-next {
+    right: 20rem;
+}
+
+
+
+
+
+/* Footer Section */
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: blue;
+  color: white;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.footer-column a {
+  color: white;
+  text-decoration: none;
+}
+
+.credit-card-columns {
+  display: flex;
+  flex-direction: column;
 }

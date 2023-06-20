@@ -21,7 +21,6 @@
     "@stripe/react-stripe-js": "^2.1.1",
     "@stripe/stripe-js": "^1.54.0",
     "axios": "^1.4.0",
-    "styled-components": "^5.3.10",
     "typescript": "^5.0.3"
   }
 }

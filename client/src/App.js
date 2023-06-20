@@ -48,7 +48,7 @@ const App = () => {
     <BrowserRouter>
       <UserContext.Provider value={[user, setUser]}>
         <Header setSearchTerm={setSearchTerm} />
-        <div className="pt-3 px-4">
+        <div style={{paddingTop: '7vh'}}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />

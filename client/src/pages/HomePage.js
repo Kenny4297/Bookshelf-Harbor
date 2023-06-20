@@ -2,6 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import styled from "styled-components";
+import NileHero from '../components/assets/images/NileHero.jpg'
+import FeaturedProducts from '../components/Home/FeaturedProducts'
+import CategoriesPage from './CategoriesPage'
+import Footer from '../components/Home/Footer'
 
 const HomePage = () => {
     const [user, setUser] = useContext(UserContext);
@@ -66,54 +71,80 @@ const HomePage = () => {
 
     return (
         <>
-            <h1>Home Page</h1>
+            <HeroContainer>
+                <IntroductionSection>
+                <h1>Welcome to Nile</h1>
 
-            {!user ? (
-                <p>The user is not logged in.</p>
-            ) : (
-                <>
-                    <p>The user is logged in.</p>
-                    <p>UserID: {user._id}</p>
-                    <p>Email: {user.email}</p>
-                    {/* <p>Users Shopping Cart: {JSON.stringify(user.shoppingCart.books)}</p> */}
-                    
-                    <Link to="/test">Go to Test Component</Link>
-                </>
-            )}
+                <p>Search though millions of books and have them sent right to your doorstep</p>
+                { user && user.id &&
+                    <>
+                        <p>UserID: {user._id}</p>
+                        <p>Email: {user.email}</p>
+                    </>
+                }
 
-            <p>Testing the Open Book API</p>
+                <p>Testing the Open Book API</p>
+                </IntroductionSection>
 
-            <Link to="/categories">Categories</Link>
+                <Link to="/categories">Categories</Link>
 
-            <div>
-                <form onSubmit={handleFormSubmit}>
-                    <input type="text" value={searchTerm} style={{color: 'black'}} onChange={handleInputChange} />
-                    <button type="submit">Search</button>
-                </form>
-                <ul>
-                    {bookData.map(book => (
-                    <li key={book.key}>
-                        <h3>{book.title}</h3>
-                        {book.author_name && (
-                        <p>
-                            by{' '}
-                            {book.author_name.length > 1
-                            ? book.author_name.join(', ')
-                            : book.author_name}
-                        </p>
-                        )}
-                        {book.cover_i && (
-                        <img
-                            src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`}
-                            alt={`${book.title} cover`}
-                        />
-                        )}
-                    </li>
-                    ))}
-                </ul>
-            </div>
+                <div>
+                    <form onSubmit={handleFormSubmit}>
+                        <input type="text" value={searchTerm} style={{color: 'black'}} onChange={handleInputChange} />
+                        <button type="submit">Search</button>
+                    </form>
+                    <ul>
+                        {bookData.map(book => (
+                        <li key={book.key}>
+                            <h3>{book.title}</h3>
+                            {book.author_name && (
+                            <p>
+                                by{' '}
+                                {book.author_name.length > 1
+                                ? book.author_name.join(', ')
+                                : book.author_name}
+                            </p>
+                            )}
+                            {book.cover_i && (
+                            <img
+                                src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`}
+                                alt={`${book.title} cover`}
+                            />
+                            )}
+                        </li>
+                        ))}
+                    </ul>
+                </div>
+            </HeroContainer>
+
+            <FeaturedProducts />
+
+            <CategoriesPage />
+
+            <Footer />
+
+
         </>
     )
 }
 
-export default HomePage
+export default HomePage;
+
+const HeroContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    width: 100%;
+    height: 95vh;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${NileHero});
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+`
+
+const IntroductionSection = styled.div`
+    margin-left: 3rem;
+`

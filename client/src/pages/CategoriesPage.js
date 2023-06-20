@@ -43,27 +43,30 @@ export default function BookDisplay() {
   };
 
   return (
-    <div style={{height: '150vh'}}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: "20px" }}>
-        <div style={{ width: '48%', border: '1px solid blue' }}>
-          <h2 style={{ textAlign: 'center' }}>Mystery</h2>
-          <BookCarousel books={mystery} />
-        </div>
-        <div style={{ width: '48%', border: '1px solid blue' }}>
-          <h2 style={{ textAlign: 'center' }}>Drama</h2>
-          <BookCarousel books={drama} />
+    <div style={{height:'80rem'}}>
+      <h2>Browse by Categories</h2>
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: "20px" }}>
+            <div style={{ width: '48%', border: '1px solid blue' }}>
+              <h2 style={{ textAlign: 'center' }}>Mystery</h2>
+              <BookCarousel books={mystery} />
+            </div>
+            <div style={{ width: '48%', border: '1px solid blue' }}>
+              <h2 style={{ textAlign: 'center' }}>Drama</h2>
+              <BookCarousel books={drama} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ width: '48%', border: '1px solid blue' }}>
+              <h2 style={{ textAlign: 'center' }}>Comedy</h2>
+              <BookCarousel books={comedy} />
+            </div>
+            <div style={{ width: '48%', border: '1px solid blue' }}>
+              <h2 style={{ textAlign: 'center' }}>Romance</h2>
+              <BookCarousel books={romance} />
+            </div>
+          </div>
         </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ width: '48%', border: '1px solid blue' }}>
-          <h2 style={{ textAlign: 'center' }}>Comedy</h2>
-          <BookCarousel books={comedy} />
-        </div>
-        <div style={{ width: '48%', border: '1px solid blue' }}>
-          <h2 style={{ textAlign: 'center' }}>Romance</h2>
-          <BookCarousel books={romance} />
-        </div>
-      </div>
-    </div>
   );
 }

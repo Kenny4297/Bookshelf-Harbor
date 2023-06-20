@@ -218,34 +218,41 @@ async createUser({ body }, res) {
 
 
   //post('/api/users/auth)
-  // user login
-  async authUser({ body }, res) {
-    // Find the user by the email address
-    const user = await User.findOne({
-      email: body.email
-    }).populate('shoppingCart');
+// user login
+async authUser({ body }, res) {
+  console.log(body); // Log the request body
   
-    if (!user) return res.status(400).json({ message: 'Unable to authenticate user' });
+  // Find the user by the email address
+  const user = await User.findOne({
+    email: body.email
+  }).populate('shoppingCart');
+
+  console.log(user); // Log the found user
   
-    // We want to verify the password & kick them out if it fails
-    const isValid = await bcrypt.compare(body.password, user.password);
-    if (!isValid) return res.status(400).json({ message: 'Unable to authenticate user' });
+  if (!user) return res.status(400).json({ message: 'Unable to authenticate user' });
+
+  // We want to verify the password & kick them out if it fails
+  const isValid = await bcrypt.compare(body.password, user.password);
+
+  console.log(isValid); // Log the comparison result
   
-    if (!user.shoppingCart) {
-      const shoppingCart = new ShoppingCart({ user: user._id, books: [] });
-      await shoppingCart.save();
-      user.shoppingCart = shoppingCart._id;
-      await user.save();
-    }
-  
-    const token = jwt.sign({
-      email: user.email,
-      id: user._id,
-    }, process.env.JWT_SECRET);
-  
-    res.header("auth-token", token).json({ error: null, data: { user, token }});
-  },
-  
+  if (!isValid) return res.status(400).json({ message: 'Unable to authenticate user' });
+
+  if (!user.shoppingCart) {
+    const shoppingCart = new ShoppingCart({ user: user._id, books: [] });
+    await shoppingCart.save();
+    user.shoppingCart = shoppingCart._id;
+    await user.save();
+  }
+
+  const token = jwt.sign({
+    email: user.email,
+    id: user._id,
+  }, process.env.JWT_SECRET);
+
+  res.header("auth-token", token).json({ error: null, data: { user, token }});
+},
+
   
 
 
@@ -530,6 +537,10 @@ async removeFromCart({ body, params }, res) {
     }
   },
 
+
+
+
+  
 
   // '/:userId/cart/create'
   // create shopping cart

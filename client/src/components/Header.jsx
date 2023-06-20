@@ -18,10 +18,11 @@ const Header = () => {
     }, [user && user.profileImage]);
     
 
-  const logout = () => {
-    cookie.remove("auth-token")
-    window.location.href = "/login"
-  }
+    const logout = () => {
+      localStorage.removeItem("auth-token");
+      setUser(null); 
+      navigate("/login");
+    }
 
     //Here we are keeping track of the data in the search bar. If it changes, the state will be updated
     const [searchTerm, setSearchTerm] = useState('');
@@ -91,7 +92,7 @@ const Header = () => {
                   <img
                     src={user.profileImage}
                     alt="The user's profile pic"
-                    style={{ width: '40px', borderRadius: '20px' }}
+                    style={{ width: '40px', borderRadius: '20px', border: '2px solid green' }}
                   />
                 )}
               </>

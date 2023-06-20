@@ -5,12 +5,14 @@ const router = express.Router();
 const { 
   createOrder, 
   getUserOrders, 
-  getLastUserOrder  // import the new controller function
+  getLastUserOrder,
+  getOrder  
 } = require('../../controllers/order-controller');
 
 // Routes
 router.route('/').post(createOrder);
-router.route('/:userId').get(getUserOrders);
-router.route('/:userId/last').get(getLastUserOrder);  // add the new route
+router.route('/order/:orderId').get(getOrder);
+router.route('/user/:userId').get(getUserOrders);
+router.route('/:userId/last').get(getLastUserOrder); 
 
 module.exports = router;

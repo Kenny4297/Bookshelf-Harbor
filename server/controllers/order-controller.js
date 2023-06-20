@@ -4,26 +4,26 @@ const Orders = require('../models/Orders');
 
  
 module.exports = {
-  // GET /api/orders/
-    async getUserOrders(req, res) {
+  // GET /api/orders/user/:userId
+  async getUserOrders(req, res) {
     try {
-      const userId = req.params.userId;
+        const userId = req.params.userId;
 
-      // Fetch all orders for the user from the database
-      let orders = await Orders.find({ user: userId });
+        // Fetch all orders for the user from the database
+        let orders = await Orders.find({ user: userId });
 
-      // If no orders found, return an empty array
-      if (!orders) {
-        return res.status(200).json([]);
-      }
+        // If no orders found, return an empty array
+        if (!orders) {
+            orders = [];
+        }
 
-      // Return the orders
-      res.status(200).json(orders);
+        // Return the orders
+        res.status(200).json(orders);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Server error' });
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
     }
-  },
+},
 
     // POST /api/orders/
         async createOrder(req, res){
@@ -80,6 +80,21 @@ module.exports = {
           console.error(error);
           res.status(500).json({ message: 'Server error' });
         }
-      }
+      },
+
+      // GET /api/orders/order/:orderId
+      async getOrder(req, res) {
+        try {
+          const orderId = req.params.orderId;
+          const order = await Orders.findById(orderId).populate('books.book');
+          if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+          }
+          res.status(200).json(order);
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: 'Server error' });
+        }
+      },
     }
 

@@ -17,6 +17,10 @@ const Account = () => {
   const cld = new cloudinary.Cloudinary({cloud_name: 'diwhrgwml'});
 
   const handleInputChange = (event) => {
+    if (event.target.name === 'password' && event.target.value === '') {
+      return;
+    }
+  
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 

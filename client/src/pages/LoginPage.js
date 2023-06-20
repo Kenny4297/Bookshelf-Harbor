@@ -1,57 +1,42 @@
-import { useState } from "react"
-import cookie from "js-cookie"
+import { useState, useContext } from "react"
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from "../contexts/UserContext";
 
-const LoginPage = (props) => {
+const LoginPage = () => {
 
   const defForm = { email: "", password: "" }
-  const [ formData, setFormData ] = useState(defForm)
-  const [ loginResult, setLoginResult ] = useState("")
+  const [formData, setFormData] = useState(defForm)
+  const [loginResult, setLoginResult] = useState("")
+  const navigate = useNavigate();
+  const [user, setUser] = useContext(UserContext);
+
 
   const handleInputChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value})
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  //! Before using shitty chat
-  // const handleFormSubmit = async (e) => {
-  //   console.log(formData)
-  //   e.preventDefault()
-  //   const query = await fetch("/api/user/auth", {
-  //     method: "post",
-  //     body: JSON.stringify(formData),
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   })
-  //   const result = await query.json()
+  const handleFormSubmit = async (e) => {
+    console.log(formData);
+    e.preventDefault();
+    const query = await fetch("/api/user/auth", {
+      method: "post",
+      body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    const result = await query.json();
 
-  //   if( result && !result.err && result.data && result.data.token ){
-  //     setLoginResult("success")
-  //     cookie.set("auth-token", result.data.token, { expires: 3 })
-  //   } else {
-  //     setLoginResult("fail")
-  //   }
-  // }
+    if (result && !result.err && result.data && result.data.token) {
+      setLoginResult("success");
+      localStorage.setItem("auth-token", result.data.token);
+      setUser(result.data.user)
+      navigate("/");
+    } else {
+      setLoginResult("fail");
+    }
+  };
 
-      const handleFormSubmit = async (e) => {
-        console.log(formData);
-        e.preventDefault();
-        const query = await fetch("/api/user/auth", {
-          method: "post",
-          body: JSON.stringify(formData),
-          headers: {
-            "Content-Type": "application/json"
-          }
-        });
-        const result = await query.json();
-      
-        if (result && !result.err && result.data && result.data.token) {
-          setLoginResult("success");
-          localStorage.setItem("auth-token", result.data.token); // Store token in local storage
-        } else {
-          setLoginResult("fail");
-        }
-      };
-  
 
   return (
     <>
@@ -60,7 +45,7 @@ const LoginPage = (props) => {
       <form className="form mb-3">
         <div className="form-group">
           <label>Email Address</label>
-          <input   
+          <input
             type="text"
             name="email"
             placeholder="john@gmail.com"
@@ -72,7 +57,7 @@ const LoginPage = (props) => {
 
         <div className="form-group">
           <label>Password</label>
-          <input   
+          <input
             type="password"
             name="password"
             className="form-control"
@@ -86,21 +71,19 @@ const LoginPage = (props) => {
         </div>
       </form>
 
-      { loginResult === "success" && (
+      {loginResult === "success" && (
         <div className="alert alert-success" role="alert">
           Login successful!
-          {window.location.href="/"}
         </div>
       )}
 
-      { loginResult === "fail" && (
+      {loginResult === "fail" && (
         <div className="alert alert-danger" role="alert">
           Login failed!
         </div>
       )}
     </>
   )
-
 }
 
 export default LoginPage

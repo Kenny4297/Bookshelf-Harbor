@@ -18,6 +18,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/global.css';
 import TestComponent from './components/testComponent';
 import Account from './components/profile/Account';
+import Orders from './components/profile/Orders';
+import SpecificOrder from './components/profile/SpecificOrder'
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -53,6 +55,8 @@ const App = () => {
             
             <Route path="/profile/:userId" element={<ProfilePage />} />
             <Route path="/profile/account/:userId" element={<Account />} />
+            <Route path="/profile/orders/:userId" element={<Orders />} />
+            <Route path="/specificOrder/:orderId" element={<SpecificOrder/>} />
             
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/test" element={<TestComponent />} />
@@ -63,6 +67,8 @@ const App = () => {
             <Route path="/shoppingCart/:userId" element={<ShoppingCart />} />
             <Route path="/checkout/:userId" element={<CheckoutForm />} />
             <Route path="/thankYou/:userId" element={<ThankYou />} />
+
+
           </Routes>
         </div>
       </UserContext.Provider>

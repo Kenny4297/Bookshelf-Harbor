@@ -20,7 +20,7 @@ const ThankYou = () => {
 
   useEffect(() => {
     const fetchOrder = async () => {
-      const response = await axios.get(`/api/orders/${userId}/last`);
+      const response = await axios.get(`/api/orders/order/${userId}/last`);
       setOrder(response.data);
     }
     fetchOrder();

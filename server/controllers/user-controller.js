@@ -155,7 +155,7 @@ async createUser({ body }, res) {
     
       try {
         // Retrieve the user by their ID
-        const user = await User.findById(payload.id).select("_id email shoppingCart").populate({ path: "shoppingCart", populate: { path: "books" } });
+        const user = await User.findById(payload.id).select("_id email shoppingCart profileImage").populate({ path: "shoppingCart", populate: { path: "books" } });
     
         // If no user is found, return an error
         if (!user) {
@@ -487,9 +487,10 @@ async removeFromCart({ body, params }, res) {
 
 
 
-
+  // POST
   // user/:userId/cart/clear'
   async clearShoppingCart(req, res) {
+    console.log("Clear shopping cart function firing??")
     try {
       // Assuming the user's id is being sent as a param in the request
       const userId = req.params.userId;
@@ -512,6 +513,8 @@ async removeFromCart({ body, params }, res) {
 
       // Save the ShoppingCart
       const updatedCart = await user.shoppingCart.save();
+
+      console.log("This is the users shopping cart after we update it:", user.shoppingCart.books)
 
       // If the ShoppingCart is not updated, return an error
       if (!updatedCart)

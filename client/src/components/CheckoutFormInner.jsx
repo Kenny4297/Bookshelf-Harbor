@@ -11,20 +11,19 @@ import {
 } from '../utils/cartCalculations';
 
 const CheckoutFormInner = () => {
-	const stripe = useStripe();
-	const elements = useElements();
-	const [user, setUser] = useContext(UserContext);
-	const { userId } = useParams(); 
-	const [cartItems, setCartItems] = useState([]);
-	const navigate = useNavigate();
+    const stripe = useStripe();
+    const elements = useElements();
+    const [user, setUser] = useContext(UserContext);
+    const { userId } = useParams(); 
+    const [cartItems, setCartItems] = useState([]);
+    const navigate = useNavigate();
 
-	const getPaymentIntent = async () => {
-		// Replace with your server route that creates a payment intent.
-		const response = await axios.post('http://localhost:3001/create-payment-intent', { amount: 1000 }); 
-		return response.data.clientSecret;
-	}
+    const getPaymentIntent = async () => {
+        const response = await axios.post('http://localhost:3001/create-payment-intent', { amount: 1000 }); 
+        return response.data.clientSecret;
+    }
 
-	const calculateTotals = () => {
+    const calculateTotals = () => {
         const preTaxTotal = calculateTotalWithoutTax(cartItems).toFixed(2);
         const salesTax = calculateSalesTax(cartItems).toFixed(2);
         const shippingCost = calculateShippingCost(cartItems).toFixed(2);
@@ -38,54 +37,65 @@ const CheckoutFormInner = () => {
         }
     }
 
-	const handleSubmit = async (event) => {
-		event.preventDefault();
-	
-		const clientSecret = await getPaymentIntent();
-	
-		const result = await stripe.confirmCardPayment(clientSecret, {
-			payment_method: {
-				card: elements.getElement(CardElement)
-			}
-		});
-	
-		if (result.error) {
-			console.log(result.error.message);
-		} else {
-			if (result.paymentIntent.status === 'succeeded') {
-				const orderToInsert = {
-					user: user._id, // this is the current user's id
-					books: cartItems.map(item => ({
-						book: {
-							title: item.title,
-							author: item.author,
-							first_publish_year: item.first_publish_year,
-							key: item.key,
-							price: item.price,
-							subject: item.subject,
-							_id: item._id,
-						},
-						quantity: item.quantity,
-					})),
-					total: parseFloat(totals.totalWithTaxAndShipping),
-					date: new Date(), 
-				};
-	
-				// changed this line to make a POST request to /api/orders
-				const response = await axios.post(`/api/orders`, orderToInsert);
-	
-				if(response.status === 201) {
-					console.log("Order created successfully");
-					navigate(`/thankYou/${userId}`)
-					
-				} else {
-					console.error("Error creating order");
-				}
-	
-				console.log("Payment successful");
-			}
-		}
-	}
+    const clearShoppingCart = async () => {
+        try {
+            const response = await axios.post(`/api/user/${userId}/cart/clear`);
+            if (response.status === 200) {
+                console.log("Shopping cart cleared successfully");
+				setCartItems([]); 
+            }
+        } catch (error) {
+            console.error("Error clearing shopping cart: ", error);
+        }
+    }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+    
+        const clientSecret = await getPaymentIntent();
+    
+        const result = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+                card: elements.getElement(CardElement)
+            }
+        });
+    
+        if (result.error) {
+            console.log(result.error.message);
+        } else {
+            if (result.paymentIntent.status === 'succeeded') {
+                const orderToInsert = {
+                    user: user._id, 
+                    books: cartItems.map(item => ({
+                        book: {
+                            title: item.title,
+                            author: item.author,
+                            first_publish_year: item.first_publish_year,
+                            key: item.key,
+                            price: item.price,
+                            subject: item.subject,
+                            _id: item._id,
+                        },
+                        quantity: item.quantity,
+                    })),
+                    total: parseFloat(totals.totalWithTaxAndShipping),
+                    date: new Date(), 
+                };
+    
+                const response = await axios.post(`/api/orders`, orderToInsert);
+    
+                if(response.status === 201) {
+                    console.log("Order created successfully");
+                    clearShoppingCart();
+                    navigate(`/thankYou/${userId}`)
+                } else {
+                    console.error("Error creating order");
+                }
+    
+                console.log("Payment successful");
+            }
+        }
+    }
 
 
 	const cardStyle = {
@@ -159,7 +169,6 @@ const CheckoutFormInner = () => {
 						</ul>
 
 						<div>
-							{/* display the cart information */}
 							<p>Pre-tax total: ${totals.preTaxTotal}</p>
 							<p>Sales tax (6%): ${totals.salesTax}</p>
 							<p>Shipping Cost: ${totals.shippingCost}</p>

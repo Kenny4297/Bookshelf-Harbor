@@ -9,15 +9,19 @@ import { UserContext } from "../contexts/UserContext";
 const Header = () => {
   const [user, setUser] = useContext(UserContext);
 
+    // Update on profileImage change
+    useEffect(() => {
+      if (user && user.profileImage) {
+        console.log('User Profile Image changed', user.profileImage);
+        // Any additional logic on profileImage change can be written here
+      }
+    }, [user && user.profileImage]);
+    
+
   const logout = () => {
     cookie.remove("auth-token")
     window.location.href = "/login"
   }
-
-    // This useEffect is used for debugging purposes. It only runs when the component is mounted (the first time it is rendered) and if the user variable changes. 
-    // useEffect(() => {
-    //     console.log(user);
-    // }, [user]);
 
     //Here we are keeping track of the data in the search bar. If it changes, the state will be updated
     const [searchTerm, setSearchTerm] = useState('');
@@ -46,19 +50,12 @@ const Header = () => {
         });
     };
 
-    // useEffect(() => {
-    //   console.log(`Search term is ${searchTerm}`)
-    //   console.log(`Search term is ${bookData}`)
-      
-    // }, [searchTerm, bookData])
-
   return (
     <header style={{width: '100%'}}>
       <Navbar bg="dark" expand="md"className="d-flex justify-content-center align-items-center">
         <Navbar.Brand href="/">
           <h2 style={{marginLeft:'2rem'}} >Bookshelf Harbor</h2>
         </Navbar.Brand>
-
 
         <Form inline='true' onSubmit={handleFormSubmit}>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -69,15 +66,6 @@ const Header = () => {
             <Button variant="outline-success" type="submit">Search</Button>
           </div>
         </Form>
-
-        {/* <form onSubmit={handleFormSubmit}>
-          <div style={{ display: "flex", alignItems: "center" }}>
-              <input type="text" value={searchTerm} style={{color: 'black'}} onChange={handleInputChange} />
-              <button type="submit">Search</button>
-          </div>
-        </form> */}
-
-
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -99,32 +87,19 @@ const Header = () => {
                   Logout
                 </Nav.Link>
                 <Nav.Link href={`/shoppingCart/${user._id}`} style={{ color: 'white' }}>Shopping Cart</Nav.Link>
-                {!user.profileImage ? (
-                  <Nav.Link href="/profileImage" style={{ color: 'white' }}>Add a profile Image!</Nav.Link>
-                ) : (
-                  <NavDropdown
-                    title={
-                      <img
-                        src={user.profileImage}
-                        alt="The users profile pic"
-                        style={{ width: '40px', borderRadius: '20px' }}
-                      />
-                    }
-                    id="basic-nav-dropdown"
-                  >
-                    <NavDropdown.Item href={`/profile/${user._id}`}>
-                      Profile
-                    </NavDropdown.Item>
-                    <NavDropdown.Item href="##" onClick={logout}>
-                      Logout
-                    </NavDropdown.Item>
-                  </NavDropdown>
+                {user && user.profileImage && (
+                  <img
+                    src={user.profileImage}
+                    alt="The user's profile pic"
+                    style={{ width: '40px', borderRadius: '20px' }}
+                  />
                 )}
               </>
             )}
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
+
     </header>
 
   );

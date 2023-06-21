@@ -5,17 +5,16 @@ import { UserContext } from "../contexts/UserContext";
 import styled from 'styled-components';
 import defaultImage from '../components/assets/images/defaultImage.jpg'
 
-
 function IndividualBook() {
   const location = useLocation();
   const searchTerm = location.state?.searchTerm;
-  const [book, setBook] = useState(null);
+  const [book, setBook] = useState([]);
   const [user, setUser] = useContext(UserContext);
-
+  const [page, setPage] = useState(0);
   
   useEffect(() => {
     if (searchTerm) {
-      fetch(`https://openlibrary.org/search.json?title=${searchTerm}`)
+      fetch(`https://openlibrary.org/search.json?title=${searchTerm}&page=${page + 1}&limit=20`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -25,29 +24,19 @@ function IndividualBook() {
       .then((data) => {
         if (data.docs) {
           setBook(data.docs);
+          window.scrollTo(0, 0);
         }
       })
       .catch((error) => console.log(error));
   }
-  }, [searchTerm]);
-
-  useEffect(() => {
-    console.log(book)
-  }, [book])
+  }, [searchTerm, page]);
 
   if (!book) {
     return <div>Loading...</div>;
   }
-  const oldestPublishYear = book.reduce((acc, cur) => {
-    if (!cur.publish_year || cur.publish_year.length === 0) return acc;
-    const oldest = cur.publish_year.reduce((oldestYear, currentYear) => {
-      return currentYear < oldestYear ? currentYear : oldestYear;
-    });
-    return oldest < acc ? oldest : acc;
-  }, Infinity);
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
       {book.map((bookItem, index) => (
         <Link to={`/book-details/${bookItem.key.replace("/works/", "")}`} style={{ textDecoration: 'none', color: 'inherit' }} key={index}>
           <Card>
@@ -61,9 +50,20 @@ function IndividualBook() {
           </Card>
         </Link>
       ))}
+      <div>
+        {page > 0 && 
+          <button onClick={() => {
+            setPage(page - 1);
+            window.scrollTo(0, 0);
+          }}>Previous Page</button>
+        }
+        <button onClick={() => {
+            setPage(page + 1);
+            window.scrollTo(0, 0);
+        }}>Next Page</button>
+      </div>
     </div>
   );
-  
 }
 
 export default IndividualBook;

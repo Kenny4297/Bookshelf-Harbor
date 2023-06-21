@@ -122,8 +122,6 @@ const HomePage = () => {
             <CategoriesPage />
 
             <Footer />
-
-
         </>
     )
 }

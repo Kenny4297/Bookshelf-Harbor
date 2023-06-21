@@ -21,6 +21,8 @@ import Account from './components/profile/Account';
 import Orders from './components/profile/Orders';
 import SpecificOrder from './components/profile/SpecificOrder'
 import { Mystery, Drama, Comedy, Romance } from './components/Categories';
+import CategoryComponent from './components/Categories/CategoryComponent'
+import { useLocation } from 'react-router-dom';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -44,6 +46,8 @@ const App = () => {
         });
     }
   }, []);
+
+
 
   return (
     <BrowserRouter>
@@ -69,14 +73,12 @@ const App = () => {
             <Route path="/checkout/:userId" element={<CheckoutForm />} />
             <Route path="/thankYou/:userId" element={<ThankYou />} />
 
-            <Route path="/mystery" element={<Mystery />} />
+            {/* <Route path="/mystery" element={<Mystery />} />
             <Route path="/comedy" element={<Comedy />} />
             <Route path="/drama" element={<Drama />} />
-            <Route path="/romance" element={<Romance />} />
+            <Route path="/romance" element={<Romance />} /> */}
 
-
-
-
+            <Route path="/categories/:category" element={<CategoryComponent />} />
           </Routes>
         </div>
       </UserContext.Provider>

@@ -8,9 +8,12 @@ module.exports = {
   async getUserOrders(req, res) {
     try {
         const userId = req.params.userId;
+        console.log("UserId:", userId)
 
         // Fetch all orders for the user from the database
         let orders = await Orders.find({ user: userId });
+
+        console.log(orders)
 
         // If no orders found, return an empty array
         if (!orders) {
@@ -61,13 +64,16 @@ module.exports = {
           }
       },
 
-      // GET /api/orders/:userId/last
+      // GET /api/orders/order/:userId/last
       async getLastUserOrder(req, res) {
         try {
           const userId = req.params.userId;
+          console.log("This is the userId for /api/orders/order/:userId/last:", userId)
 
           // Fetch the latest order for the user from the database
           let order = await Orders.findOne({ user: userId }).sort({ date: -1 });
+
+          console.log("This is the userId for /api/orders/order/:userId/last order:", order)
 
           // If no order found, return a not found response
           if (!order) {

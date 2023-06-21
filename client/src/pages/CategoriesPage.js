@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Mystery from '../components/assets/images/Mystery.jpg';
 
 const CategoryBoxes = () => {
   return (
@@ -10,13 +9,13 @@ const CategoryBoxes = () => {
         <Link to='/mystery' className='category-box-mystery'>
           <h2 className='category-box-title'>Mystery</h2>
         </Link>
-        <Link to='/drama' className='category-box'>
+        <Link to='/drama' className='category-box-drama'>
           <h2>Drama</h2>
         </Link>
-        <Link to='/comedy' className='category-box'>
+        <Link to='/comedy' className='category-box-comedy'>
           <h2>Comedy</h2>
         </Link>
-        <Link to='/romance' className='category-box'>
+        <Link to='/romance' className='category-box-romance'>
           <h2>Romance</h2>
         </Link>
       </div>

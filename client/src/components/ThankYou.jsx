@@ -20,11 +20,14 @@ const ThankYou = () => {
 
   useEffect(() => {
     const fetchOrder = async () => {
+      console.log("Fetch order useEffect?")
       const response = await axios.get(`/api/orders/order/${userId}/last`);
       setOrder(response.data);
+      console.log(response.data)
+
     }
     fetchOrder();
-  }, [userId]);
+  }, [user]);
 
   if (!order) {
     return <p>Loading...</p>;

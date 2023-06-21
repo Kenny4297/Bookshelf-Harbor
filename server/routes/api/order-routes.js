@@ -13,6 +13,6 @@ const {
 router.route('/').post(createOrder);
 router.route('/order/:orderId').get(getOrder);
 router.route('/user/:userId').get(getUserOrders);
-router.route('/:userId/last').get(getLastUserOrder); 
+router.route('/order/:userId/last').get(getLastUserOrder); 
 
 module.exports = router;

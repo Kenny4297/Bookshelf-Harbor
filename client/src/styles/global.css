@@ -91,7 +91,7 @@ body {
   gap: 1rem;
 }
 
-.category-box, .category-box-mystery {
+.category-box {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -102,27 +102,39 @@ body {
   text-decoration: none;
   color: black;
   transition: all 0.3s ease;
-}
-
-.category-box-mystery:hover {
-  transform: scale(1.05);
-}
-
-.category-box-mystery {
   position: relative;
 }
 
-.category-box-mystery:before {
+.category-box:before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../components/assets/images/Mystery.jpg');
   background-size: cover;
   background-position: center;
   opacity: 0.7;
+}
+
+.category-box:hover {
+  transform: scale(1.05);
+}
+
+.category-box-mystery:before {
+  background-image: url('../components/assets/images/Mystery.jpg');
+}
+
+.category-box-drama:before {
+  background-image: url('../components/assets/images/Drama.jpg');
+}
+
+.category-box-comedy:before {
+  background-image: url('../components/assets/images/Comedy.jpg');
+}
+
+.category-box-romance:before {
+  background-image: url('../components/assets/images/Romance.jpg');
 }
 
 .category-box-title {

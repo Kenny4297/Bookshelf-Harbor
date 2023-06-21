@@ -52,8 +52,8 @@ const Header = () => {
     };
 
   return (
-    <header style={{width: '100%', height:'5vh'}}>
-      <Navbar bg="dark" expand="md"className="d-flex justify-content-center align-items-center">
+    <header style={{width: '100%', minHheight:'1.5rem', maxHeight:'1.5rem'}}>
+      <Navbar style={{backgroundColor: "var(--grey-wood)"}} expand="md"className="d-flex justify-content-center align-items-center">
         <Navbar.Brand href="/">
           <h2 style={{marginLeft:'2rem'}} >Nile</h2>
         </Navbar.Brand>
@@ -75,24 +75,24 @@ const Header = () => {
             justifyContent: "center",
             flexGrow: "1",
           }}>
-            <Nav.Link href="/" style={{ color: 'white' }}>Home</Nav.Link>
+            <Nav.Link href="/" >Home</Nav.Link>
             {!user ? (
               <>
-                <Nav.Link href="/signup" style={{ color: 'white' }}>Signup</Nav.Link>
-                <Nav.Link href="/login" style={{ color: 'white' }}>Login</Nav.Link>
+                <Nav.Link href="/signup" >Signup</Nav.Link>
+                <Nav.Link href="/login" >Login</Nav.Link>
               </>
             ) : (
               <>
-                <Nav.Link href={`/profile/${user._id}`} style={{ color: 'white' }}>Profile</Nav.Link>
-                <Nav.Link href="##" onClick={logout} style={{ color: 'white' }}>
+                <Nav.Link href={`/profile/${user._id}`} >Profile</Nav.Link>
+                <Nav.Link href="##" onClick={logout} >
                   Logout
                 </Nav.Link>
-                <Nav.Link href={`/shoppingCart/${user._id}`} style={{ color: 'white' }}>Shopping Cart</Nav.Link>
+                <Nav.Link href={`/shoppingCart/${user._id}`} >Shopping Cart</Nav.Link>
                 {user && user.profileImage && (
                   <img
                     src={user.profileImage}
                     alt="The user's profile pic"
-                    style={{ width: '40px', borderRadius: '20px', border: '2px solid green' }}
+                    style={{ width: '40px', borderRadius: '20px', border:'1px solid var(--dark-wood)'}}
                   />
                 )}
               </>

@@ -20,19 +20,19 @@ const BookComponent = ({ category }) => {
   }, [category, page]);
 
   return (
-    <div className='book-container-categories'>
+    <div className='book-container'>
       <h2 className='category'>{category}</h2>
-      <div className='books-category'>
+      <div className='book-grid'>
         {books.map((book, index) => (
-          <Link to={`/book-details/${book.cover_edition_key}`} className='book-card-categories' key={index}>
-            <div className='card-categories'>
+          <Link to={`/book-details/${book.cover_edition_key}`} className='book-card' key={index}>
+            <div className='book-card-content'>
               <img
-                className='book-cover-categories'
+                className='book-card-image'
                 src={book.cover_id ? `https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg` : defaultImage}
                 alt={`Cover for ${book.title}`}
               />
-              <h3 className='book-title-categories'>{book.title}</h3>
-              <p className='book-author-categories'>{book.authors && book.authors[0]?.name}</p>
+              <h3 className='book-card-title'>{book.title}</h3>
+              <p className='book-card-author'>{book.authors && book.authors[0]?.name}</p>
             </div>
           </Link>
         ))}

@@ -72,23 +72,21 @@ const HomePage = () => {
     return (
         <>
             <HeroContainer>
-                <IntroductionSection>
-                <h1>Welcome to Nile</h1>
+                <div className="hero-introduction-text">
+                    <h1>Welcome to Nile</h1>
 
-                <p>Search though millions of books and have them sent right to your doorstep</p>
-                { user && user.id &&
-                    <>
-                        <p>UserID: {user._id}</p>
-                        <p>Email: {user.email}</p>
-                    </>
-                }
+                    <p>Search though millions of books and have them sent right to your doorstep</p>
+                    {/* { user && user.id &&
+                        <>
+                            <p>UserID: {user._id}</p>
+                            <p>Email: {user.email}</p>
+                        </>
+                    } */}
+                </div>
 
-                <p>Testing the Open Book API</p>
-                </IntroductionSection>
+                {/* <Link to="/categories">Categories</Link> */}
 
-                <Link to="/categories">Categories</Link>
-
-                <div>
+                {/* <div>
                     <form onSubmit={handleFormSubmit}>
                         <input type="text" value={searchTerm} style={{color: 'black'}} onChange={handleInputChange} />
                         <button type="submit">Search</button>
@@ -114,7 +112,7 @@ const HomePage = () => {
                         </li>
                         ))}
                     </ul>
-                </div>
+                </div> */}
             </HeroContainer>
 
             <FeaturedProducts />
@@ -133,9 +131,12 @@ const HeroContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     /* align-items: center; */
-    width: 100%;
-    height: 95vh;
-    padding: 0 !important;
+    min-width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+
+    /* border: 3px solid red; */
+    padding-top: 0rem !important;
     margin: 0 !important;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${NileHero});
     background-position: center;

@@ -18,17 +18,395 @@ p {
   margin-bottom: 1rem;
 }
 
+button:hover {
+  transform: scale(1.1);
+}
+
 body {
   height: 100vh;
-  background-color: #111;
+  background-color: var(--white-ash);
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+element.style {
+  padding-top: 0rem !important;
+}
+
+:root {
+  --white-ash: #F1EDE2;
+  --light-teak: #D1AA7C;
+  --gingerbread: #A8734F;
+  --dark-wood: #6F4E3C;
+  --grey-wood: #7F7F7F;
+}
+
 .pt-3, .px-4 {
   margin: 0 !important;
   padding: 0 !important;
+}
+
+
+/* Header */
+.navbar * {
+  color: var(--white-ash);
+}
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link:hover {
+  color: black;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 100%; /* Start from the left */
+  height: 2px;
+  background: black; /* Color of the underline */
+  transition: right 0.3s ease-in; /* Animate right property (left to right) */
+}
+
+.nav-link:hover::after {
+  right: 0; /* Go full width on hover */
+  color: red;
+}
+
+
+
+
+
+/* Profile */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-h2 {
+  margin-top: 3rem;
+  color: var(--light-teak);
+  border-bottom: 2px solid var(--light-teak);
+}
+
+.profile-links {
+  display: inline-block;
+  padding: 1rem 1rem;
+  text-decoration: none;
+  background-color: #f4f4f4;  
+  color: var(--light-teak);             
+  border-radius: 10px;
+  text-align: center;
+  margin: 10px;
+  font-weight: bold;
+}
+
+.profile-links:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  color: var(--light-teak); 
+  transform: scale(1.2);
+}
+
+
+
+
+
+
+
+/* Profile / Account */
+
+.account-container {
+  display: flex;
+}
+
+
+
+.form-container {
+  padding: 3rem 8.5rem;
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; */
+  /* border: 2px solid green; */
+  height: 45rem;
+  width: 70%;
+}
+
+.account-h2  {
+  /* padding-top: 3rem; */
+  color: var(--light-teak);
+  border-bottom: 2px solid var(--light-teak);
+  display: inline;
+}
+
+.account-form-label {
+  color: var(--light-teak);
+  font-weight: bold;
+  padding-top: 1rem;
+  /* border: 2px solid green; */
+}
+
+.account-password-button {
+  width: 10rem;
+  margin: 0rem 0rem;
+  background-color: white;  
+  border: 2px solid var(--light-teak);
+  border-radius: 5px;
+  color: var(--light-teak);
+}
+
+.account-email-button {
+  width: 15rem;
+  margin: 1rem 0rem;
+  background-color: white;  
+  border: 2px solid var(--light-teak);
+  border-radius: 5px;
+  color: var(--light-teak);
+  /* border: 2px solid red; */
+  margin-top: -2rem;
+
+}
+
+.profile-image-container {
+  /* border: 2px solid blue; */
+  width: 30%;
+  /* padding: 1rem 2rem; */
+  margin-right: 7rem;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  flex-direction: column;
+}
+
+.profile-image-label {
+  color: var(--light-teak);
+  font-weight: bold;
+  font-size: 2rem;
+  border-bottom: 2px solid var(--light-teak);
+  padding-top: 0rem;
+  margin-bottom: 1rem;
+}
+
+
+.profile-img {
+  width: 20rem;
+  height: 20rem;
+  border: 2px solid black;
+  border-radius: 200px;
+  object-fit: cover;
+}
+
+.profile-image-h2 {
+  color: var(--light-teak);
+  font-weight: bold;
+  font-size: 2rem;
+  border-bottom: 2px solid var(--light-teak);
+  padding-top: 3rem;
+  margin-bottom: 1rem;
+}
+
+.update-profile-button {
+  width: 15rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 1rem 0rem;
+  background-color: white;  
+  border: 2px solid var(--light-teak);
+  border-radius: 5px;
+  color: var(--light-teak);
+  margin-bottom: 10rem;
+  /* border: 2px solid red; */
+}
+
+.update-profile-button-container {
+  display: flex;  
+  flex-direction: end;
+  text-align: right;
+}
+
+.file-input {
+  color: var(--light-teak);
+
+}
+
+.file-input-label {
+  color: var(--light-teak);
+  font-weight: bold;
+}
+
+
+
+
+/* Account / Orders */
+.orders-page {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border: 2px solid green;
+}
+
+.orders-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid blue;
+}
+
+.individual-order-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* border: 2px solid red; */
+  align-self: flex-start;
+  margin-top: 2.5rem;
+}
+
+
+.individual-order {
+  border: 2px solid green;
+  width: 50rem;
+  text-align: center;
+}
+
+.individual-order h2, 
+.individual-order h3 {
+  color: var(--light-teak)
+}
+
+/* .individual-order h2, 
+.individual-order p, 
+.individual-order h3 {
+  color: green;
+} */
+
+.orders-h2 {
+    padding-top: 3rem;
+    margin-bottom: 2rem;
+    color: var(--light-teak);
+    border-bottom: 2px solid var(--light-teak);
+    display: inline;
+}
+
+.orders-individual-orders {
+  /* border: 2px solid blue; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25rem;
+  margin-bottom: 1rem;
+}
+
+.orders-button-link {
+  display: inline-block;
+  border: 2px solid var(--gingerbread);
+  background-color: #f2f2f2;
+  text-align: center;
+  line-height: 50px;
+  border-radius: 5px;
+  color: #000;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.orders-button-link:hover {
+  background-color: #e6e6e6;
+}
+
+.orders-orderId-p {
+  margin: 0; 
+  padding: 0.5rem; 
+  color: black;
+}
+
+.orders-orderDate-p{
+  color: #666; 
+}
+
+
+
+
+/* Orders  */
+
+
+/* Hero section */
+
+.hero-introduction-text {
+  margin-left: 5rem;
+}
+
+/* Individual book */
+
+.book-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.book-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.book-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+.book-card-content {
+  border-radius: 5px;
+  padding: 15px;
+  margin: 10px;
+  width: 200px;
+  height: auto;
+  min-height: 350px; 
+  max-height: 350px; 
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 10px 10px -7px rgba(0,0,0,0.1);
+  border: 2px solid white;
+  transition: all 0.3s ease-out;
+}
+
+.book-card-content:hover {
+  box-shadow: 0px 10px 10px -2px rgba(0,0,0,0.1);
+}
+
+.book-card-image {
+  min-height: 10rem;
+  max-height: 10rem;
+  min-width: 7rem;
+  max-width: 11rem;
+  margin-bottom: 15px;
+}
+
+.book-card-title {
+  margin: 0;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.book-card-author {
+  font-size: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 90%; 
+  max-width: 90%; 
+  color: white;
 }
 
 
@@ -42,7 +420,7 @@ body {
   width: auto;
   margin: 0 auto;
   text-align: center;
-  border: 2px solid green;
+  /* border: 2px solid green; */
   display: flex;
   justify-content: center;
   margin-top: 2rem;
@@ -223,7 +601,7 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 1rem;
-  background-color: blue;
+  background-color: var(--grey-wood);
   color: white;
 }
 

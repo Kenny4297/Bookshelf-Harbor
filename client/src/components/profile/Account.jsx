@@ -13,6 +13,9 @@ const Account = () => {
   const [userUrl, setUserUrl] = useState(null);
   const navigate = useNavigate();
   const [user, setUser] = useContext(UserContext);
+  const [showMessage, setShowMessage] = useState(false);
+  const [showEmailMessage, setShowEmailMessage] = useState(false);
+
 
   const cld = new cloudinary.Cloudinary({cloud_name: 'diwhrgwml'});
 
@@ -28,9 +31,9 @@ const Account = () => {
     const resp = await Axios.get(`/api/user/${userId}`);
     if(resp.data) {
         setFormData(resp.data);
-            if(resp.data.profileImage) {
-                setUserUrl(cld.url(resp.data.profileImage.url));
-            }
+          if(resp.data.profileImage) {
+            setUserUrl(resp.data.profileImage);
+          }
         }
     };
 
@@ -91,23 +94,39 @@ const Account = () => {
           setUserUrl(url);
         }
       };
+
+      const handleResetPasswordClick = (event) => {
+        event.preventDefault();
+        setShowMessage(!showMessage);
+      }
+
+      const handleChangeEmailClick = (event) => {
+        event.preventDefault();
+        setShowEmailMessage(!showEmailMessage);
+      };
+      
       
 
   useEffect(() => {
     getUserData();
+    console.log(user)
   }, [userId]);
 
   useEffect(() => {
     console.log(userUrl);
-  }, [userId]);
+  }, [userUrl]);
 
   return (
     <>
-      <h1>Edit Your Profile</h1>
+    <div className="account-container">
+
+      
+
+      <div className="form-container">
+      <h2 className='account-h2'>Edit Your Profile</h2>
       <div style={{ width: "50%" }}>
-        <form className="mb-2">
-          <div className="form-group mb-2">
-            <label>Name</label>
+        <form className="account-form">
+            <label className="account-form-label">Name</label>
             <input 
               type="text" 
               className="form-control" 
@@ -115,9 +134,9 @@ const Account = () => {
               placeholder={formData.name || "No information currently set"} 
               onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group mb-2">
-            <label>Address</label>
+
+          
+            <label className="account-form-label">Address</label>
             <input 
               type="text" 
               className="form-control" 
@@ -125,9 +144,8 @@ const Account = () => {
               placeholder={formData.address || "No information currently set"} 
               onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group mb-2">
-            <label>Phone Number</label>
+
+            <label className="account-form-label">Phone Number</label>
             <input 
               type="text" 
               className="form-control" 
@@ -135,34 +153,48 @@ const Account = () => {
               placeholder={formData.phone || "No information currently set"} 
               onChange={handleInputChange}
             />
-          </div>
-          <div className="form-group mb-2">
-            <label>Email Address</label>
+
+            {/* <label className="account-form-label">Email Address</label>
             <input 
               type="text" 
               className="form-control" 
               name="email" 
               placeholder={formData.email || "No information currently set"} 
               onChange={handleInputChange}
-            />
-          </div>
-          <div className="form-group mb-2">
-            <label>Password</label>
-            <input 
-              type="password" 
-              className="form-control" 
-              name="password" 
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="form-group mb-2">
-            <label>Profile Image</label>
-            <input type="file" onChange={handleFileChange}/>
-            {userUrl && <Image style={{width: "200px"}} cloudName="diwhrgwml" publicId={userUrl}/>}
+            /> */}
+
+            <p className="account-form-label">Email: {formData.email}</p>
+
+            <button type="button" className="account-email-button" onClick={handleChangeEmailClick}>
+              Change Email Address
+            </button>
+            {showEmailMessage && 
+              <div>
+                Normally you would receive an email with a link to change your email. However, for the purpose of this demonstration, no email will be sent.
+              </div>
+            }
+
+
+
+
+            <div style={{display:'flex', flexDirection:'column'}}>
+              <button className="account-password-button" onClick={handleResetPasswordClick}>
+                Reset Password
+              </button>
+              {showMessage && 
+                <div>
+                  Normally you would receive an email asking to verify yourself, along with a link to reset your password. 
+                  However, for the purpose of this demonstration and to protect your privacy, no email will be sent.
+                </div>
+              }
+              <div className="update-profile-button-container">
+                <button onClick={update} className="update-profile-button">Update Profile</button>
+              </div>
+              
+
+              
             </div>
-          <div className="form-group">
-            <button onClick={update} className="btn btn-primary">Update Profile</button>
-          </div>
+
         </form>
         {updateResult === "success" && (
           <div className="alert alert-success" role="alert">
@@ -175,6 +207,19 @@ const Account = () => {
           </div>
         )}
       </div>
+      </div>
+      <div className="profile-image-container">
+        <h2 className="profile-image-h2">Edit Profile Image</h2>
+        {userUrl && <Image className="profile-img" cloudName="diwhrgwml" publicId={userUrl}/>}
+        <label htmlFor="fileInput" className="file-input-label">
+          Upload File
+          <input id="fileInput" type="file" className="file-input" onChange={handleFileChange} />
+      </label>
+                  
+      </div>
+      
+    </div>
+
     </>
   );
 };

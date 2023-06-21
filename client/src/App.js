@@ -20,6 +20,7 @@ import TestComponent from './components/testComponent';
 import Account from './components/profile/Account';
 import Orders from './components/profile/Orders';
 import SpecificOrder from './components/profile/SpecificOrder'
+import { Mystery, Drama, Comedy, Romance } from './components/Categories';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -67,6 +68,13 @@ const App = () => {
             <Route path="/shoppingCart/:userId" element={<ShoppingCart />} />
             <Route path="/checkout/:userId" element={<CheckoutForm />} />
             <Route path="/thankYou/:userId" element={<ThankYou />} />
+
+            <Route path="/mystery" element={<Mystery />} />
+            <Route path="/comedy" element={<Comedy />} />
+            <Route path="/drama" element={<Drama />} />
+            <Route path="/romance" element={<Romance />} />
+
+
 
 
           </Routes>

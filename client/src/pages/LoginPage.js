@@ -1,6 +1,8 @@
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../contexts/UserContext";
+import image from '../components/assets/images/login.jpg'
+
 
 const LoginPage = () => {
 
@@ -9,11 +11,21 @@ const LoginPage = () => {
   const [loginResult, setLoginResult] = useState("")
   const navigate = useNavigate();
   const [user, setUser] = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true);
 
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+  };
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = image;
+    img.onload = () => {
+      setIsLoading(false); // Image loaded, set loading state to false
+    } // Image loaded
+    img.onerror = (error) => console.error('Failed to load image', error);
+  }, []);
 
   const handleFormSubmit = async (e) => {
     console.log(formData);
@@ -40,20 +52,33 @@ const LoginPage = () => {
   const handleFormSubmitSignUp = (event) => {
     event.preventDefault()
 
-    navigate("/signup")
+    navigate("/signup");
   }
 
 
-  return (
+  if (isLoading) {
+    return <div style={{
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      backgroundColor: 'var(--ash-white)', 
+      height: '100vh', // Adjust as needed
+      width: '100vw' // Adjust as needed
+    }}>
+    <p style={{fontSize:'3rem', fontStyle:'italic', color:'var(--grey-wood)'}}>Loading...</p>
+  </div>
+  
+  } else {
+    return (
     <div className="full-page-background">
 
       <form className="login-form-container">
         <div className='form-background'>
-          <h2>Welcome to Nile</h2>
-        <h2 className="login-h2">Login</h2>
+          <h2 className="welcome-to-nile">Welcome to Nile</h2>
+        <h3 className="login-h3">Login</h3>
 
           <div className="login-forms">
-            <label>Email Address</label>
+            <label className="label-title">Email Address</label>
             <input
               type="text"
               name="email"
@@ -65,7 +90,7 @@ const LoginPage = () => {
           </div>
 
           <div className="login-forms">
-            <label>Password</label>
+            <label className="label-title">Password</label>
             <input
               type="password"
               name="password"
@@ -101,5 +126,6 @@ const LoginPage = () => {
     </div>
   )
 }
+}
 
-export default LoginPage
+export default LoginPage;

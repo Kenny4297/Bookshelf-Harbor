@@ -10,12 +10,12 @@ const Header = () => {
   const [user, setUser] = useContext(UserContext);
 
     // Update on profileImage change
-    // useEffect(() => {
-    //   if (user && user.profileImage) {
-    //     console.log('User Profile Image changed', user.profileImage);
-    //     // Any additional logic on profileImage change can be written here
-    //   }
-    // }, [user && user.profileImage]);
+    useEffect(() => {
+      if (user && user.profileImage) {
+        console.log('User Profile Image changed', user.profileImage);
+        // Any additional logic on profileImage change can be written here
+      }
+    }, [user && user.profileImage]);
     
 
     const logout = () => {
@@ -60,7 +60,7 @@ const Header = () => {
 
         <Form inline='true' onSubmit={handleFormSubmit}>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <FormControl type="text" placeholder="Search" style={{width:'30vw'}} className="mr-sm-2" onChange={handleInputChange} />
+            <FormControl type="text" placeholder="Search for a book" style={{width:'30vw'}} className="mr-sm-2" onChange={handleInputChange} />
 
             <Link to={`/individual-book/${searchTerm}`}></Link>
 

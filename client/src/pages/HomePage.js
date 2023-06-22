@@ -8,6 +8,8 @@ import login from '../components/assets/images/login.jpg'
 import FeaturedProducts from '../components/Home/FeaturedProducts'
 import CategoriesPage from './CategoriesPage'
 import Footer from '../components/Home/Footer'
+import LoginPage from '../pages/LoginPage'
+import Header from '../components/Header'
 
 const HomePage = () => {
     const [user, setUser] = useContext(UserContext);
@@ -28,6 +30,18 @@ const HomePage = () => {
 
     //Here we are keeping track of the book data. Once the book changes, the state is the updated. 
     const [bookData, setBookData] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const img = new Image();
+        img.src = login;
+        img.onload = () => {
+          setIsLoading(false); // Image loaded, set loading state to false
+        } // Image loaded
+        img.onerror = (error) => console.error('Failed to load image', error);
+      }, []);
+
   
     const handleInputChange = event => {
         console.log(searchTerm)
@@ -70,8 +84,26 @@ const HomePage = () => {
       }, [user && user._id]);
       
 
-    return (
+      if (isLoading) {
+        return <div style={{
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          backgroundColor: 'var(--ash-white)', 
+          height: '100vh', // Adjust as needed
+          width: '100vw' // Adjust as needed
+        }}>
+        <p style={{fontSize:'3rem', fontStyle:'italic', color:'var(--grey-wood)'}}>Loading...</p>
+      </div>
+      
+      } else {
+        return (
         <>
+        {!user ?(
+            <LoginPage />
+        ) :(
+            <>
+            
             <HeroContainer>
                 <div className="hero-introduction-text">
                     <h1>Welcome to Nile</h1>
@@ -91,8 +123,11 @@ const HomePage = () => {
             <FeaturedProducts />
 
             <Footer />
+            </>
+            )}
         </>
     )
+}
 }
 
 export default HomePage;

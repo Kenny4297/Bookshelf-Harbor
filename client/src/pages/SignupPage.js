@@ -1,14 +1,27 @@
-import { useState } from "react"
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import image from '../components/assets/images/signup.jpg'
 
 const SignupPage = (props) => {
 
   const defForm = { name: "", email: "", password: "" }
   const [ formData, setFormData ] = useState(defForm)
   const [ signupResult, setSignupResult ] = useState("")
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true); // Added this line
 
   const handleInputChange = (event) => {
     setFormData({...formData, [event.target.name]: event.target.value})
   }
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = image;
+    img.onload = () => {
+      setIsLoading(false); // Image loaded, set loading state to false
+    } // Image loaded
+    img.onerror = (error) => console.error('Failed to load image', error);
+  }, []);
 
   const handleFormSubmit = async(event) => {
     event.preventDefault()
@@ -31,16 +44,37 @@ const SignupPage = (props) => {
         setSignupResult("fail")
       }
     }
-  }  
+  };
+
+  const handleFormSubmitLogin = (event) => {
+    event.preventDefault()
+
+    navigate("/login")
+  }
   
-
-  return (
+  if (isLoading) {
+    return <div style={{
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      backgroundColor: 'var(--grey-wood)', 
+      height: '100vh', // Adjust as needed
+      width: '100vw' // Adjust as needed
+    }}>
+    <p style={{fontSize:'3rem', fontStyle:'italic'}}>Loading...</p>
+  </div>
+  
+  } else {
+    return (
     <>
-      <h1>Signup Page</h1>
+    <div className="sign-up-container">
 
-      <form className="form mb-3">
-        <div className="form-group">
-          <label>Name</label>
+      <form className="signup-form">
+        <div className='signup-form-background'>
+          <h1 className="signup-page-title">Sign Up</h1>
+
+        <div className="signup-forms">
+          <label className="signup-label-title">Name</label>
           <input   
             type="text"
             name="name"
@@ -51,8 +85,8 @@ const SignupPage = (props) => {
           />
         </div>
 
-        <div className="form-group">
-          <label>Email Address</label>
+        <div className="signup-forms">
+          <label className="signup-label-title">Email Address</label>
           <input   
             type="text"
             name="email"
@@ -63,8 +97,8 @@ const SignupPage = (props) => {
           />
         </div>
 
-        <div className="form-group">
-          <label>Password</label>
+        <div className="signup-forms">
+          <label className="signup-label-title">Password</label>
           <input   
             type="password"
             name="password"
@@ -74,8 +108,13 @@ const SignupPage = (props) => {
           />
         </div>
 
-        <div className="form-group mt-2">
-          <button className="btn btn-primary" onClick={handleFormSubmit}>Sign Me Up!</button>
+          <div className="form-group mt-2">
+            <button className="btn btn-primary" onClick={handleFormSubmit}>Sign Me Up!</button>
+          </div>
+
+          <div className="form-group mt-2">
+            <button className="btn btn-primary" onClick={handleFormSubmitLogin}>Login</button>
+          </div>
         </div>
       </form>
 
@@ -91,8 +130,10 @@ const SignupPage = (props) => {
           Signup failed!
         </div>
       )}
+    </div>
     </>
   )
+}
 }
 
 export default SignupPage

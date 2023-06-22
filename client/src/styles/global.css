@@ -24,7 +24,7 @@ button:hover {
 
 body {
   height: 100vh;
-  /* background-color: var(--grey-wood); */
+  background-color: var(--white-ash);
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -110,7 +110,7 @@ element.style {
   transform: scaleX(-1);
 }
 
-.login-form-container {
+.login-form-container, .signup-form {
   width: 100%;
   padding-left: 10rem;
   margin-top: 4rem;
@@ -118,11 +118,32 @@ element.style {
   /* opacity: 1; */
 }
 
-.login-h2 {
-  /* margin-top: 5rem; */
+.welcome-to-nile, .signup-page-title {
+  color: black;
+  font-size: 2.5rem;
+  margin: 0 auto;
+  border-bottom: 2px solid var(--white-ash);
 }
 
-.form-background {
+.signup-page-title {
+  border-bottom: 2px solid black;
+
+}
+
+.login-h3 {
+  color: var(--light-teak)
+}
+
+.label-title  {
+  color: var(--light-teak);
+}
+
+.signup-label-title {
+  color: black;
+  font-weight: bold;
+}
+
+.form-background, .signup-form-background {
   /* opacity: .5; */
   z-index: 10;
   width: 35rem;
@@ -137,8 +158,22 @@ element.style {
   background-color: rgba(255, 255, 255, 0.2); 
 }
 
-.login-forms {
-  border: 2px solid red;
+.signup-form-background {
+  z-index: 10;
+  width: 35rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  height: 30rem;
+  margin-top: 5rem;
+  padding-left: 3rem;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.5); 
+}
+
+.login-forms, .signup-forms {
+  /* border: 2px solid red; */
   width: 30rem;
   margin-top: 1rem;
 }
@@ -147,6 +182,34 @@ element.style {
   margin: 0 auto;
   text-align: center;
   /* border: 2px solid blue; */
+}
+
+
+
+
+/* Sign up */
+.sign-up-container {
+  position: relative;  /* use relative instead of fixed */
+  width: 100vw; 
+  height: 100vh;
+  overflow: hidden; /* Ensures the content is not going outside the container */
+}
+
+.sign-up-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -4; /* this ensures that the image stays behind the text content */
+
+  /* Add your image */
+  background: url('../components/assets/images/signup.jpg') no-repeat center center; 
+  /* Centering the image */
+  
+  /* Cover the entire div */
+  background-size: cover;
 }
 
 
@@ -184,16 +247,17 @@ element.style {
   border-bottom: 2px solid var(--light-teak);
 }
 
-.profile-links {
+.profile-links, .individual-book-button {
   display: inline-block;
   padding: 1rem 1rem;
   text-decoration: none;
-  background-color: #f4f4f4;  
-  color: var(--light-teak);             
+  background-color: var(--white-ash);  
+  color: var(--gingerbread);             
   border-radius: 10px;
   text-align: center;
   margin: 10px;
   font-weight: bold;
+  border: 2px solid var(--gingerbread);
 }
 
 .profile-links:hover {
@@ -482,6 +546,13 @@ element.style {
   margin-left: 5rem;
 }
 
+
+
+
+
+
+
+
 /* Individual book */
 
 .book-container {
@@ -490,6 +561,15 @@ element.style {
   justify-content: center;
   flex-direction: column;
   align-items: center;
+}
+
+.book-results-for-h2 {
+  margin: 6rem 0rem 2rem 0rem;
+  color: var(--gingerbread)
+}
+
+.search-term-results {
+  color: var(--grey-wood)
 }
 
 .book-grid {
@@ -516,6 +596,7 @@ element.style {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  background-color: var(--light-teak);
   box-shadow: 0px 10px 10px -7px rgba(0,0,0,0.1);
   border: 2px solid white;
   transition: all 0.3s ease-out;
@@ -523,6 +604,7 @@ element.style {
 
 .book-card-content:hover {
   box-shadow: 0px 10px 10px -2px rgba(0,0,0,0.1);
+  transform: scale(1.05);
 }
 
 .book-card-image {
@@ -531,6 +613,7 @@ element.style {
   min-width: 7rem;
   max-width: 11rem;
   margin-bottom: 15px;
+  box-shadow: 0 10px 20px 0 rgba(0,0,0,0.2), 0 18px 32px 0 rgba(0,0,0,0.19);
 }
 
 .book-card-title {
@@ -538,20 +621,60 @@ element.style {
   margin-bottom: 10px;
   text-align: center;
   font-size: 1.2em;
+  text-decoration: underline;
 }
 
 .book-card-author {
-  font-size: 16px;
+  font-size: 1rem;
+  font-weight: bold;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   width: 90%; 
   max-width: 90%; 
-  color: white;
+  color: var(--dark-wood);
 }
 
 
 
+
+/* Book Details Page */
+
+.book-details-page-container {
+  margin-left: 5rem;
+  margin-top: 5rem;
+  position: relative;
+}
+
+.book-details-page-h2 {
+  color: var(--dark-wood)
+}
+
+.book-details-title {
+  color: var(--grey-wood);
+  font-weight: bold;
+}
+
+.individual-book-data-response {
+  color: var(--gingerbread);
+  font-weight:400
+}
+
+.individual-book-add-to-cart {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-block;
+  padding: 1rem 1rem;
+  text-decoration: none;
+  background-color: white;;  
+  color: var(--gingerbread);             
+  border-radius: 10px;
+  text-align: center;
+  margin: 10px;
+  font-weight: bold;
+  border: 2px solid var(--gingerbread);
+}
 
 
 

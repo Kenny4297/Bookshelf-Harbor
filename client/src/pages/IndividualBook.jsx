@@ -46,7 +46,10 @@ function IndividualBook() {
   }
 
   return (
+    <>
     <div className="book-container">
+      <h2 className='book-results-for-h2'>Results for <span className="search-term-results">'{searchTerm}'</span></h2>
+      
       <div className="book-grid">
         {book.map((bookItem, index) => (
           <Link to={`/books/works/${bookItem.key.replace("/works/", "")}`} className="book-card" key={index}>
@@ -62,9 +65,15 @@ function IndividualBook() {
           </Link>
         ))}
       </div>
-      <button onClick={handlePrevPage} disabled={page === 0}>Previous Page</button>
-      <button onClick={handleNextPage}>Next Page</button>
+      <div style={{display: 'flex', alignItems:'center'}}>
+        <button className="individual-book-button" onClick={handlePrevPage} disabled={page === 0}>Previous Page</button>
+
+         <p style={{color:'var(--grey-wood'}}>page: {page + 1}</p>
+
+        <button className="individual-book-button" onClick={handleNextPage}>Next Page</button>
+      </div>
     </div>
+    </>
   );
 }
 

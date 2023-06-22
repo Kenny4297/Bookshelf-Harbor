@@ -143,27 +143,26 @@ const BookDetailsPage = () => {
     }
 
     return (
-        <div>
-            <h1>Book Details Page</h1>
-            <h2>{book.title}</h2>
-            <p>
+        <div className="book-details-page-container">
+            <h2 className="book-details-page-h2">{book.title}</h2>
+            <p className="book-details-title">
                 Author:{" "}
                 {authors.length > 0 &&
                     authors.map((author, index) => (
-                        <span key={author.key}>
+                        <span className="individual-book-data-response" key={author.key}>
                             {author.name}
                             {index < authors.length - 1 ? ", " : ""}
                         </span>
                     ))}
             </p>
-            <p>Publication Date: {firstPublishDate}</p>
-            <p>
-                Description:{" "}
+            <p className="book-details-title">Publication Date: <span className="individual-book-data-response">{firstPublishDate}</span></p>
+            <p className="book-details-title">
+                Description:{" "}<span className="individual-book-data-response">
                 {typeof description === "object"
                     ? description.value.split("Contains:")[0].trim()
-                    : description}
+                    : description}</span>
             </p>
-            <p>Book Price: ${calculateBookPrice(book.title)}</p>
+            <p className="book-details-title">Book Price: ${calculateBookPrice(book.title)}</p>
             {cover ? (
                 <img
                     className="d-block mx-auto"
@@ -174,7 +173,7 @@ const BookDetailsPage = () => {
                 <p>Loading cover image...</p>
             )}
 
-            <button onClick={addToCart}>Add to Cart</button>
+            <button className="individual-book-add-to-cart" onClick={addToCart}>Add to Cart</button>
         </div>
     );
 }

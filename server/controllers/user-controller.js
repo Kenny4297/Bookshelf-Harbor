@@ -183,19 +183,10 @@ async createUser({ body }, res) {
   async updateUser({ body, params }, res) {
     // Create the userToUpdate object directly from the request body
     let userToUpdate = { ...body };
-
-    // Hash the password if it is provided
-    if (body.password?.length) {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(body.password, salt);
-      userToUpdate.password = hashedPassword;
-    }
-
-    // Remove password field from userToUpdate if no password is provided to avoid overwriting existing password
-    else {
-      delete userToUpdate.password;
-    }
-
+  
+    // Remove password field from userToUpdate to avoid overwriting existing password
+    delete userToUpdate.password;
+  
     const user = await User.findOneAndUpdate(
       // Find the user by the id
       { _id: params.id },
@@ -203,14 +194,15 @@ async createUser({ body }, res) {
       // Return the updated user
       { new: true }
     );
-
+  
     // if the user is not updated, return an error
     if (!user)
       return res.status(400).json({ message: "Unable to update user" });
-
+  
     // Return the user
     res.status(200).json({ _id: user._id, email: user.email, name: user.name, phone: user.phone, address: user.address, profileImage: user.profileImage });
   },
+  
   
 
 
@@ -219,39 +211,39 @@ async createUser({ body }, res) {
 
   //post('/api/users/auth)
 // user login
-async authUser({ body }, res) {
-  console.log(body); // Log the request body
-  
-  // Find the user by the email address
-  const user = await User.findOne({
-    email: body.email
-  }).populate('shoppingCart');
+  async authUser({ body }, res) {
+    console.log("The request body is:", body); // Log the request body
+    
+    // Find the user by the email address
+    const user = await User.findOne({
+      email: body.email
+    }).populate('shoppingCart');
 
-  console.log(user); // Log the found user
-  
-  if (!user) return res.status(400).json({ message: 'Unable to authenticate user' });
+    console.log("This was the found user:", user); // Log the found user
+    
+    if (!user) return res.status(400).json({ message: 'Unable to authenticate user' });
 
-  // We want to verify the password & kick them out if it fails
-  const isValid = await bcrypt.compare(body.password, user.password);
+    // We want to verify the password & kick them out if it fails
+    const isValid = await bcrypt.compare(body.password, user.password);
 
-  console.log(isValid); // Log the comparison result
-  
-  if (!isValid) return res.status(400).json({ message: 'Unable to authenticate user' });
+    console.log(isValid); // Log the comparison result
+    
+    if (!isValid) return res.status(400).json({ message: 'Unable to authenticate user' });
 
-  if (!user.shoppingCart) {
-    const shoppingCart = new ShoppingCart({ user: user._id, books: [] });
-    await shoppingCart.save();
-    user.shoppingCart = shoppingCart._id;
-    await user.save();
-  }
+    if (!user.shoppingCart) {
+      const shoppingCart = new ShoppingCart({ user: user._id, books: [] });
+      await shoppingCart.save();
+      user.shoppingCart = shoppingCart._id;
+      await user.save();
+    }
 
-  const token = jwt.sign({
-    email: user.email,
-    id: user._id,
-  }, process.env.JWT_SECRET);
+    const token = jwt.sign({
+      email: user.email,
+      id: user._id,
+    }, process.env.JWT_SECRET);
 
-  res.header("auth-token", token).json({ error: null, data: { user, token }});
-},
+    res.header("auth-token", token).json({ error: null, data: { user, token }});
+  },
 
   
 
@@ -410,14 +402,10 @@ async addToCart(req, res) {
     return res.status(400).json({ message: 'Invalid or missing key' });
   }
 
-  if (!description || typeof description !== 'string') {
-    return res.status(400).json({ message: 'Invalid or missing description' });
-  }
-
   // Add more checks for the remaining fields if necessary
 
   // Construct the book object
-  const newBook = { title, author, price, cover_i, first_publish_year: publishYear, key, description };
+  const newBook = { title, author, price, cover_i, first_publish_year: publishYear, key, description: description || "" };
 
     // Add the book to the ShoppingCart
     user.shoppingCart.books.push(newBook);

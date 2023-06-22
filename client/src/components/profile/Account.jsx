@@ -4,6 +4,7 @@ import { Image } from 'cloudinary-react';
 import Axios from 'axios';
 import cloudinary from 'cloudinary-core';
 import { UserContext } from "../../contexts/UserContext";
+import noUser from '../../components/assets/images/noUser.png'
 
 const Account = () => {
   const { userId } = useParams();
@@ -38,44 +39,51 @@ const Account = () => {
     };
 
     const update = async (event) => {
-        console.log("Update function firing")
-        event?.preventDefault();
-    
-        let dataToSend = { ...formData };
-        if(userUrl) {
-            dataToSend.profileImage = userUrl;
-        }
-    
-        const resp = await Axios.put(`/api/user/${userId}`, dataToSend);
-        
-        if(resp.status !== 200) { 
-            return setUpdateResult("fail");
-        }
-        // Updating the user context
-        setUser({...user, profileImage: userUrl});
-    
-        setUpdateResult("success");
-        navigate(`/profile/${userId}`);
-        alert("Profile updated successfully!");
+      console.log("Update function firing")
+      event?.preventDefault();
+  
+      let dataToSend = { ...formData };
+      
+      // If password field is empty, remove it from the request
+      if (!dataToSend.password) {
+        delete dataToSend.password;
+      }
+  
+      if(userUrl) {
+          dataToSend.profileImage = userUrl;
+      }
+  
+      const resp = await Axios.put(`/api/user/${userId}`, dataToSend);
+      
+      if(resp.status !== 200) { 
+          return setUpdateResult("fail");
+      }
+      // Updating the user context
+      setUser({...user, profileImage: userUrl});
+  
+      setUpdateResult("success");
+      navigate(`/profile/${userId}`);
+      alert("Profile updated successfully!");
     };
+  
     
 
-    const uploadImage = async (event) => {
-        event.preventDefault();
+    // const uploadImage = async (event) => {
+    //     event.preventDefault();
         
-        const formData = new FormData();
-        formData.append("file", imageSelected);
-        formData.append("upload_preset", "fxbnekpl");
+    //     const formData = new FormData();
+    //     formData.append("file", imageSelected);
+    //     formData.append("upload_preset", "fxbnekpl");
         
-        const response = await Axios.post("https://api.cloudinary.com/v1_1/diwhrgwml/image/upload", formData);
+    //     const response = await Axios.post("https://api.cloudinary.com/v1_1/diwhrgwml/image/upload", formData);
         
-        if (response.data) {
-          const publicId = response.data.public_id;
-          const url = cld.url(publicId);
-          setUserUrl(url);
-          console.log(url);
-        }
-      };
+    //     if (response.data) {
+    //       const publicId = response.data.public_id;
+    //       const url = cld.url(publicId);
+    //       setUserUrl(url);
+    //       console.log(url);
+    //     }
+    //   };
 
       const handleFileChange = async (event) => {
         setImageSelected(event.target.files[0]);
@@ -119,8 +127,6 @@ const Account = () => {
   return (
     <>
     <div className="account-container">
-
-      
 
       <div className="form-container">
       <h2 className='account-h2'>Edit Your Profile</h2>
@@ -210,7 +216,11 @@ const Account = () => {
       </div>
       <div className="profile-image-container">
         <h2 className="profile-image-h2">Edit Profile Image</h2>
-        {userUrl && <Image className="profile-img" cloudName="diwhrgwml" publicId={userUrl}/>}
+        {userUrl 
+          ? <Image className="profile-img" cloudName="diwhrgwml" publicId={userUrl}/>
+          : <img src={noUser} alt="No User" className="profile-img" />
+        }
+
         <label htmlFor="fileInput" className="file-input-label">
           Upload File
           <input id="fileInput" type="file" className="file-input" onChange={handleFileChange} />

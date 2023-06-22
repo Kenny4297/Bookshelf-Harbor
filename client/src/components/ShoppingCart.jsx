@@ -142,7 +142,7 @@ const clearCart = () => {
 					<li key={index}>
 					<h2>{book.title}</h2>
 					<h3>Author: {book.author.join(', ')}</h3>
-					<img src={book.cover_i} alt="" />
+					<img src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`} alt="cover" />
 					<p>First published year: {book.first_publish_year}</p>
 					<p>Price: ${book.price}</p>
 					<button onClick={() => removeFromCart(book._id)}>Remove from Cart</button>

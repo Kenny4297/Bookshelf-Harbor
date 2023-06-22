@@ -247,16 +247,17 @@ element.style {
 /* Account / Orders */
 .orders-page {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-  border: 2px solid green;
+  /* border: 2px solid green; */
 }
 
 .orders-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 2px solid blue;
+  margin-left: 3rem;
+  /* border: 2px solid blue; */
 }
 
 .individual-order-wrapper {
@@ -265,19 +266,36 @@ element.style {
   align-items: flex-start;
   /* border: 2px solid red; */
   align-self: flex-start;
-  margin-top: 2.5rem;
+  /* margin-top: 1rem; */
+  margin-bottom: 2.5rem;
 }
 
 
 .individual-order {
-  border: 2px solid green;
-  width: 50rem;
+  border: 2px solid var(--grey-wood);
+  width: 30rem;
   text-align: center;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
+
 
 .individual-order h2, 
 .individual-order h3 {
   color: var(--light-teak)
+}
+
+/* .individual-order h3 {
+  border-top: 1px solid var(--grey-wood);
+} */
+
+.individual-order h3::before {
+  content: "";
+  display: block;
+  height: 1px;
+  width: 50%;  /* Set width to desired percentage */
+  background-color: var(--grey-wood);
+  margin-bottom: 10px; /* Adjust as needed */
+  margin: 0 auto;
 }
 
 /* .individual-order h2, 
@@ -294,6 +312,25 @@ element.style {
     display: inline;
 }
 
+.order-number-h2 {
+  border-bottom: 2px solid var(--light-teak);
+  display: inline-flex;
+  margin-bottom: 1rem;
+}
+.order-number-p, .order-date {
+  color: var(--grey-wood);
+  font-weight: bold;
+}
+
+.order-date {
+  margin-top: -1rem;
+}
+
+.order-date-title {
+  color: var(--light-teak);
+  font-weight: bold;
+}
+
 .orders-individual-orders {
   /* border: 2px solid blue; */
   display: flex;
@@ -301,6 +338,8 @@ element.style {
   align-items: center;
   width: 25rem;
   margin-bottom: 1rem;
+  border: 2px solid var(--light-teak);
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
 .orders-button-link {
@@ -319,6 +358,10 @@ element.style {
   background-color: #e6e6e6;
 }
 
+.order-image {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.3);
+}
+
 .orders-orderId-p {
   margin: 0; 
   padding: 0.5rem; 
@@ -329,10 +372,18 @@ element.style {
   color: #666; 
 }
 
+.quantity-p, .price-p {
+  color: var(--grey-wood);
+}
 
+.order-total {
+  color: var(--grey-wood);
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-bottom: 2px solid var(--grey-wood);
+  display: inline-flex;
+}
 
-
-/* Orders  */
 
 
 /* Hero section */
@@ -410,10 +461,16 @@ element.style {
 }
 
 
+
+
+
+
+
 /* Featured Section */
 
 .featured-novels-container {
   height: 45rem;
+  background-color: var(--grey-wood);
 }
 
 .featured-novels-image {
@@ -426,6 +483,13 @@ element.style {
   margin-top: 2rem;
 }
 
+.featured-novels-container h2 {
+  font-weight: bold;
+  text-align: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
 .featured-novels-text {
   display: flex;
   flex-direction: column;
@@ -435,32 +499,49 @@ element.style {
 
 .featured-novels-card {
   width: 25rem;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.3);
 }
 
 .featured-novel-author {
   color: black;
 }
 
-
-#featured-books-carousel .carousel-control-next-icon,
-#featured-books-carousel .carousel-control-prev-icon {
-    background-color: black;
-}
-
-#featured-books-carousel .carousel-control-next,
-#featured-books-carousel .carousel-control-prev {
-    position: absolute;
-    bottom: -35rem;
-    width: auto;
+#featured-books-carousel .carousel-control-prev, 
+#featured-books-carousel .carousel-control-next {
+  position: absolute;
+  width: auto;  /* Reset width */
+  height: auto;  /* Reset height */
+  padding: 0;
+  bottom: 0;  /* Position at the bottom */
+  transform: translateY(-50%); /* Center vertically */
 }
 
 #featured-books-carousel .carousel-control-prev {
-    left: 20rem;
+  left: 20rem;
 }
 
 #featured-books-carousel .carousel-control-next {
-    right: 20rem;
+  right: 20rem;
 }
+
+#featured-books-carousel .carousel-control-prev-icon,
+#featured-books-carousel .carousel-control-next-icon {
+  width: 2rem;  /* Adjust as needed */
+  height: 2rem;  /* Adjust as needed */
+  position: relative;
+  top: 28rem;
+  background-size: 100%, 100%;  /* Adjust as needed */
+  border: 2px solid red;
+}
+
+
+
+
+
+
+
+
+
 
 /* Categories pages */
 .category-container {

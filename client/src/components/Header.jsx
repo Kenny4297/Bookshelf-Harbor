@@ -10,12 +10,12 @@ const Header = () => {
   const [user, setUser] = useContext(UserContext);
 
     // Update on profileImage change
-    useEffect(() => {
-      if (user && user.profileImage) {
-        console.log('User Profile Image changed', user.profileImage);
-        // Any additional logic on profileImage change can be written here
-      }
-    }, [user && user.profileImage]);
+    // useEffect(() => {
+    //   if (user && user.profileImage) {
+    //     console.log('User Profile Image changed', user.profileImage);
+    //     // Any additional logic on profileImage change can be written here
+    //   }
+    // }, [user && user.profileImage]);
     
 
     const logout = () => {

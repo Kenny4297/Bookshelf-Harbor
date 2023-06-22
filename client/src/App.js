@@ -71,7 +71,7 @@ const App = () => {
             <Route path="/categories" element={<CategoriesPage />} />
             <Route path="/books/works/:key" element={<BookDetailsPage />} />
             <Route path="/individual-book/:id" element={<IndividualBook searchTerm={searchTerm} />} />            
-            <Route path="/book-details/:key" element={<BookDetailsPage />} />
+            {/* <Route path="/book-details/:key" element={<BookDetailsPage />} /> */}
             <Route path="/shoppingCart/:userId" element={<ShoppingCart />} />
             <Route path="/checkout/:userId" element={<CheckoutForm />} />
             <Route path="/thankYou/:userId" element={<ThankYou />} />

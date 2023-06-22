@@ -71,6 +71,7 @@ const CheckoutFormInner = () => {
                             title: item.title,
                             author: item.author,
                             first_publish_year: item.first_publish_year,
+							cover_i: item.cover_i,
                             key: item.key,
                             price: item.price,
                             subject: item.subject,
@@ -86,6 +87,7 @@ const CheckoutFormInner = () => {
     
                 if(response.status === 201) {
                     console.log("Order created successfully");
+					console.log("The response for creating the order:", response)
                     clearShoppingCart();
                     navigate(`/thankYou/${userId}`)
                 } else {
@@ -137,7 +139,7 @@ const CheckoutFormInner = () => {
 	}, [userId, user?.shoppingCart]); // Adding the optional chaining operator '?'
 
 	useEffect(() => {
-		console.log(cartItems);
+		console.log("This is the cartItems:", cartItems);
 	});
 
 	const totals = calculateTotals();
@@ -160,6 +162,7 @@ const CheckoutFormInner = () => {
 							{cartItems.map((book, index) => (
 							<li key={index}>
 								<h2>{book.title}</h2>
+								<img src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`} alt="cover" />
 								<h3>Author: {book.author.join(', ')}</h3>
 								<p>First published year: {book.first_publish_year}</p>
 								<p>Price: ${book.price}</p>

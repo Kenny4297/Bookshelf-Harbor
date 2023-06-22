@@ -13,7 +13,7 @@ function IndividualBook() {
   
   useEffect(() => {
     if (searchTerm) {
-      fetch(`https://openlibrary.org/search.json?title=${searchTerm}&page=${page + 1}&limit=100`)
+      fetch(`https://openlibrary.org/search.json?title=${searchTerm}&page=${page + 1}&limit=20`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -49,7 +49,7 @@ function IndividualBook() {
     <div className="book-container">
       <div className="book-grid">
         {book.map((bookItem, index) => (
-          <Link to={`/book-details/${bookItem.key.replace("/works/", "")}`} className="book-card" key={index}>
+          <Link to={`/books/works/${bookItem.key.replace("/works/", "")}`} className="book-card" key={index}>
             <div className="book-card-content">
               {bookItem.cover_i ? (
                 <img className="book-card-image" src={`https://covers.openlibrary.org/b/id/${bookItem.cover_i}-M.jpg`} alt='book cover' />

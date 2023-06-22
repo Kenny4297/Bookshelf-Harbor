@@ -14,6 +14,7 @@ const orderSchema = new Schema({
           title: String,
           author: [String],
           first_publish_year: Number,
+          cover_i: Number,
           key: String,
           price: Number,
           subject: [String],

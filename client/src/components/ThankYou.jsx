@@ -40,6 +40,7 @@ const ThankYou = () => {
       {order.books.map((item, index) => (
         <div key={index}>
           <h3>{item.book.title}</h3>
+          <img src={`https://covers.openlibrary.org/b/id/${item.book.cover_i}-M.jpg`} alt="cover" />
           <p>Author: {item.book.author.join(', ')}</p>
           <p>First published year: {item.book.first_publish_year}</p>
           <p>Price: ${item.book.price}</p>

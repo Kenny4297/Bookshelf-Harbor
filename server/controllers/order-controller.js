@@ -42,6 +42,7 @@ module.exports = {
                           title: item.book.title,
                           author: item.book.author,
                           first_publish_year: item.book.first_publish_year,
+                          cover_i: item.book.cover_i,
                           key: item.book.key,
                           price: item.book.price,
                           subject: item.book.subject,
@@ -81,6 +82,7 @@ module.exports = {
           }
 
           // Return the order
+          console.log("This is the last order:", order)
           res.status(200).json(order);
         } catch (error) {
           console.error(error);

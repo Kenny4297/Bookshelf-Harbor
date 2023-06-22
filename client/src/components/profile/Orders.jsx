@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
 
@@ -18,8 +18,10 @@ const Orders = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const data = await response.json();
+      let data = await response.json();
       if (Array.isArray(data)) {
+        // Sort orders by date from most recent to oldest
+        data.sort((a, b) => new Date(b.date) - new Date(a.date));
         setOrders(data);
       } else {
         console.error('Data is not an array:', data);
@@ -41,40 +43,50 @@ const Orders = () => {
     }
   };
 
-  const handleOrderClick = (orderId) => {
-    console.log(`Order button clicked for ID: ${orderId}`);
+const handleOrderClick = (orderId) => {
+  console.log(`Order button clicked for ID: ${orderId}`);
+  if (selectedOrder && selectedOrder._id === orderId) {
+    setSelectedOrder(null);
+  } else {
     fetchSpecificOrder(orderId);
-  };
+  }
+};
 
   return (
     <div className="orders-page">
-      <div className="orders-container">
-        <h2 className="orders-h2">Your Orders:</h2>
-        {orders.map((order) => (
-          <button onClick={() => handleOrderClick(order._id)} key={order._id} className="orders-individual-orders">
-            <p className="orders-orderId-p">Order#: {order._id}</p>
-            <p className="orders-orderDate-p">{new Date(order.date).toLocaleDateString()}</p>
-          </button>
-        ))}
-      </div>
-      <div className="individual-order-wrapper">
-        {selectedOrder && (
-          <div className="individual-order">
-            <h2>Order number:</h2>
-            <p>{selectedOrder._id}</p>
-            {selectedOrder.books && selectedOrder.books.length > 0 ? selectedOrder.books.map((item, index) => (
-              <div key={index}>
-                <h3>{item.book.title}</h3>
-                <p>Quantity: {item.quantity}</p>
-                <p>Price: {item.book.price}</p>
-              </div>
-            )) : <p>No books found for this order.</p>}
-            <p>Order Date: {new Date(selectedOrder.date).toLocaleDateString()}</p>
-            <p>Total: {selectedOrder.total}</p>
+  <div className="orders-container">
+    <h2 className="orders-h2">Your Orders:</h2>
+    {orders.map((order, index) => (
+      <React.Fragment key={order._id}>
+        <button onClick={() => handleOrderClick(order._id)} className="orders-individual-orders">
+          <p className="orders-orderId-p">Order#: {order._id}</p>
+          <p className="orders-orderDate-p">{new Date(order.date).toLocaleDateString()}</p>
+        </button>
+        {selectedOrder && selectedOrder._id === order._id && (
+          <div className="individual-order-wrapper">
+            <div className="individual-order">
+              <h2 className="order-number-h2">Order number:</h2>
+              <p className="order-number-p">{selectedOrder._id}</p>
+              <p className="order-date-title">Order Date:</p> 
+              <p className="order-date">{new Date(selectedOrder.date).toLocaleString()}</p>
+
+              {selectedOrder.books && selectedOrder.books.length > 0 ? selectedOrder.books.map((item, index) => (
+                <div key={index}>
+                  <h3>{item.book.title}</h3>
+                  <img className="order-image" src={`https://covers.openlibrary.org/b/id/${item.book.cover_i}-M.jpg`} alt="cover" />
+                  <p className="quantity-p">Quantity: {item.quantity}</p>
+                  <p className='price-p'>Price: ${item.book.price}</p>
+                </div>
+              )) : <p>No books found for this order.</p>}
+
+              <p className="order-total">Total: ${selectedOrder.total}</p>
+            </div>
           </div>
         )}
-      </div>
-    </div>
+      </React.Fragment>
+    ))}
+  </div>
+</div>
   );
 };
 

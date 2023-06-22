@@ -19,12 +19,20 @@ const BookComponent = ({ category }) => {
     fetchBooks();
   }, [category, page]);
 
+  useEffect(() => {
+    if (books) {
+    console.log(books);
+    }
+  }, [books]);
+
   return (
     <div className='book-container'>
       <h2 className='category'>{category}</h2>
       <div className='book-grid'>
         {books.map((book, index) => (
-          <Link to={`/book-details/${book.cover_edition_key}`} className='book-card' key={index}>
+          // <Link to={`/book-details/${book.cover_edition_key}`} className='book-card' key={index}>
+          <Link to={`/books/works/${book.key.replace("/works/", "")}`} className='book-card' key={index}>
+            
             <div className='book-card-content'>
               <img
                 className='book-card-image'

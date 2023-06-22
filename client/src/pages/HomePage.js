@@ -115,9 +115,9 @@ const HomePage = () => {
                 </div> */}
             </HeroContainer>
 
-            <FeaturedProducts />
-
             <CategoriesPage />
+
+            <FeaturedProducts />
 
             <Footer />
         </>

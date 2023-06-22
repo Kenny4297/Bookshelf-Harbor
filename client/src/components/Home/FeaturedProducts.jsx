@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card } from 'react-bootstrap';
+import { Card, Carousel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import loading from '../assets/gifs/loading.gif'
+import { HiArrowRight, HiArrowLeft } from 'react-icons/hi';
 
 const FeaturedBooks = () => {
     const [books, setBooks] = useState([]);
 
     useEffect(() => {
         console.log("UseEffect is running!")
-        fetchBooks(3);
+        fetchBooks(12);
     }, []);
 
     const fetchBooks = async (count) => {
@@ -43,39 +43,54 @@ const FeaturedBooks = () => {
         }
     };
     
-    
+    const carouselItems = [];
+    for (let i = 0; i < books.length; i += 3) {
+        carouselItems.push(
+            <Carousel.Item key={i}>
+                <div className="d-flex justify-content-around flex-wrap">
+                    {books.slice(i, i+3).map((book) => (
+                        <Card key={book.key} className="featured-novels-card">
+                            <Link to={`/books${book.key}`}>
+                                <Card.Img
+                                    className="featured-novels-image"
+                                    variant="top"
+                                    src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`}
+                                    alt={`Cover for ${book.title}`}
+                                />
+                                <Card.Body className="featured-novels-text">
+                                    <h2 className="featured-novels-book-title">
+                                        {book.title}
+                                    </h2>
+                                    <p className="featured-novels-author">
+                                      {book.author_name[0]}
+                                    </p>
+                                </Card.Body>
+                            </Link>
+                        </Card>
+                    ))}
+                </div>
+            </Carousel.Item>
+        )
+    }
 
     return (
         <div className="featured-novels-container">
-          <h2>Today's Featured Novels</h2>
-          <div className="d-flex justify-content-around flex-wrap">
-            {books.length > 0 ? (
-              books.map((book) => (
-                <Card key={book.key} className="featured-novels-card">
-                  <Link to={`/books${book.key}`}>
-                    <Card.Img
-                      className="featured-novels-image"
-                      variant="top"
-                      src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`}
-                      alt={`Cover for ${book.title}`}
-                    />
-                    <Card.Body className="featured-novels-text">
-                      <Card.Title className="featured-novel-book-title">
-                        {book.title}
-                      </Card.Title>
-                      <Card.Text className="featured-novel-author">
-                        {book.author_name && book.author_name.join(", ")}
-                      </Card.Text>
-                    </Card.Body>
-                  </Link>
-                </Card>
-              ))
-            ) : (
-              <p>Awaiting Open Library API...</p>
-            )}
-          </div>
+          <h2 className="todays-featured-novels-h2">Today's Featured Novels</h2>
+          {books.length > 0 ? (
+           <Carousel
+            style={{height:'30rem'}} 
+            indicators={false} 
+            nextIcon={<HiArrowRight size={30} color="black" />} 
+            prevIcon={<HiArrowLeft size={30} color="black" />}>
+            {carouselItems}
+         </Carousel>
+          ) : (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                <p>Awaiting OpenLibrary API...</p>
+            </div>
+          )}
         </div>
-      );
+    );
       
 };
 

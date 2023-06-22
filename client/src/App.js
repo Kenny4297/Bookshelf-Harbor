@@ -20,9 +20,7 @@ import TestComponent from './components/testComponent';
 import Account from './components/profile/Account';
 import Orders from './components/profile/Orders';
 import SpecificOrder from './components/profile/SpecificOrder'
-import { Mystery, Drama, Comedy, Romance } from './components/Categories';
 import CategoryComponent from './components/Categories/CategoryComponent'
-import { useLocation } from 'react-router-dom';
 
 const App = () => {
   const [user, setUser] = useState(null);

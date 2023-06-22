@@ -469,25 +469,44 @@ element.style {
 /* Featured Section */
 
 .featured-novels-container {
-  height: 45rem;
-  background-color: var(--grey-wood);
+  height: 40rem;
+  background-color: var(--white-ash);
+  /* border: 2px solid green; */
 }
 
 .featured-novels-image {
-  width: auto;
+  min-width: 10rem;
+  max-width: 10rem;
+  min-height: 15rem;
+  max-height: 15rem;
   margin: 0 auto;
   text-align: center;
-  /* border: 2px solid green; */
   display: flex;
   justify-content: center;
   margin-top: 2rem;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.3);
 }
 
-.featured-novels-container h2 {
+.featured-novels-card a {
+  text-decoration: none;
+}
+
+.featured-novels-container {
   font-weight: bold;
   text-align: center;
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.todays-featured-novels-h2 {
+  margin-bottom: 2rem;
+  color: var(--gingerbread)
+}
+
+.featured-novels-book-title {
+  font-size: 1.25rem;
+  color: var(--dark-wood);
+  border-bottom: 2px solid var(--dark-wood)
 }
 
 .featured-novels-text {
@@ -495,43 +514,65 @@ element.style {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 .featured-novels-card {
-  width: 25rem;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.3);
+  width: 18rem;
+  min-height: 24rem;
+  max-height: 24rem;
+  background-color: var(--light-teak);
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.2), 0px 0px 15px 0px rgba(0,0,0,0.2);
 }
 
-.featured-novel-author {
+.featured-novels-card:hover {
+  transform: scale(1.05)
+}
+
+.featured-novels-author {
   color: black;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+  font-size:1rem;
 }
 
-#featured-books-carousel .carousel-control-prev, 
-#featured-books-carousel .carousel-control-next {
+.carousel-control-prev, 
+.carousel-control-next {
   position: absolute;
   width: auto;  /* Reset width */
   height: auto;  /* Reset height */
   padding: 0;
   bottom: 0;  /* Position at the bottom */
   transform: translateY(-50%); /* Center vertically */
+  
 }
 
-#featured-books-carousel .carousel-control-prev {
-  left: 20rem;
+.carousel-control-prev {
+  left: 30rem;
+  top: 27.5rem;
+
 }
 
-#featured-books-carousel .carousel-control-next {
-  right: 20rem;
+.carousel-control-next {
+  right: 30rem;
+  top: 27.5rem;
+
 }
 
-#featured-books-carousel .carousel-control-prev-icon,
-#featured-books-carousel .carousel-control-next-icon {
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
   width: 2rem;  /* Adjust as needed */
   height: 2rem;  /* Adjust as needed */
   position: relative;
-  top: 28rem;
+  /* top: 28rem; */
   background-size: 100%, 100%;  /* Adjust as needed */
-  border: 2px solid red;
+  /* border: 2px solid red; */
+  filter: invert(1) brightness(0.5) saturate(0); 
+  /* background-color: var(--dark-wood); */
 }
 
 
@@ -544,6 +585,18 @@ element.style {
 
 
 /* Categories pages */
+
+.categories-page-container {
+  background-color: var(--grey-wood);
+  padding-bottom: 3rem;
+}
+
+.browse-by-categories {
+  padding: 3rem 0rem;
+  text-align: center;
+}
+
+
 .category-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -554,6 +607,7 @@ element.style {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 20rem;
   width: 20rem;
   margin: 0 auto;
@@ -562,6 +616,8 @@ element.style {
   color: black;
   transition: all 0.3s ease;
   position: relative;
+  overflow: hidden;
+  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2), 0px 1px 20px 0px rgba(0,0,0,0.3);
 }
 
 .category-box:before {
@@ -598,11 +654,59 @@ element.style {
 
 .category-box-title {
   position: relative;
-  z-index: 1;
   color: white;
-  text-align: center;
-  padding: 20px;
+  bottom: 6rem;
+  /* border: 2px solid green; */
 }
+
+.category-box-desc {
+  color: white;
+
+  opacity: .8;
+  z-index: 1;
+  text-align: center;
+}
+
+
+
+.slide-background {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: black;
+  transform: translateY(100%); /* Initially, push it down */
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Transition effect */
+}
+
+.category-box:hover .slide-background {
+  transform: translateY(0); 
+  opacity: .7;
+}
+
+.slide-box-desc {
+  text-align: center;
+  color: white;
+  padding: 0rem 1rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Categories */
 

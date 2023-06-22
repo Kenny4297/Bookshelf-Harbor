@@ -52,7 +52,7 @@ const Header = () => {
     };
 
   return (
-    <header style={{width: '100%', minHheight:'1.5rem', maxHeight:'1.5rem'}}>
+    <header style={{width: '100%', minHight:'1.5rem', maxHeight:'1.5rem'}}>
       <Navbar style={{backgroundColor: "var(--grey-wood)"}} expand="md"className="d-flex justify-content-center align-items-center">
         <Navbar.Brand href="/">
           <h2 style={{marginLeft:'2rem'}} >Nile</h2>

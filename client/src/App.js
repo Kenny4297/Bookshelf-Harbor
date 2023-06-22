@@ -50,8 +50,10 @@ const App = () => {
   return (
     <BrowserRouter>
       <UserContext.Provider value={[user, setUser]}>
+        {user && 
         <Header setSearchTerm={setSearchTerm} />
-        <div style={{paddingTop: '7vh'}}>
+        }
+        <div>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />

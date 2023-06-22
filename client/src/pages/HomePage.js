@@ -3,7 +3,8 @@ import { UserContext } from "../contexts/UserContext";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import styled from "styled-components";
-import NileHero from '../components/assets/images/NileHero.jpg'
+// import NileHero from '../components/assets/images/NileHero.jpg'
+import login from '../components/assets/images/login.jpg'
 import FeaturedProducts from '../components/Home/FeaturedProducts'
 import CategoriesPage from './CategoriesPage'
 import Footer from '../components/Home/Footer'
@@ -83,36 +84,6 @@ const HomePage = () => {
                         </>
                     } */}
                 </div>
-
-                {/* <Link to="/categories">Categories</Link> */}
-
-                {/* <div>
-                    <form onSubmit={handleFormSubmit}>
-                        <input type="text" value={searchTerm} style={{color: 'black'}} onChange={handleInputChange} />
-                        <button type="submit">Search</button>
-                    </form>
-                    <ul>
-                        {bookData.map(book => (
-                        <li key={book.key}>
-                            <h3>{book.title}</h3>
-                            {book.author_name && (
-                            <p>
-                                by{' '}
-                                {book.author_name.length > 1
-                                ? book.author_name.join(', ')
-                                : book.author_name}
-                            </p>
-                            )}
-                            {book.cover_i && (
-                            <img
-                                src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`}
-                                alt={`${book.title} cover`}
-                            />
-                            )}
-                        </li>
-                        ))}
-                    </ul>
-                </div> */}
             </HeroContainer>
 
             <CategoriesPage />
@@ -127,6 +98,8 @@ const HomePage = () => {
 export default HomePage;
 
 const HeroContainer = styled.div`
+    /* position: relative;
+    bottom: 5rem; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -136,9 +109,8 @@ const HeroContainer = styled.div`
     height: 100vh;
 
     /* border: 3px solid red; */
-    padding-top: 0rem !important;
     margin: 0 !important;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${NileHero});
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${login});
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

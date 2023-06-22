@@ -37,37 +37,53 @@ const LoginPage = () => {
     }
   };
 
+  const handleFormSubmitSignUp = (event) => {
+    event.preventDefault()
+
+    navigate("/signup")
+  }
+
 
   return (
-    <>
-      <h1>Login Page</h1>
+    <div className="full-page-background">
 
-      <form className="form mb-3">
-        <div className="form-group">
-          <label>Email Address</label>
-          <input
-            type="text"
-            name="email"
-            placeholder="john@gmail.com"
-            className="form-control"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-        </div>
+      <form className="login-form-container">
+        <div className='form-background'>
+          <h2>Welcome to Nile</h2>
+        <h2 className="login-h2">Login</h2>
 
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            className="form-control"
-            value={formData.password}
-            onChange={handleInputChange}
-          />
-        </div>
+          <div className="login-forms">
+            <label>Email Address</label>
+            <input
+              type="text"
+              name="email"
+              placeholder="john@gmail.com"
+              className="form-control"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+          </div>
 
-        <div className="form-group mt-2">
-          <button className="btn btn-primary" onClick={handleFormSubmit}>Log Me In!</button>
+          <div className="login-forms">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              className="form-control"
+              value={formData.password}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="form-group mt-2">
+            <button className="btn btn-primary" onClick={handleFormSubmit}>Log Me In!</button>
+          </div>
+          <div className="login-signup-section">
+            <p>Not a user? Sign up!</p>
+            <div className="form-group mt-2">
+              <button className="btn btn-primary" onClick={handleFormSubmitSignUp}>Sign In</button>
+            </div>
+          </div>
         </div>
       </form>
 
@@ -82,7 +98,7 @@ const LoginPage = () => {
           Login failed!
         </div>
       )}
-    </>
+    </div>
   )
 }
 

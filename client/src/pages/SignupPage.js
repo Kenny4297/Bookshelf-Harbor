@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import image from '../components/assets/images/signup.jpg'
+import Loading from '../components/Loading'
 
 const SignupPage = (props) => {
 
@@ -53,17 +54,7 @@ const SignupPage = (props) => {
   }
   
   if (isLoading) {
-    return <div style={{
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      backgroundColor: 'var(--grey-wood)', 
-      height: '100vh', // Adjust as needed
-      width: '100vw' // Adjust as needed
-    }}>
-    <p style={{fontSize:'3rem', fontStyle:'italic'}}>Loading...</p>
-  </div>
-  
+    return <Loading />
   } else {
     return (
     <>

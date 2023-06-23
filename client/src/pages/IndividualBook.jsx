@@ -2,7 +2,8 @@ import { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
-import defaultImage from '../components/assets/images/defaultImage.jpg'
+import defaultImage from '../components/assets/images/defaultImage.jpg';
+import Loading from '../components/Loading'
 
 function IndividualBook() {
   const location = useLocation();
@@ -14,20 +15,26 @@ function IndividualBook() {
   useEffect(() => {
     if (searchTerm) {
       fetch(`https://openlibrary.org/search.json?title=${searchTerm}&page=${page + 1}&limit=20`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.docs) {
-          setBook(data.docs);
-        }
-      })
-      .catch((error) => console.log(error));
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.docs) {
+            setBook(data.docs);
+          }
+        })
+        .catch((error) => console.log(error));
     }
   }, [searchTerm, page]);
+
+  useEffect(() => {
+    if (book) {
+      console.log("The book object:", book)
+    }
+  }, [book]);
 
   const handleNextPage = () => {
     setPage(page + 1);
@@ -45,34 +52,48 @@ function IndividualBook() {
     return <div>Loading...</div>;
   }
 
+  // Filter books without an image cover
+  const filteredBooks = book.filter((bookItem) => bookItem.cover_i);
+
   return (
     <>
-    <div className="book-container">
-      <h2 className='book-results-for-h2'>Results for <span className="search-term-results">'{searchTerm}'</span></h2>
-      
-      <div className="book-grid">
-        {book.map((bookItem, index) => (
-          <Link to={`/books/works/${bookItem.key.replace("/works/", "")}`} className="book-card" key={index}>
-            <div className="book-card-content">
-              {bookItem.cover_i ? (
-                <img className="book-card-image" src={`https://covers.openlibrary.org/b/id/${bookItem.cover_i}-M.jpg`} alt='book cover' />
-              ) : (
-                <img className="book-card-image" src={defaultImage} alt='Default book cover' />
-              )}
-              <h3 className="book-card-title">{bookItem.title}</h3>
-              <p className="book-card-author">{bookItem.author_name && bookItem.author_name.join(", ")}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
-      <div style={{display: 'flex', alignItems:'center'}}>
-        <button className="individual-book-button" onClick={handlePrevPage} disabled={page === 0}>Previous Page</button>
+      {book.length === 0 ? (
+        <Loading />
+      ) : (
+        <div className="book-container">
+          <h2 className="book-results-for-h2">
+            Results for <span className="search-term-results">'{searchTerm}'</span>
+          </h2>
+          <div className="book-grid">
+            {filteredBooks.map((bookItem, index) => (
+              <Link to={`/books/works/${bookItem.key.replace("/works/", "")}`} className="book-card" key={index}>
+                <div className="book-card-content">
+                  {bookItem.cover_i ? (
+                    <img className="book-card-image" src={`https://covers.openlibrary.org/b/id/${bookItem.cover_i}-M.jpg`} alt="book cover" />
+                  ) : (
+                    <img className="book-card-image" src={defaultImage} alt="Default book cover" />
+                  )}
+                  <h3 className="book-card-title">{bookItem.title}</h3>
+                  <p className="book-card-author">{bookItem.author_name && bookItem.author_name.join(", ")}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
 
-         <p style={{color:'var(--grey-wood'}}>page: {page + 1}</p>
 
-        <button className="individual-book-button" onClick={handleNextPage}>Next Page</button>
-      </div>
-    </div>
+          <div style={{ display: "flex", alignItems: "center", marginBottom:'5rem' }}>
+            <button className="individual-book-button" onClick={handlePrevPage} disabled={page === 0}>
+              Previous Page
+            </button>
+
+            <p style={{ color: "var(--grey-wood)" }}>page: {page + 1}</p>
+            
+            <button className="individual-book-button" onClick={handleNextPage}>
+              Next Page
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

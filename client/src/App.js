@@ -21,15 +21,18 @@ import Account from './components/profile/Account';
 import Orders from './components/profile/Orders';
 import SpecificOrder from './components/profile/SpecificOrder'
 import CategoryComponent from './components/Categories/CategoryComponent'
+import Loading from './components/Loading'
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     console.log("Testing App.js UseEffect for the'/me/' route");
-    const authToken = localStorage.getItem("auth-token"); 
-    if (authToken) {
+    const authToken = localStorage.getItem("auth-token");
+  
+    if (authToken && !user) {
       axios
         .get(`/api/user/me`, {
           headers: {
@@ -38,13 +41,20 @@ const App = () => {
         })
         .then((response) => {
           setUser(response.data);
+          setIsLoading(false); // Turn off loading state when we have user data
         })
         .catch((error) => {
           console.error(error);
+          setIsLoading(false); // Also turn off loading state if an error occurs
         });
+    } else {
+      setIsLoading(false); // If there's no token, no need to wait
     }
   }, []);
 
+  if (isLoading) {
+    return <Loading />; // Replace this with your actual loading UI
+  }
 
 
   return (

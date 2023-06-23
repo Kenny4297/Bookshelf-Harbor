@@ -2,27 +2,77 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import axios from "axios";
+import Loading from '../components/Loading'
+
+const cutOffAtSpecialCharacter = (text) => {
+    if (!text) {
+      return '';
+    }
+  
+    const specialCharacters = ['{', '[', '(', '-'];
+    let pos = text.length;
+    let consecutiveDashesCount = 0;
+  
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+  
+      if (specialCharacters.includes(char) && i < pos) {
+        if (char === '-') {
+          consecutiveDashesCount++;
+          if (consecutiveDashesCount >= 3) {
+            pos = i - 2; // Remove the last two dashes
+            break;
+          }
+        } else {
+          pos = i;
+          break;
+        }
+      } else {
+        consecutiveDashesCount = 0; // Reset consecutive dashes count for other characters
+      }
+    }
+  
+    if (pos !== -1) {
+      return text.slice(0, pos).trim();
+    }
+  
+    return text.trim();
+  };
+  
+  
+  
+  
+  
+  
 
 const BookDetailsPage = () => {
-    const { key } = useParams();
-    const [book, setBook] = useState(null);
-    const [authors, setAuthors] = useState([]);
-    const [firstPublishDate, setFirstPublishDate] = useState(null);
-    const [description, setDescription] = useState("");
-    const [cover, setCover] = useState(null);
-    const [user, setUser] = useContext(UserContext);
-    const [cartItems, setCartItems] = useState(user?.shoppingCart?.books || []);
+  const { key } = useParams();
+  const [book, setBook] = useState(null);
+  const [authors, setAuthors] = useState([]);
+  const [firstPublishDate, setFirstPublishDate] = useState(null);
+  const [description, setDescription] = useState("");
+  const [cover, setCover] = useState(null);
+  const [user, setUser] = useContext(UserContext);
+  const [cartItems, setCartItems] = useState(user?.shoppingCart?.books || []);
 
-    const MIN_PRICE = 5.0; // $5.00
-    const MAX_PRICE = 20.0; // $20.00
+  const MIN_PRICE = 5.0; // $5.00
+  const MAX_PRICE = 20.0; // $20.00
 
-    const calculateBookPrice = (title) => {
-        const titleLength = title.length;
-        const priceRange = MAX_PRICE - MIN_PRICE;
-        const priceIncrement = priceRange / (100 * titleLength);
-        const price = MIN_PRICE + priceIncrement * 100;
-        return price.toFixed(2);
+  const calculateBookPrice = (title) => {
+    const titleLength = title.length;
+    const priceRange = MAX_PRICE - MIN_PRICE;
+    const priceIncrement = priceRange / (100 * titleLength);
+    const price = MIN_PRICE + priceIncrement * 100;
+    return price.toFixed(2);
+  };
+
+  useEffect(() => {
+    if (book && book.description) {
+      let bookDescription = typeof book.description === "object" ? book.description.value : book.description;
+      setDescription(cutOffAtSpecialCharacter(bookDescription));
     }
+  }, [book]);
+
 
     useEffect(() => {
         const url = key.startsWith("/works/") ? `https://openlibrary.org${key}.json` : `https://openlibrary.org/works/${key}.json`;
@@ -80,6 +130,7 @@ const BookDetailsPage = () => {
     useEffect(() => {
         if (book && book.description) {
             setDescription(book.description);
+            console.log("The book description is:", book.description)
         }
     }, [book]);
 
@@ -112,6 +163,14 @@ const BookDetailsPage = () => {
         }
     }, [cover]);
 
+    useEffect(() => {
+        if (book && book.description) {
+          let bookDescription = typeof book.description === "object" ? book.description.value : book.description;
+          setDescription(cutOffAtSpecialCharacter(bookDescription));
+        }
+    }, [book]);
+      
+
     if (!book) {
         return <div style={{ color: "white" }}>Loading...</div>;
     }
@@ -143,39 +202,53 @@ const BookDetailsPage = () => {
     }
 
     return (
-        <div className="book-details-page-container">
-            <h2 className="book-details-page-h2">{book.title}</h2>
-            <p className="book-details-title">
+      <>
+        {!cover ? (
+          <Loading />
+        ) : (
+          <div className="book-details-page-container">
+            <div className="book-details-text-section">
+              <h2 className="book-details-page-h2">{book.title}</h2>
+              <p className="book-details-title">
                 Author:{" "}
                 {authors.length > 0 &&
-                    authors.map((author, index) => (
-                        <span className="individual-book-data-response" key={author.key}>
-                            {author.name}
-                            {index < authors.length - 1 ? ", " : ""}
-                        </span>
-                    ))}
-            </p>
-            <p className="book-details-title">Publication Date: <span className="individual-book-data-response">{firstPublishDate}</span></p>
-            <p className="book-details-title">
-                Description:{" "}<span className="individual-book-data-response">
-                {typeof description === "object"
-                    ? description.value.split("Contains:")[0].trim()
-                    : description}</span>
-            </p>
-            <p className="book-details-title">Book Price: ${calculateBookPrice(book.title)}</p>
-            {cover ? (
-                <img
-                    className="d-block mx-auto"
+                  authors.map((author, index) => (
+                    <span className="individual-book-data-response" key={author.key}>
+                      {author.name}
+                      {index < authors.length - 1 ? ", " : ""}
+                    </span>
+                  ))}
+              </p>
+              <p className="book-details-title">
+                Publication Date: <span className="individual-book-data-response">{firstPublishDate}</span>
+              </p>
+              <p className="book-details-title">
+                Description:{" "}
+                <span className="individual-book-data-response">{description || "No description available"}</span>
+              </p>
+              <p className="book-details-title">Book Price: ${calculateBookPrice(book.title)}</p>
+            </div>
+    
+            <div>
+              <div className="book-details-image-section">
+                {cover ? (
+                  <img
+                    className="book-details-image"
                     src={`https://covers.openlibrary.org/b/id/${cover.docs[0].cover_i}-L.jpg`}
                     alt={`Cover for ${book.title}`}
-                />
-            ) : (
-                <p>Loading cover image...</p>
-            )}
-
+                  />
+                ) : (
+                  <p>Loading cover image...</p>
+                )}
+              </div>
+            </div>
+    
             <button className="individual-book-add-to-cart" onClick={addToCart}>Add to Cart</button>
-        </div>
+          </div>
+        )}
+      </>
     );
+    
 }
 
 export default BookDetailsPage;

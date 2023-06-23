@@ -37,19 +37,12 @@ const Header = () => {
       setSearchTerm(event.target.value);
     };
 
-
-    // Search bar in Header logic
     const handleFormSubmit = event => {
       event.preventDefault();
       const query = searchTerm.replace(/ /g, '+');
-      const url = `https://openlibrary.org/search.json?title=${query}`;
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          setBookData(data.docs);
-          navigate(`/individual-book/${query}`, { state: { searchTerm: searchTerm.replace(/[+,]/g, '') } });
-        });
+      navigate(`/individual-book/${query}`, { state: { searchTerm: searchTerm.replace(/[+,]/g, '') } });
     };
+
 
   return (
     <header style={{width: '100%', minHight:'1.5rem', maxHeight:'1.5rem'}}>
@@ -92,7 +85,7 @@ const Header = () => {
                   <img
                     src={user.profileImage}
                     alt="The user's profile pic"
-                    style={{ width: '40px', borderRadius: '20px', border:'1px solid var(--dark-wood)'}}
+                    style={{ width: '40px', borderRadius: '20px', border:'1px solid var(--dark-wood)', marginRight:'2rem'}}
                   />
                 )}
               </>

@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../contexts/UserContext";
 import image from '../components/assets/images/login.jpg'
+import Loading from '../components/Loading'
 
 
 const LoginPage = () => {
@@ -57,16 +58,7 @@ const LoginPage = () => {
 
 
   if (isLoading) {
-    return <div style={{
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      backgroundColor: 'var(--ash-white)', 
-      height: '100vh', // Adjust as needed
-      width: '100vw' // Adjust as needed
-    }}>
-    <p style={{fontSize:'3rem', fontStyle:'italic', color:'var(--grey-wood)'}}>Loading...</p>
-  </div>
+    return <Loading />
   
   } else {
     return (

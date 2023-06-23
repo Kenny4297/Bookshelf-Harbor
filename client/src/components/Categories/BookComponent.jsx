@@ -53,7 +53,7 @@ return (
           </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", justifyContent:'center', border:'2px solid green', paddingBottom:'5rem'}}>   
+        <div style={{ display: "flex", alignItems: "center", justifyContent:'center', paddingBottom:'5rem'}}>   
             {page > 0 && 
               <button className="individual-book-button" onClick={() => {
                 setPage(page - 1);

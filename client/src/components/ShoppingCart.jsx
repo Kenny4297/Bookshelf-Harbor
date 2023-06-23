@@ -133,35 +133,45 @@ const clearCart = () => {
 	const totals = calculateTotals();
 
 	return (
-		<div>
-			<h1>Shopping Cart</h1>
-			{cartItems.length > 0 ? (
-			<>
-				<ul>
-				{cartItems.map((book, index) => (
-					<li key={index}>
-					<h2>{book.title}</h2>
-					<h3>Author: {book.author.join(', ')}</h3>
-					<img src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`} alt="cover" />
-					<p>First published year: {book.first_publish_year}</p>
-					<p>Price: ${book.price}</p>
-					<button onClick={() => removeFromCart(book._id)}>Remove from Cart</button>
-					</li>
-				))}
-				</ul>
+		<div className='shopping-cart-container'>
+		  <h2 className="shopping-cart-h2">Shopping Cart</h2>
+		  {cartItems.length > 0 ? (
+			<div>
+				<div className="shopping-cart-only-book-container">
+					{cartItems.map((book, index) => (
+						
+						<div className="shopping-cart-book" key={index}>
+							<div className="shopping-cart-header-author-container">
+								<h4 className='shopping-cart-book-title-h4'>{book.title}</h4>
+								<h5 className="author-name">{book.author.join(', ')}</h5>
+							</div>
+						<img src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`} alt="cover" />
+						<p className='shopping-cart-price'>Price: <span className="shopping-cart-rendered-price">${book.price}</span></p>
+
+						<button className="shopping-cart-remove-button" onClick={() => removeFromCart(book._id)}>Remove from Cart</button>
+						</div>
+					))}
+			  </div>
+
+			  <div className="shopping-cart-totals-container">
+				<div className="shopping-cart-math-container">
 					<p>Pre-tax total: ${totals.preTaxTotal}</p>
 					<p>Sales tax (6%): ${totals.salesTax}</p>
 					<p>Shipping Cost: ${totals.shippingCost}</p>
-					<hr />
-					<p>Total with tax and shipping: ${totals.totalWithTaxAndShipping}</p>
-					<button onClick={clearCart}>Clear Cart</button>
-			</>
-			) : (
+				</div>
+				<hr />
+				<p>Total with tax and shipping: ${totals.totalWithTaxAndShipping}</p>
+				<button className="shopping-cart-clear-cart" onClick={clearCart}>Clear Cart</button>
+				<Link className="shopping-cart-clear-cart" to={`/checkout/${userId}`}>Checkout</Link>
+
+
+			  </div>
+			</div>
+		  ) : (
 			<p>Your shopping cart is empty.</p>
-			)}
-			<Link to={`/checkout/${userId}`}> Go to Checkout</Link>
+		  )}
 		</div>
-	);
+	  );
 }
 
 export default ShoppingCart;

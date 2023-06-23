@@ -226,7 +226,7 @@ const BookDetailsPage = () => {
                 Description:{" "}
                 <span className="individual-book-data-response">{description || "No description available"}</span>
               </p>
-              <p className="book-details-title">Book Price: ${calculateBookPrice(book.title)}</p>
+              <p className="book-details-title book-details-price">Book Price: ${calculateBookPrice(book.title)}</p>
             </div>
     
             <div>

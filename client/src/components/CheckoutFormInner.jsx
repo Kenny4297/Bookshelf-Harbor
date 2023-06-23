@@ -17,6 +17,21 @@ const CheckoutFormInner = () => {
     const { userId } = useParams(); 
     const [cartItems, setCartItems] = useState([]);
     const navigate = useNavigate();
+	const [billingDetails, setBillingDetails] = useState({
+		firstName: '',
+		lastName: '',
+		address: '',
+		billingAddress: '',
+		expDate: '',
+	  });
+	  
+	  const handleInputChange = (e) => {
+		const { value, name } = e.target;
+		setBillingDetails({
+		  ...billingDetails,
+		  [name]: value,
+		});
+	  };
 
     const getPaymentIntent = async () => {
         const response = await axios.post('http://localhost:3001/create-payment-intent', { amount: 1000 }); 
@@ -103,9 +118,9 @@ const CheckoutFormInner = () => {
 	const cardStyle = {
 		style: {
 		base: {
-			color: '#ffffff',
+			color: 'black',
 			'::placeholder': {
-			color: '#abcdef', 
+			color: 'black', 
 			},
 		},
 		invalid: {
@@ -145,39 +160,100 @@ const CheckoutFormInner = () => {
 	const totals = calculateTotals();
 
 	return (
-			<>
-				<div>
-					<p>Enter a credit card: (Note: Again, this is just to mock credit card transactions. <span>Do not use a read credit card number.</span> Instead please use the following credit card number: 4242 4242 4242 4242, 05/39, 123 (CSV))</p>
-					<form onSubmit={handleSubmit} >
-						<CardElement options={cardStyle} />
+			<div className='checkout-container'>
+				<h2 className="checkout-h2">Checkout</h2>
+				<div className="credit-card-container">
+					
+
+					<div className="checkout-form-field">
+					<form className="form-field" onSubmit={handleSubmit}>
+						<div className="form-column">
+						<label>
+						First Name:
+						<input 
+							type="text" 
+							name="firstName" 
+							required 
+							onChange={handleInputChange} 
+							value={billingDetails.firstName}
+							minLength={1}
+							/>
+						</label>
+
+						<label>
+							Last Name:
+							<input 
+							type="text" 
+							name="lastName" 
+							required 
+							onChange={handleInputChange} 
+							value={billingDetails.lastName}
+							minLength={1}
+							/>
+						</label>
+
+						<label>
+							Address:
+							<input 
+							type="text" 
+							name="address" 
+							required 
+							onChange={handleInputChange} 
+							placeholder='Enter a fake address'
+							value={billingDetails.address}
+							minLength={1}
+							/>
+						</label>
+						</div>
+						<div className="form-column">
+						<label>
+							Billing Address:
+							<input 
+							type="text" 
+							name="billingAddress" 
+							placeholder='Enter a fake billing address'
+							required 
+							onChange={handleInputChange} 
+							value={billingDetails.billingAddress}
+							minLength={1}
+							/>
+						</label>
+							<p className='checkout-warning'>Do not use a real credit card number. Please use the following:</p> 
+							<p className='checkout-warning'>4242 4242 4242 4242, 05/39, 123</p>
+							<CardElement options={cardStyle} />
+						</div>
 						<button type="submit">Submit Payment</button>
 					</form>
+
+					<div className="checkout-total-section">
+							<p className="standard">Pre-tax total: <span className="generated">${totals.preTaxTotal}</span></p>
+							<p className="standard">Sales tax (6%): <span className="generated">${totals.salesTax}</span></p>
+							<p className="standard">Shipping Cost: <span className="generated">${totals.shippingCost}</span></p>
+							<hr />
+							<p className="standard">Total with tax and shipping: <span className="generated">${totals.totalWithTaxAndShipping}</span></p>
+						</div>
+
+						</div>
 				</div>
 
-				<div style={{display: 'flex'}}>
+				<div className="checkout-book-total-container">
 					{cartItems.length > 0 ? (
 					<>
-						<ul>
-						{/* <ul style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}> */}
-							{cartItems.map((book, index) => (
-							<li key={index}>
-								<h2>{book.title}</h2>
-								<img src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`} alt="cover" />
-								<h3>Author: {book.author.join(', ')}</h3>
-								<p>First published year: {book.first_publish_year}</p>
-								<p>Price: ${book.price}</p>
-							</li>
-							
-							))}
-						</ul>
+						{/* <div className="checkout-individual-book-section"> */}
+							<div className="checkout-individual-book-section">
+								{cartItems.map((book, index) => (
+								<div className="checkout-individual-book" key={index}>
+									<h4>{book.title}</h4>
+									<h5>{book.author.join(', ')}</h5>
+									<img src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`} alt="cover" />
+									<p>${book.price}</p>
+								</div>
+								
+								))}
+							</div>
+						{/* </div> */}
 
-						<div>
-							<p>Pre-tax total: ${totals.preTaxTotal}</p>
-							<p>Sales tax (6%): ${totals.salesTax}</p>
-							<p>Shipping Cost: ${totals.shippingCost}</p>
-							<hr />
-							<p>Total with tax and shipping: ${totals.totalWithTaxAndShipping}</p>
-						</div>
+						
 					</>
 				) : (
 					<p>Your shopping cart is empty.</p>
@@ -185,7 +261,7 @@ const CheckoutFormInner = () => {
 
 				</div>
 
-			</>
+			</div>
 		);
 	}
 

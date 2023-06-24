@@ -18,9 +18,9 @@ p {
   margin-bottom: 1rem;
 }
 
-button:hover {
+/* button:hover {
   transform: scale(1.1);
-}
+} */
 
 body {
   height: 100vh;
@@ -77,6 +77,26 @@ element.style {
   color: red;
 }
 
+.header-search-button {
+  display: inline-block;
+  padding: .25rem .25rem;
+  text-decoration: none;
+  background-color: var(--white-ash);  
+  color: var(--gingerbread);             
+  border-radius: 10px;
+  text-align: center;
+  height: 2.5rem;
+  margin-left:.25rem;
+  border: 2px solid var(--gingerbread);
+}
+
+.header-search-button:hover {
+  transform: scale(1);
+  color: var(--white-ash);
+  background-color: var(--gingerbread);
+  border: 2px solid var(--white-ash);
+}
+
 
 
 
@@ -131,7 +151,8 @@ element.style {
 }
 
 .login-h3 {
-  color: var(--light-teak)
+  color: var(--dark-wood);
+  border-bottom: 2px solid var(--dark-wood);
 }
 
 .label-title  {
@@ -175,7 +196,7 @@ element.style {
 .login-forms, .signup-forms {
   /* border: 2px solid red; */
   width: 30rem;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
 }
 
 .login-signup-section {
@@ -212,6 +233,23 @@ element.style {
   background-size: cover;
 }
 
+.signup-buttons {
+  display: inline-block;
+  padding: .5rem .5rem;
+  text-decoration: none;
+  background-color: var(--white-ash);  
+  color: var(--gingerbread);             
+  border-radius: 5px;
+  text-align: center;
+  /* margin: 1rem; */
+  /* font-weight: bold; */
+  border: 2px solid var(--gingerbread);
+}
+
+.signup-buttons:hover {
+  color: var(--white-ash);
+  background-color: var(--gingerbread);
+}
 
 
 
@@ -247,7 +285,11 @@ element.style {
   border-bottom: 2px solid var(--light-teak);
 }
 
-.profile-links, .individual-book-button, .shopping-cart-clear-cart {
+/* Standard #button */
+.profile-links, .individual-book-button, 
+.shopping-cart-clear-cart, .back-to-home, 
+.send-me-receipt-button
+{
   display: inline-block;
   padding: 1rem 1rem;
   text-decoration: none;
@@ -260,7 +302,10 @@ element.style {
   border: 2px solid var(--gingerbread);
 }
 
-.profile-links:hover, .individual-book-button:hover, .shopping-cart-remove-button:hover, .shopping-cart-clear-cart:hover {
+.profile-links:hover, .individual-book-button:hover, .shopping-cart-remove-button:hover, .shopping-cart-clear-cart:hover,
+.send-me-receipt-button:hover,
+.add-to-cart-button:hover
+{
   cursor: pointer;
   /* text-decoration: underline; */
   color: var(--light-teak); 
@@ -653,7 +698,7 @@ element.style {
 
 .book-details-page-container {
   /* margin-left: 5rem; */
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
   width: 100%;
   height: 100%;
   min-height: 40rem;
@@ -668,7 +713,7 @@ element.style {
 .book-details-text-section {
   width: 50%;
   height: 100%;
-  border: 2px solid green;
+  /* border: 2px solid green; */
   padding: 3rem 0rem;;
   display: flex;
   justify-content: center;
@@ -690,20 +735,34 @@ element.style {
   font-weight:400
 }
 
-.individual-book-add-to-cart {
-  position: absolute;
-  top: 0;
-  right: 0;
+.add-to-cart-button {
   display: inline-block;
-  padding: 1rem 1rem;
   text-decoration: none;
   background-color: white;;  
+  padding: 1rem 1rem;
   color: var(--gingerbread);             
   border-radius: 10px;
   text-align: center;
   font-weight: bold;
   border: 2px solid var(--gingerbread);
 }
+
+.individual-book-add-to-cart {
+  /* border: 2px solid green; */
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.individual-book-state-message {
+  color: var(--grey-wood);
+  
+}
+
 .book-details-image-section {
   border: 2px solid purple;
   margin-left: 4rem;
@@ -713,10 +772,6 @@ element.style {
   width: 15rem;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.3);
 
-}
-
-.book-details-price {
-  /* padding-bottom: 10rem; */
 }
 
 
@@ -1112,7 +1167,7 @@ element.style {
 .shopping-cart-only-book-container {
   display: flex;
   justify-content: space-evenly;
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
   flex-wrap: wrap;
   /* position: relative; */
 }
@@ -1180,8 +1235,6 @@ element.style {
   position:absolute;
 }
 
-
-
 .shopping-cart-totals-container {
   /* border: 2px solid blue; */
   text-align: center;
@@ -1189,8 +1242,10 @@ element.style {
 }
 
 .shopping-cart-totals-container p {
-  color: var(--dark-wood)
+  color: var(--dark-wood);
+  font-weight: bold;
 }
+
 .shopping-cart-math-container {
   text-align: left;
   padding-left:2rem;
@@ -1199,6 +1254,21 @@ element.style {
   margin: 0 auto;
 }
 
+.shopping-cart-math-container p {
+  font-weight: bold;
+}
+
+.shopping-cart-total {
+  border-bottom: 2px solid var(--grey-wood);
+}
+
+
+/* Empty Shopping Cart */
+.shopping-cart-empty-message {
+  text-align: center;
+  color: var(--gingerbread);
+  padding-top: 5rem;
+}
 
 
 
@@ -1209,7 +1279,7 @@ element.style {
 /* Checkout  */
 
 .checkout-container {
-  border: 2px solid green;
+  /* border: 2px solid green; */
   padding: 5rem 3rem;
 }
 
@@ -1230,12 +1300,12 @@ element.style {
 }
 
 .credit-card-container {
-  border: 2px solid red;
+  /* border: 2px solid red; */
   /* padding: 0rem 3rem; */
 }
 
 .checkout-form-field {
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
   display: flex;
   justify-content: flex-start;
   /* align-items: center; */
@@ -1246,13 +1316,11 @@ element.style {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  border: 2px solid #1c88a2;
-  border-radius: 10px;
+  border: 2px solid var(--dark-wood);
+  border-radius: 1rem;
   width: 50rem;
-  background-color: #ffffff;
+  background-color: var(--white-ash);
   padding: 2rem;
-  /* margin: 0 auto; */
-  /* height: 5rem; */
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   flex-wrap: wrap;
 }
@@ -1268,32 +1336,35 @@ element.style {
   width: 100%;
   font-size: 1rem;
   margin-bottom: 1rem;
-  color: #1c88a2;
+  font-weight: bold;
+  color: var(--dark-wood);
 }
 
 .form-field input {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
+  padding: .5rem;
+  border: 1px solid var(--gingerbread);
   border-radius: 5px;
   font-size: 1rem;
   margin-bottom: 1.5rem;
-  color: var(--grey-wood)
+  color: var(--dark-wood);
+  background-color: var(--white-ash);
 }
 
 .form-field button {
   align-self: center;
-  background-color: #1c88a2;
-  color: #ffffff;
+  background-color: var(--dark-wood);
+  color: var(--white-ash);
   padding: 0.5rem 1rem;
   border: none;
+  margin-left: 1rem;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .form-field button:hover {
-  background-color: #145c6b;
+  background-color: var(--light-teak);
 }
 
 
@@ -1303,6 +1374,7 @@ element.style {
   margin: 0 auto;
   text-align: center;
   height: 15rem;
+  padding-top: 1rem;
   position: fixed;
   right: 3rem;
   z-index: 100;
@@ -1315,7 +1387,8 @@ element.style {
 }
 
 .generated {
-  color: var(--light-teak)
+  color: var(--grey-wood);
+  font-weight: bold;
 }
 
 
@@ -1324,12 +1397,12 @@ element.style {
 
 .checkout-book-total-container {
   display: flex;
-  border: 2px solid green;
+  /* border: 2px solid green; */
   position: relative;
 }
 
 .checkout-individual-book-section {
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
   /* margin-left: 4rem; */
   /* width: 40rem; */
   width: 75%;
@@ -1346,8 +1419,8 @@ element.style {
   padding: 1.5rem 1rem;
   margin: 1rem;
   width: 15rem;
-  min-height: 25rem; 
-  max-height: 25rem; 
+  min-height: 30rem; 
+  max-height: 30rem; 
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -1362,10 +1435,11 @@ element.style {
 
 .checkout-individual-book h4 {
   text-decoration: underline;
+  color: var(--dark-wood)
 }
 
 .checkout-individual-book h5 {
-  color: var(--grey-wood);
+  color: var(--white-ash);
 }
 
 .checkout-individual-book img {
@@ -1374,4 +1448,32 @@ element.style {
 
 
 /* Thank you */
+
+.thank-you-container {
+  /* border: 2px solid red; */
+  margin: 0 3rem;
+  padding-top: 5rem;
+  text-align: center;
+}
+
+.thank-you-container h2 {
+  color: var(--grey-wood);
+  border-bottom: 2px solid var(--grey-wood);
+  display: inline-flex;
+  margin-bottom: 2rem;
+}
+
+.thank-you-container h3 {
+  color: var(--gingerbread)
+}
+
+.thank-you-container h3 span {
+  color: black;
+}
+
+.send-me-receipt-desc {
+  color: var(--gingerbread);
+  width: 80%;
+  margin: 0 auto;
+}
 

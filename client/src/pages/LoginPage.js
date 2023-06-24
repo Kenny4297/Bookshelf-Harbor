@@ -93,12 +93,12 @@ const LoginPage = () => {
           </div>
 
           <div className="form-group mt-2">
-            <button className="btn btn-primary" onClick={handleFormSubmit}>Log Me In!</button>
+            <button className="signup-buttons" onClick={handleFormSubmit}>Log Me In!</button>
           </div>
           <div className="login-signup-section">
             <p>Not a user? Sign up!</p>
             <div className="form-group mt-2">
-              <button className="btn btn-primary" onClick={handleFormSubmitSignUp}>Sign In</button>
+              <button className="signup-buttons" onClick={handleFormSubmitSignUp}>Sign Up</button>
             </div>
           </div>
         </div>

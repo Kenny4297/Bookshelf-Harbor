@@ -155,20 +155,22 @@ const clearCart = () => {
 
 			  <div className="shopping-cart-totals-container">
 				<div className="shopping-cart-math-container">
-					<p>Pre-tax total: ${totals.preTaxTotal}</p>
-					<p>Sales tax (6%): ${totals.salesTax}</p>
-					<p>Shipping Cost: ${totals.shippingCost}</p>
+					<p className="standard">Pre-tax total: <span className="generated">${totals.preTaxTotal}</span></p>
+					<p>Sales tax (6%): <span className="generated">${totals.salesTax}</span></p>
+					<p>Shipping Cost: <span className="generated">${totals.shippingCost}</span></p>
 				</div>
 				<hr />
-				<p>Total with tax and shipping: ${totals.totalWithTaxAndShipping}</p>
+				<p className="standard">Total with tax and shipping: <span className="generated shopping-cart-total">${totals.totalWithTaxAndShipping}</span></p>
+
 				<button className="shopping-cart-clear-cart" onClick={clearCart}>Clear Cart</button>
 				<Link className="shopping-cart-clear-cart" to={`/checkout/${userId}`}>Checkout</Link>
-
-
 			  </div>
 			</div>
 		  ) : (
-			<p>Your shopping cart is empty.</p>
+			<div style={{display: 'flex', justifyContent:'center', alignItems:'center', flexDirection:'column'}}>
+				<h2 className="shopping-cart-empty-message">Your shopping cart is empty</h2>
+				<Link className="back-to-home" to="/">Back to home</Link>
+			</div>
 		  )}
 		</div>
 	  );

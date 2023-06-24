@@ -39,11 +39,6 @@ const cutOffAtSpecialCharacter = (text) => {
     return text.trim();
   };
   
-  
-  
-  
-  
-  
 
 const BookDetailsPage = () => {
   const { key } = useParams();
@@ -54,6 +49,7 @@ const BookDetailsPage = () => {
   const [cover, setCover] = useState(null);
   const [user, setUser] = useContext(UserContext);
   const [cartItems, setCartItems] = useState(user?.shoppingCart?.books || []);
+  const [isAddedToCart, setIsAddedToCart] = useState(false)
 
   const MIN_PRICE = 5.0; // $5.00
   const MAX_PRICE = 20.0; // $20.00
@@ -193,7 +189,7 @@ const BookDetailsPage = () => {
         .then(response => {
             console.log(response);
             setCartItems(prevItems => [...prevItems, bookToAdd]);
-            alert('Book added to cart!');
+            setIsAddedToCart(true)
         })
         .catch(error => {
             console.error(error);
@@ -242,8 +238,11 @@ const BookDetailsPage = () => {
                 )}
               </div>
             </div>
-    
-            <button className="individual-book-add-to-cart" onClick={addToCart}>Add to Cart</button>
+            
+            <div className="individual-book-add-to-cart">
+              <button className="add-to-cart-button" onClick={addToCart}>Add to Cart</button>
+              {isAddedToCart && <p style={{color:'var(--grey-wood)'}}>Book Added!</p>}
+            </div>
           </div>
         )}
       </>

@@ -57,7 +57,7 @@ const Header = () => {
 
             <Link to={`/individual-book/${searchTerm}`}></Link>
 
-            <Button variant="outline-success" type="submit">Search</Button>
+            <button className="header-search-button" type="submit">Search</button>
           </div>
         </Form>
 

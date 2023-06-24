@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../contexts/UserContext';
 
@@ -34,10 +34,10 @@ const ThankYou = () => {
   }
 
   return (
-    <div>
-      <h1>Thank you for your order!</h1>
-      <h2>Order Number: {order._id}</h2>
-      {order.books.map((item, index) => (
+    <div className="thank-you-container">
+      <h2>Thank you for your order!</h2>
+      <h3>Order Number: <span>{order._id}</span></h3>
+      {/* {order.books.map((item, index) => (
         <div key={index}>
           <h3>{item.book.title}</h3>
           <img src={`https://covers.openlibrary.org/b/id/${item.book.cover_i}-M.jpg`} alt="cover" />
@@ -47,14 +47,19 @@ const ThankYou = () => {
           <p>Quantity: {item.quantity}</p>
         </div>
       ))}
-      <h2>Total: ${order.total}</h2>
+      <h2>Total: ${order.total}</h2> */}
 
       {isReceiptRequested ? (
-        <p>
-          Thank you for your mock purchase! If this were a real eCommerce site, a receipt would be sent to your email. However, for the purpose of this demonstration and to protect your privacy, no email will be sent.
-        </p>
+        <>
+          <p className="send-me-receipt-desc">
+            Thank you for your mock purchase! If this were a real e-commerce site, a receipt would be sent to your email. However, for the purpose of this demonstration and to protect your privacy, no email will be sent.
+          </p>
+          
+          <Link className="send-me-receipt-button" to="/">Back to Home</Link>
+
+        </>
       ) : (
-        <button onClick={handleReceiptRequest}>
+        <button className="send-me-receipt-button" onClick={handleReceiptRequest}>
           "Send" me an email receipt (but not really)
         </button>
       )}

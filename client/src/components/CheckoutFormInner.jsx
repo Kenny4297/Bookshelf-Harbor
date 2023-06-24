@@ -9,6 +9,7 @@ import {
     calculateTotalWithTaxAndShipping, 
     calculateShippingCost 
 } from '../utils/cartCalculations';
+import Loading from './Loading'
 
 const CheckoutFormInner = () => {
     const stripe = useStripe();
@@ -17,6 +18,7 @@ const CheckoutFormInner = () => {
     const { userId } = useParams(); 
     const [cartItems, setCartItems] = useState([]);
     const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(false)
 	const [billingDetails, setBillingDetails] = useState({
 		firstName: '',
 		lastName: '',
@@ -66,6 +68,8 @@ const CheckoutFormInner = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+		setIsLoading(true);
     
         const clientSecret = await getPaymentIntent();
     
@@ -77,6 +81,7 @@ const CheckoutFormInner = () => {
     
         if (result.error) {
             console.log(result.error.message);
+			setIsLoading(false);
         } else {
             if (result.paymentIntent.status === 'succeeded') {
                 const orderToInsert = {
@@ -109,9 +114,11 @@ const CheckoutFormInner = () => {
                     console.error("Error creating order");
                 }
     
+				
                 console.log("Payment successful");
             }
         }
+		setIsLoading(false);
     }
 
 
@@ -223,6 +230,7 @@ const CheckoutFormInner = () => {
 							<CardElement options={cardStyle} />
 						</div>
 						<button type="submit">Submit Payment</button>
+						{isLoading && <p style={{color:'black', marginLeft:'1rem'}}>Processing...</p>}
 					</form>
 
 					<div className="checkout-total-section">

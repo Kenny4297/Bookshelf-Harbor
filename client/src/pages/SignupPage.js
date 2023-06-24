@@ -62,7 +62,7 @@ const SignupPage = (props) => {
 
       <form className="signup-form">
         <div className='signup-form-background'>
-          <h1 className="signup-page-title">Sign Up</h1>
+          <h2 className="signup-page-title">Sign Up</h2>
 
         <div className="signup-forms">
           <label className="signup-label-title">Name</label>
@@ -100,11 +100,11 @@ const SignupPage = (props) => {
         </div>
 
           <div className="form-group mt-2">
-            <button className="btn btn-primary" onClick={handleFormSubmit}>Sign Me Up!</button>
+            <button className="signup-buttons" onClick={handleFormSubmit}>Sign Me Up!</button>
           </div>
 
           <div className="form-group mt-2">
-            <button className="btn btn-primary" onClick={handleFormSubmitLogin}>Login</button>
+            <button className="signup-buttons" onClick={handleFormSubmitLogin}>Login</button>
           </div>
         </div>
       </form>

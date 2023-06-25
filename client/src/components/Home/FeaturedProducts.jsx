@@ -81,7 +81,7 @@ const FeaturedBooks = () => {
     }
 
     return (
-        <div className="featured-novels-container">
+        <section className="featured-novels-container">
             <h2 className="todays-featured-novels-h2" id="carousel-label">
                 Today's Featured Novels
             </h2>
@@ -119,7 +119,7 @@ const FeaturedBooks = () => {
                     <p>Awaiting OpenLibrary API...</p>
                 </div>
             )}
-        </div>
+        </section>
     );
 };
 

@@ -1,17 +1,15 @@
-import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
-
 
 	const ProfilePage = () => {
 		const { userId } = useParams(); 
 		return (
-			<div className='profile-container'>
+			<section className='profile-container' aria-label="User Profile Section">
 				<h2 className='profile-h2'>Profile</h2>
 
-				<Link className="profile-links" to={`/profile/account/${userId}`}>Account</Link>
+				<Link className="profile-links" to={`/profile/account/${userId}`} aria-label="Account Settings">Account</Link>
 
-				<Link  className="profile-links" to={`/profile/orders/${userId}`}>View Orders</Link>
-			</div>
+				<Link  className="profile-links" to={`/profile/orders/${userId}`} aria-label="Order Settings">View Orders</Link>
+			</section>
 		)
 	}
 

@@ -36,7 +36,7 @@ const BookComponent = ({ category }) => {
                 <Loading aria-live="polite" />
             ) : (
                 <>
-                    <div className="book-container">
+                    <section className="book-container">
                         <h2 className="book-category-h2" id="book-category">
                             {category.charAt(0).toUpperCase() +
                                 category.slice(1)}
@@ -80,9 +80,9 @@ const BookComponent = ({ category }) => {
                                 </Link>
                             ))}
                         </div>
-                    </div>
+                    </section>
 
-                    <div
+                    <nav
                         style={{
                             display: "flex",
                             alignItems: "center",
@@ -119,7 +119,7 @@ const BookComponent = ({ category }) => {
                         >
                             Next Page
                         </button>
-                    </div>
+                    </nav>
                 </>
             )}
         </>

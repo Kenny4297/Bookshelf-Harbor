@@ -1,22 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
-import { Link } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import styled from "styled-components";
-// import NileHero from '../components/assets/images/NileHero.jpg'
-import login from '../components/assets/images/login.jpg'
-import FeaturedProducts from '../components/Home/FeaturedProducts'
-import CategoriesPage from './CategoriesPage'
-import Footer from '../components/Home/Footer'
-import LoginPage from '../pages/LoginPage'
-import Loading from '../components/Loading'
+import login from "../components/assets/images/login.jpg";
+import FeaturedProducts from "../components/Home/FeaturedProducts";
+import CategoriesPage from "./CategoriesPage";
+import Footer from "../components/Home/Footer";
 
 const HomePage = () => {
     const [user, setUser] = useContext(UserContext);
 
-    // This useEffect is used for debugging purposes. It only runs when the component is mounted (the first time it is rendered) and if the user variable changes. 
+    // This useEffect is used for debugging purposes. It only runs when the component is mounted (the first time it is rendered) and if the user variable changes.
     useEffect(() => {
-        console.log("Checking to see if the user is being updated")
+        console.log("Checking to see if the user is being updated");
         console.log(user);
         if (user) {
             console.log(user._id);
@@ -25,107 +21,59 @@ const HomePage = () => {
         // user
     }, [user]);
 
-    //Here we are keeping track of the data in the search bar. If it changes, the state will be updated
-    const [searchTerm, setSearchTerm] = useState('');
-
-    //Here we are keeping track of the book data. Once the book changes, the state is the updated. 
-    const [bookData, setBookData] = useState([]);
-
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const img = new Image();
-        img.src = login;
-        img.onload = () => {
-          setIsLoading(false); // Image loaded, set loading state to false
-        } // Image loaded
-        img.onerror = (error) => console.error('Failed to load image', error);
-      }, []);
-
-  
-    const handleInputChange = event => {
-        console.log(searchTerm)
-        setSearchTerm(event.target.value);
-    };
-  
-    const handleFormSubmit = event => {
-        event.preventDefault();
-        const query = searchTerm.replace(/ /g, '+');
-        const url = `https://openlibrary.org/search.json?title=${query}`;
-        fetch(url)
-            .then(response => response.json())
-            
-            //This saves the data as bookData, and we use this variable to map through it later on
-            .then(data => setBookData(data.docs));
-        setSearchTerm('');
-    };
-
     useEffect(() => {
         if (user && user._id) {
-          axios.get(`/api/user/${user._id}/cart/data`)
-            .then(response => {
-              console.log(response.data);
-              const { shoppingCart } = response.data;
-              if (shoppingCart === null) { // Check if shoppingCart is null
-                // If the shopping cart doesn't exist, create a new one
-                axios.post(`/api/user/${user._id}/cart/create`)
-                  .then(response => {
+            axios
+                .get(`/api/user/${user._id}/cart/data`)
+                .then((response) => {
+                    console.log(response.data);
                     const { shoppingCart } = response.data;
-                    setUser({ ...user, shoppingCart });
-                  })
-                  .catch(error => console.error(error));
-              } else {
-                // If shopping cart exists, set the shopping cart in the user context
-                setUser({ ...user, shoppingCart });
-              }
-            })
-            .catch(error => console.error(error));
+                    if (shoppingCart === null) {
+                        // Check if shoppingCart is null
+                        // If the shopping cart doesn't exist, create a new one
+                        axios
+                            .post(`/api/user/${user._id}/cart/create`)
+                            .then((response) => {
+                                const { shoppingCart } = response.data;
+                                setUser({ ...user, shoppingCart });
+                            })
+                            .catch((error) => console.error(error));
+                    } else {
+                        // If shopping cart exists, set the shopping cart in the user context
+                        setUser({ ...user, shoppingCart });
+                    }
+                })
+                .catch((error) => console.error(error));
         }
-      }, [user && user._id]);
-      
+    }, [user && user._id]);
 
-      if (isLoading) {
-        return <Loading />
-      
-      } else {
-        return (
+    return (
         <>
-        {!user ?(
-            <LoginPage />
-        ) :(
-            <>
-            
-            <HeroContainer>
+            <HeroContainer aria-label="Hero section with welcome message">
                 <div className="hero-introduction-text">
                     <h1>Welcome to Nile</h1>
 
-                    <p>Search though millions of books and have them sent right to your doorstep</p>
-                    {/* { user && user.id &&
-                        <>
-                            <p>UserID: {user._id}</p>
-                            <p>Email: {user.email}</p>
-                        </>
-                    } */}
+                    <p>
+                        Search though millions of books and have them sent right
+                        to your doorstep
+                    </p>
                 </div>
             </HeroContainer>
 
-            <CategoriesPage />
+            <CategoriesPage aria-label="Categories Page Section" />
 
-            <FeaturedProducts />
+            <FeaturedProducts aria-label="Section featuring selected books" />
 
-            <Footer />
-            </>
-            )}
+            <Footer aria-label="Footer section" />
         </>
-    )
-}
-}
+    );
+};
 
 export default HomePage;
 
-const HeroContainer = styled.div`
-    /* position: relative;
-    bottom: 5rem; */
+// Im using styled-components here in order to more accurately show the full component when the image has loaded.
+
+const HeroContainer = styled.section`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -135,13 +83,11 @@ const HeroContainer = styled.div`
     height: 100vh;
 
     /* border: 3px solid red; */
+    padding-top: 0rem !important;
     margin: 0 !important;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${login});
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url(${login});
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-`
-
-const IntroductionSection = styled.div`
-    margin-left: 3rem;
-`
+`;

@@ -114,12 +114,12 @@ const Account = () => {
 
     return (
         <>
-            <div className="account-container">
-                <div className="form-container">
+            <section className="account-container">
+                <section className="form-container">
                     <h2 className="account-h2" id="form-label">
                         Edit Your Profile
                     </h2>
-                    <div style={{ width: "50%" }}>
+                    <section style={{ width: "50%" }}>
                         <form
                             className="account-form"
                             aria-labelledby="form-label"
@@ -246,9 +246,9 @@ const Account = () => {
                                 Update failed!
                             </div>
                         )}
-                    </div>
-                </div>
-                <div className="profile-image-container">
+                    </section>
+                </section>
+                <section className="profile-image-container">
                     <h2 className="profile-image-h2">Edit Profile Image</h2>
                     {userUrl ? (
                         <Image
@@ -275,8 +275,8 @@ const Account = () => {
                             aria-label="Upload File"
                         />
                     </label>
-                </div>
-            </div>
+                </section>
+            </section>
         </>
     );
 };

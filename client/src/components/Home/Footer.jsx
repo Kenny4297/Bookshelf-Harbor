@@ -10,7 +10,7 @@ import { FaUser } from "react-icons/fa";
 const Footer = () => {
     return (
         <footer className="footer-container">
-            <div className="footer-column">
+            <section className="footer-column">
                 <p className="footer-p">Developer: Kedgard Cordero</p>
                 <a
                     href="https://kenny4297.github.io/Website/"
@@ -38,7 +38,8 @@ const Footer = () => {
                 >
                     <FaGithub size={30} />
                 </a>
-            </div>
+            </section>
+            
             <div className="footer-column-about-us">
                 <p className="footer-p">About us</p>
                 <p className="footer-p">Delivery Information</p>

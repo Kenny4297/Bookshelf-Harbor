@@ -79,11 +79,11 @@ element.style {
 
 .header-search-button {
   display: inline-block;
-  padding: .25rem .25rem;
+  padding: .25rem .5rem;
   text-decoration: none;
   background-color: var(--white-ash);  
   color: var(--gingerbread);             
-  border-radius: 10px;
+  border-radius: 3px;
   text-align: center;
   height: 2.5rem;
   margin-left:.25rem;
@@ -208,6 +208,10 @@ element.style {
 
 
 
+
+
+
+
 /* Sign up */
 .sign-up-container {
   position: relative;  /* use relative instead of fixed */
@@ -262,16 +266,6 @@ element.style {
 
 
 
-
-
-
-
-
-
-
-
-
-
 /* Profile */
 .profile-container {
   display: flex;
@@ -295,7 +289,7 @@ element.style {
   text-decoration: none;
   background-color: var(--white-ash);  
   color: var(--gingerbread);             
-  border-radius: 10px;
+  border-radius: 3px;
   text-align: center;
   margin: 1rem;
   font-weight: bold;
@@ -309,7 +303,7 @@ element.style {
   cursor: pointer;
   /* text-decoration: underline; */
   color: var(--light-teak); 
-  transform: scale(1.2);
+  transform: scale(1.05);
 }
 
 
@@ -323,8 +317,6 @@ element.style {
 .account-container {
   display: flex;
 }
-
-
 
 .form-container {
   padding: 3rem 8.5rem;
@@ -439,6 +431,8 @@ element.style {
   color: var(--light-teak);
   font-weight: bold;
 }
+
+
 
 
 
@@ -585,7 +579,28 @@ element.style {
 
 
 
+
 /* Hero section */
+
+.hero-section-container {
+    /* position: relative;
+    bottom: 5rem; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    /* min-width: 98.8vw;
+    max-width: 99vw; */
+    width: 100%;
+    height: 100vh;
+
+    /* border: 3px solid red; */
+    margin: 0 !important;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../components/assets/images/login.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 
 .hero-introduction-text {
   margin-left: 5rem;

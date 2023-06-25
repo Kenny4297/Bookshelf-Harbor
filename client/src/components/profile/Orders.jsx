@@ -53,8 +53,8 @@ const Orders = () => {
     };
 
     return (
-        <div className="orders-page">
-            <div className="orders-container" aria-labelledby="orders-heading">
+        <section className="orders-page">
+            <section className="orders-container" aria-labelledby="orders-heading">
                 <h2 id="orders-heading" className="orders-h2">
                     Your Orders:
                 </h2>
@@ -128,8 +128,8 @@ const Orders = () => {
                         )}
                     </React.Fragment>
                 ))}
-            </div>
-        </div>
+            </section>
+        </section>
     );
 };
 

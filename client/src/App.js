@@ -16,7 +16,6 @@ import { UserContext } from './contexts/UserContext';
 import { ShoppingCart, CheckoutForm, ThankYou } from './components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/global.css';
-import TestComponent from './components/testComponent';
 import Account from './components/profile/Account';
 import Orders from './components/profile/Orders';
 import SpecificOrder from './components/profile/SpecificOrder'
@@ -79,7 +78,6 @@ const App = () => {
               <Route path="/profile/orders/:userId" element={<Orders />} />
               <Route path="/specificOrder/:orderId" element={<SpecificOrder/>} />
 
-              <Route path="/test" element={<TestComponent />} />
               <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/books/works/:key" element={<BookDetailsPage />} />
               <Route path="/individual-book/:id" element={<IndividualBook searchTerm={searchTerm} />} />            

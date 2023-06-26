@@ -1,9 +1,12 @@
+require('dotenv').config();
+console.log(process.env.MONGODB_URI);
+
 const express = require('express');
 const path = require('path');
 const db = require('./config/connection');
 const routes = require('./routes');
 const Stripe = require('stripe');
-require('dotenv').config();
+
 const cors = require('cors');
 
 const app = express();

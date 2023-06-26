@@ -47,8 +47,9 @@ const BookDetailsPage = () => {
     const [firstPublishDate, setFirstPublishDate] = useState(null);
     const [description, setDescription] = useState("");
     const [cover, setCover] = useState(null);
-    const user = useContext(UserContext);
-    const [cartItems, setCartItems] = useState(user?.shoppingCart?.books || []);
+    // eslint-disable-next-line no-unused-vars
+    const [user, setUser] = useContext(UserContext);
+    const [, setCartItems] = useState(user?.shoppingCart?.books || []);
     const [isAddedToCart, setIsAddedToCart] = useState(false);
 
     const MIN_PRICE = 5.0; // $5.00
@@ -154,10 +155,7 @@ const BookDetailsPage = () => {
                     ? description.value.split("Contains:")[0].trim()
                     : description,
         };
-
-        console.log("addToCart bookDetails:", bookToAdd);
-        console.log(user._id);
-
+    
         axios
             .post(`/api/user/${user._id}/cart`, bookToAdd)
             .then((response) => {
@@ -170,6 +168,8 @@ const BookDetailsPage = () => {
                 alert("There was an error adding the book to the cart.");
             });
     };
+    
+    
 
     return (
         <>

@@ -8,6 +8,7 @@ const Orders = () => {
 
     useEffect(() => {
         fetchOrders();
+        // eslint-disable-next-line
     }, []);
 
     const fetchOrders = async () => {
@@ -30,11 +31,9 @@ const Orders = () => {
     };
 
     const fetchSpecificOrder = async (orderId) => {
-        console.log(`Fetching specific order with ID: ${orderId}`);
         try {
             const response = await fetch(`/api/orders/order/${orderId}`);
             const data = await response.json();
-            console.log(`Fetched specific order: `, data);
             setSelectedOrder(data);
         } catch (error) {
             console.error("Error:", error);
@@ -42,7 +41,6 @@ const Orders = () => {
     };
 
     const handleOrderClick = (orderId) => {
-        console.log(`Order button clicked for ID: ${orderId}`);
         if (selectedOrder && selectedOrder._id === orderId) {
             setSelectedOrder(null);
         } else {

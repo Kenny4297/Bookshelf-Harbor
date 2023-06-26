@@ -1,15 +1,12 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../contexts/UserContext";
-import defaultImage from "../assets/images/defaultImage.jpg";
 import Loading from "../Loading";
 
 function IndividualBook() {
     const location = useLocation();
     const searchTerm = location.state?.searchTerm;
     const [book, setBook] = useState(null);
-    const [user, setUser] = useContext(UserContext);
     const [page, setPage] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -33,11 +30,11 @@ function IndividualBook() {
             })
             .catch((error) => {
                 console.log(error);
-                setBook([]); // Make sure 'book' is an empty array in case of an error
+                setBook([]); 
                 setIsLoading(false);
             });
-    }
-}, [searchTerm, page]);
+        }
+    }, [searchTerm, page]);
 
 
     const handleNextPage = () => {
@@ -64,7 +61,7 @@ function IndividualBook() {
         </>
     }
 
-    // Filter books without an image cover
+    // Filter books without an image cover. Wo don't want any books without a cover to be shown!
     const filteredBooks = book ? book.filter((bookItem) => bookItem.cover_i) : [];
 
     return (
@@ -91,19 +88,11 @@ function IndividualBook() {
                                 role="listitem"
                             >
                                 <div className="book-card-content">
-                                    {bookItem.cover_i ? (
-                                        <img
-                                            className="book-card-image"
-                                            src={`https://covers.openlibrary.org/b/id/${bookItem.cover_i}-M.jpg`}
-                                            alt="book cover"
-                                        />
-                                    ) : (
-                                        <img
-                                            className="book-card-image"
-                                            src={defaultImage}
-                                            alt="Default book cover"
-                                        />
-                                    )}
+                                    <img
+                                        className="book-card-image"
+                                        src={`https://covers.openlibrary.org/b/id/${bookItem.cover_i}-M.jpg`}
+                                        alt="book cover"
+                                    />
                                     <h3 className="book-card-title">
                                         {bookItem.title}
                                     </h3>

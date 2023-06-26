@@ -38,7 +38,7 @@ const SignUpPage = () => {
 
             if (data && !data.err && data.data && data.data.token) {
                 setSignUpResult("success");
-                localStorage.setItem("auth-token", data.data.token); // Set token to local storage
+                localStorage.setItem("auth-token", data.data.token);
             } else {
                 setSignUpResult("fail");
             }
@@ -60,13 +60,13 @@ const SignUpPage = () => {
         return (
             <>
                 <section className="sign-up-container">
-                    <form className="signUp-form" onSubmit={handleFormSubmit}>
-                        <section className="signUp-form-background">
-                            <h2 className="signUp-page-title">Sign Up</h2>
+                    <form className="sign-up-form" onSubmit={handleFormSubmit}>
+                        <section className="sign-up-form-background">
+                            <h2 className="sign-up-page-title">Sign Up</h2>
 
-                            <section className="signUp-forms">
+                            <section className="sign-up-forms">
                                 <label
-                                    className="signUp-label-title"
+                                    className="sign-up-label-title"
                                     htmlFor="name"
                                 >
                                     Name
@@ -85,9 +85,9 @@ const SignUpPage = () => {
                                 />
                             </section>
 
-                            <section className="signUp-forms">
+                            <section className="sign-up-forms">
                                 <label
-                                    className="signUp-label-title"
+                                    className="sign-up-label-title"
                                     htmlFor="email"
                                 >
                                     Email Address
@@ -104,9 +104,9 @@ const SignUpPage = () => {
                                 />
                             </section>
 
-                            <section className="signUp-forms">
+                            <section className="sign-up-forms">
                                 <label
-                                    className="signUp-label-title"
+                                    className="sign-up-label-title"
                                     htmlFor="password"
                                 >
                                     Password
@@ -126,7 +126,7 @@ const SignUpPage = () => {
                             <div className="form-group mt-2">
                                 <button
                                     type="submit"
-                                    className="signUp-buttons"
+                                    className="sign-up-buttons"
                                     disabled={!isFormValid}
                                 >
                                     Sign Me Up!
@@ -136,7 +136,7 @@ const SignUpPage = () => {
                             <div className="form-group mt-2">
                                 <button
                                     type="button"
-                                    className="signUp-buttons"
+                                    className="sign-up-buttons"
                                     onClick={handleFormSubmitLogin}
                                 >
                                     Login

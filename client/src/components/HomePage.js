@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import axios from "axios";
 import styled from "styled-components";
-import login from "../components/assets/images/login.jpg";
+import image from "../components/assets/images/HeroPage.jpg";
 import FeaturedProducts from "./Home/FeaturedProducts";
 import CategoriesPage from "./Categories/CategoriesPage";
 import Footer from "./Home/Footer";
@@ -12,23 +12,12 @@ const HomePage = () => {
     const [user, setUser] = useContext(UserContext);
     const [isImageLoaded, setImageLoaded] = useState(false);
 
-    // This useEffect is used for debugging purposes. It only runs when the component is mounted (the first time it is rendered) and if the user variable changes.
-    useEffect(() => {
-        console.log("Checking to see if the user is being updated");
-        console.log(user);
-        if (user) {
-            console.log(user._id);
-            // console.log(user.shoppingCart.books);
-        }
-        // user
-    }, [user]);
-
     useEffect(() => {
         if (user && user._id) {
             axios
                 .get(`/api/user/${user._id}/cart/data`)
                 .then((response) => {
-                    console.log(response.data);
+
                     const { shoppingCart } = response.data;
                     if (shoppingCart === null) {
                         // Check if shoppingCart is null
@@ -47,11 +36,12 @@ const HomePage = () => {
                 })
                 .catch((error) => console.error(error));
         }
+        // eslint-disable-next-line
     }, [user && user._id]);
 
     useEffect(() => {
         const img = new Image();
-        img.src = login;
+        img.src = image;
         img.onload = () => setImageLoaded(true);
     }, []);
 
@@ -97,7 +87,7 @@ const HeroContainer = styled.section`
     padding-top: 0rem !important;
     margin: 0 !important;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url(${login});
+        url(${image});
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

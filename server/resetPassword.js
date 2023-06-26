@@ -20,7 +20,6 @@ mongoose.connection.on('connected', async () => {
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
     await User.updateOne({ email: userEmail }, { $set: { password: hashedPassword } });
-    console.log('Password updated successfully!');
     process.exit(0);
 });
 

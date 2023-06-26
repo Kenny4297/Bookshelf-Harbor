@@ -10,7 +10,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/global.css';
 import Account from './components/Profile/Account';
 import Orders from './components/Profile/Orders';
-// import SpecificOrder from './components/profile/SpecificOrder'
 import { CategoriesPage, CategoryComponent } from './components/Categories'
 import Loading from './components/Loading';
 import { BookDetailsPage, IndividualBook } from './components/SearchForBook'
@@ -21,7 +20,6 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log("Testing App.js UseEffect for the'/me/' route");
     const authToken = localStorage.getItem("auth-token");
   
     if (authToken && !user) {
@@ -33,19 +31,20 @@ const App = () => {
         })
         .then((response) => {
           setUser(response.data);
-          setIsLoading(false); // Turn off loading state when we have user data
+          setIsLoading(false); 
         })
         .catch((error) => {
           console.error(error);
-          setIsLoading(false); // Also turn off loading state if an error occurs
+          setIsLoading(false); 
         });
     } else {
-      setIsLoading(false); // If there's no token, no need to wait
+      setIsLoading(false); 
     }
+    // eslint-disable-next-line
   }, []);
 
   if (isLoading) {
-    return <Loading />; // Replace this with your actual loading UI
+    return <Loading />;
   }
 
 
@@ -56,7 +55,6 @@ const App = () => {
         {!user ? (
             <>
               <Routes>
-                {/* <Route path="/login" element={<Login />} /> */}
                 <Route path="/signUp" element={<SignUp />} />
                 <Route path="*" element={<Login />} /> 
               </Routes>
@@ -69,7 +67,6 @@ const App = () => {
               <Route path="/profile/:userId" element={<ProfilePage />} />
               <Route path="/profile/account/:userId" element={<Account />} />
               <Route path="/profile/orders/:userId" element={<Orders />} />
-              {/* <Route path="/specificOrder/:orderId" element={<SpecificOrder/>} /> */}
 
               <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/books/works/:key" element={<BookDetailsPage />} />

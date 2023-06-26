@@ -1,70 +1,60 @@
-# Getting Started with Create React App
+# **Nile**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Nile](./src/components/assets/images/fullPageScreenshot.png)
+## **Table of Contents**
+- [License](#license)
+- [Login Page](#login-page)
+- [Lesson Example](#lesson-example)
+- [Shopping Cart](#shopping-cart)
+- [Checkout](#checkout)
+- [Purpose and Inspiration](#purpose-and-inspiration)
+- [Unique Technologies](#technologies)
+- [Technologies Used](#technologies-used)
+- [Deployment](#Deployment)
+- [Testing](#testing)
 
-## Available Scripts
+## **License**
+This project is licensed under the MIT license.
 
-In the project directory, you can run:
+## **Project Overview**
+Nile is a state-of-the-art e-commerce platform where book-lovers can search, filter, and "buy" books from a vast range of titles.  Showcasing elements like a daily-refreshed 'featured books' section, secure Stripe payments, and a user profile with image upload and order history, Nile fuses engaging user experience with modern web development practices. Engaging and efficient, Nile is a testament to modern e-commerce.
 
-### `npm start`
+## **Login Page**
+![](./src/components/assets/images/loginScreenshot.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## **Shopping Cart**
+![](./src/components/Assets/images/shoppingCartScreenShot.png)
+The user can choose to remove, view, and proceed to the checkout page after selected books to be added to their shopping cart.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## **Checkout**
+![](./src/components/Assets/images/checkoutScreenshot.png)
+Using Stripe, the user can enter their credit card information (which shouldn't bea real one!) and have Stripe take care of the processing. They are then routed to a "Thank You" page with their order number and the fake option of having an email receipt sent to them.
 
-### `npm test`
+## **Book Results**
+![](./src/components/Assets/images/bookResultsScreenshot.png)
+The user can view all the books either by category or by title, and select the one that looks most appealing to them.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## **Purpose and Inspiration**
+Building Nile was all about getting my hands dirty with the nuts and bolts of an e-commerce website. I wanted to truly understand what happens behind the curtain when we shop online, from managing user interactions to handling secure payment processing and everything in between.
 
-### `npm run build`
+This project wasn't just about learning though; it was a personal challenge. I wanted to push myself and see if I could create a fully-functional, user-friendly platform that could hold its own in the real world. By working on Nile, I had the chance to strengthen my existing skills, learn a bunch of new ones, and grow a deeper appreciation for the craft of web development.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+So, at the heart of it all, Nile is a reflection of learning, growth, and a lot of hard work. It's proof that, with a little bit of determination and a lot of coffee, we can create some pretty cool stuff.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## **Unique Technologies**
+**Stripe**
+Stripe is a renowned global payment processing service known for its seamless and secure digital transactions. By integrating Stripe, we ensured that our platform could handle all the complexities of online payment, from securely storing card information to processing payments in real-time. It's also packed with features such as fraud detection and currency conversion, making it an invaluable tool for any e-commerce project. Notably, Stripe's detailed documentation and React-specific libraries made it a breeze to implement in our tech stack.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## **Open Library API**
+Open Library API is a freely available, open-source API that provided us access to a vast database of books. By leveraging this API, Nile offers its users a broad selection of titles to browse and purchase. Users can search for books based on different criteria like author name, book title, or subject. The Open Library API is also used for fetching book cover images and other detailed information about each book, enhancing the browsing experience for our users. Its easy-to-use endpoints and comprehensive documentation played a key role in building the book browsing feature of Nile.
 
-### `npm run eject`
+## **Technologies Used**
+* React.js
+* JavaScript
+* CSS
+* HTML
+* Stripe
+* Open Library API
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## **Deployment**
+[Deployment Link](https://learn-c-plus-plus.netlify.app/)

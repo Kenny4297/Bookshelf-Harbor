@@ -45,7 +45,6 @@ const Account = () => {
     }, [userId]);
 
     const update = async (event) => {
-        console.log("Update function firing");
         event?.preventDefault();
 
         let dataToSend = { ...formData };
@@ -105,7 +104,6 @@ const Account = () => {
         getUserData();
     }, [getUserData]);
 
-
     return (
         <>
             <section className="account-container">
@@ -130,8 +128,7 @@ const Account = () => {
                                 className="form-control"
                                 name="name"
                                 placeholder={
-                                    formData.name ||
-                                    "No information currently set"
+                                    formData.name
                                 }
                                 onChange={handleInputChange}
                                 aria-label="Name"
@@ -149,8 +146,7 @@ const Account = () => {
                                 className="form-control"
                                 name="address"
                                 placeholder={
-                                    formData.address ||
-                                    "No information currently set"
+                                    formData.address
                                 }
                                 onChange={handleInputChange}
                                 aria-label="Address"
@@ -168,8 +164,7 @@ const Account = () => {
                                 className="form-control"
                                 name="phone"
                                 placeholder={
-                                    formData.phone ||
-                                    "No information currently set"
+                                    formData.phone
                                 }
                                 onChange={handleInputChange}
                                 aria-label="Phone Number"

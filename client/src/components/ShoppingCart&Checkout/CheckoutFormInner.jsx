@@ -9,12 +9,11 @@ import {
     calculateTotalWithTaxAndShipping,
     calculateShippingCost,
 } from "../../utils/cartCalculations";
-import Loading from "../Loading";
 
 const CheckoutFormInner = () => {
     const stripe = useStripe();
     const elements = useElements();
-    const [user, setUser] = useContext(UserContext);
+    const [user, ] = useContext(UserContext);
     const { userId } = useParams();
     const [cartItems, setCartItems] = useState([]);
     const navigate = useNavigate();
@@ -27,8 +26,8 @@ const CheckoutFormInner = () => {
         expDate: "",
     });
 
-    const handleInputChange = (e) => {
-        const { value, name } = e.target;
+    const handleInputChange = (event) => {
+        const { value, name } = event.target;
         setBillingDetails({
             ...billingDetails,
             [name]: value,
@@ -62,7 +61,6 @@ const CheckoutFormInner = () => {
         try {
             const response = await axios.post(`/api/user/${userId}/cart/clear`);
             if (response.status === 200) {
-                console.log("Shopping cart cleared successfully");
                 setCartItems([]);
             }
         } catch (error) {
@@ -110,18 +108,11 @@ const CheckoutFormInner = () => {
                 const response = await axios.post(`/api/orders`, orderToInsert);
 
                 if (response.status === 201) {
-                    console.log("Order created successfully");
-                    console.log(
-                        "The response for creating the order:",
-                        response
-                    );
                     clearShoppingCart();
                     navigate(`/thankYou/${userId}`);
                 } else {
                     console.error("Error creating order");
                 }
-
-                console.log("Payment successful");
             }
         }
         setIsLoading(false);
@@ -131,6 +122,7 @@ const CheckoutFormInner = () => {
         style: {
             base: {
                 color: "black",
+                fontSize: '16px',
                 "::placeholder": {
                     color: "black",
                 },
@@ -168,10 +160,6 @@ const CheckoutFormInner = () => {
 
         fetchShoppingCartData();
     }, [userId, user?.shoppingCart]); // Adding the optional chaining operator '?'
-
-    useEffect(() => {
-        console.log("This is the cartItems:", cartItems);
-    });
 
     const totals = calculateTotals();
 
@@ -249,11 +237,15 @@ const CheckoutFormInner = () => {
                             <p className="checkout-warning" aria-live="polite">
                                 4242 4242 4242 4242, 05/39, 123
                             </p>
-                            <CardElement
-                                options={cardStyle}
-                                aria-label="Credit Card Input"
-                            />
+                            
                         </section>
+                        <div className="card-element-wrapper"
+                                >
+                                <CardElement
+                                    options={cardStyle}
+                                    aria-label="Credit Card Input"
+                                />
+                                </div>
                         <button type="submit" aria-label="Submit Payment">
                             Submit Payment
                         </button>

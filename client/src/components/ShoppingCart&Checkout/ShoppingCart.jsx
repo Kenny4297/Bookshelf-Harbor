@@ -6,7 +6,7 @@ import Loading from '../Loading'
 
 const ShoppingCart = () => {
     const [cartItems, setCartItems] = useState([]);
-    const { userId } = useParams(); // Get userId from URL parameters
+    const { userId } = useParams(); 
     const [user, setUser] = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -53,17 +53,7 @@ const ShoppingCart = () => {
         fetchShoppingCartData();
     }, [userId, user?.shoppingCart]); // Adding the optional chaining operator '?'
 
-    useEffect(() => {
-        console.log(cartItems);
-    });
-
-    useEffect(() => {
-        console.log(user);
-    });
-
     const removeFromCart = (bookId) => {
-        console.log("Book ID to remove:", bookId);
-        console.log("removeFromCart function called");
         axios
             .post(`/api/user/${userId}/cart/remove`, { bookId })
             .then((response) => {
@@ -96,16 +86,13 @@ const ShoppingCart = () => {
         axios
             .post(`/api/user/${userId}/cart/clear`)
             .then((response) => {
-                console.log(response.data);
-                setCartItems([]); // Clear the local state
+                setCartItems([]);
 
-                // Call updateUser function here
                 axios
                     .put(`/api/user/${userId}`, {
                         shoppingCart: response.data._id,
                     })
                     .then((response) => {
-                        console.log("User updated: ", response.data);
                     })
                     .catch((error) => {
                         console.error("Error updating user: ", error);
@@ -130,7 +117,7 @@ const ShoppingCart = () => {
     };
 
     const calculateTotalWithTaxAndShipping = () => {
-        const shippingCostPerBook = 5; // $5 shipping cost per book
+        const shippingCostPerBook = 5; 
         const totalPrice = calculateTotalWithoutTax();
         const tax = calculateSalesTax();
         const shippingCost = cartItems.length * shippingCostPerBook;
@@ -138,7 +125,7 @@ const ShoppingCart = () => {
     };
 
     const calculateShippingCost = () => {
-        const shippingCostPerBook = 5; // $5 shipping cost per book
+        const shippingCostPerBook = 5; 
         return cartItems.length * shippingCostPerBook;
     };
 
@@ -242,32 +229,32 @@ const ShoppingCart = () => {
                         </Link>
                     </section>
                 </section>
-            ) : (
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "column",
-                    }}
-                    aria-label="Empty cart message"
-                >
-                    <h2 className="shopping-cart-empty-message">
-                        Your shopping cart is empty
-                    </h2>
-                    <Link
-                        className="back-to-home"
-                        to="/"
-                        aria-label="Back to home"
+                ) : (
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flexDirection: "column",
+                        }}
+                        aria-label="Empty cart message"
                     >
-                        Back to home
-                    </Link>
-                </div>
-            )}
-        </section>
-    
-    );
-                }
+                        <h2 className="shopping-cart-empty-message">
+                            Your shopping cart is empty
+                        </h2>
+                        <Link
+                            className="back-to-home"
+                            to="/"
+                            aria-label="Back to home"
+                        >
+                            Back to home
+                        </Link>
+                    </div>
+                )}
+            </section>
+        
+        );
+    }
 };
 
 export default ShoppingCart;

@@ -23,14 +23,13 @@ const LoginPage = () => {
         const img = new Image();
         img.src = image;
         img.onload = () => {
-            setIsLoading(false); // Image loaded, set loading state to false
-        }; // Image loaded
+            setIsLoading(false);    
+        };  
         img.onerror = (error) => console.error("Failed to load image", error);
     }, []);
 
-    const handleFormSubmit = async (e) => {
-        console.log(formData);
-        e.preventDefault();
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
 
         try {
             const result = await axios.post("/api/user/auth", formData);
@@ -112,7 +111,7 @@ const LoginPage = () => {
 
                         <div className="form-group mt-2">
                             <button
-                                className="signUp-buttons"
+                                className="sign-up-buttons"
                                 onClick={handleFormSubmit}
                                 aria-label="Login button"
                             >
@@ -120,11 +119,11 @@ const LoginPage = () => {
                             </button>
                         </div>
 
-                        <nav className="login-signUp-section">
+                        <nav className="login-sign-up-section">
                             <p>Not a user? Sign up!</p>
                             <div className="form-group mt-2">
                                 <button
-                                    className="signUp-buttons"
+                                    className="sign-up-buttons"
                                     onClick={handleFormSubmitSignUp}
                                     aria-label="Sign up button"
                                 >

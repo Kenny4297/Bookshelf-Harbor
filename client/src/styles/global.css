@@ -18,10 +18,6 @@ p {
   margin-bottom: 1rem;
 }
 
-/* button:hover {
-  transform: scale(1.1);
-} */
-
 body {
   height: 100vh;
   background-color: var(--white-ash);
@@ -48,20 +44,15 @@ element.style {
 }
 
 
-/* Header */
 
-.header-search-bar:focus {
+
+/* Header Section */
+.header-search-bar:focus,
+.header-search-bar:active,
+.header-search-bar:visited,
+.nav-link:hover {
   color: black;
 }
-
-.header-search-bar:active {
-  color: black;
-}
-
-.header-search-bar:visited {
-  color: black;
-}
-
 
 .nav-link {
   position: relative;
@@ -69,24 +60,19 @@ element.style {
   color: var(--white-ash)
 }
 
-.nav-link:hover {
-  color: black;
-}
-
 .nav-link::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
-  right: 100%; /* Start from the left */
+  right: 100%; 
   height: 2px;
-  background: black; /* Color of the underline */
-  transition: right 0.3s ease-in; /* Animate right property (left to right) */
+  background: black; 
+  transition: right 0.3s ease-in; 
 }
 
 .nav-link:hover::after {
-  right: 0; /* Go full width on hover */
-  color: red;
+  right: 0; 
 }
 
 .header-search-button {
@@ -109,13 +95,20 @@ element.style {
   border: 2px solid var(--white-ash);
 }
 
+@media (max-width: 794px) {
+  .header-links {
+    font-size:.82rem;
+    position: relative;
+    top:.1rem;
+  }
+}
 
 
 
 
-/* Log in */
+
+/* Login section */
 .full-page-background {
-  /* position fixed makes the div cover the entire page */
   position: fixed;
   top: 0;
   left: 0;
@@ -131,27 +124,26 @@ element.style {
   right: 0;
   bottom: 0;
   z-index: -1;
-  background: url('../components/assets/images/NileHero.jpg') no-repeat left; 
+  background: url('../components/assets/images/login.jpg') no-repeat left; 
   background-size: cover;
   transform: scaleX(-1);
 }
 
-.login-form-container, .signUp-form {
+.login-form-container, .sign-up-form {
   width: 100%;
   padding-left: 10rem;
   margin-top: 4rem;
   height: 100rem;
-  /* opacity: 1; */
 }
 
-.welcome-to-nile, .signUp-page-title {
+.welcome-to-nile, .sign-up-page-title {
   color: black;
   font-size: 2.5rem;
   margin: 0 auto;
   border-bottom: 2px solid var(--white-ash);
 }
 
-.signUp-page-title {
+.sign-up-page-title {
   border-bottom: 2px solid black;
 
 }
@@ -165,13 +157,8 @@ element.style {
   color: var(--light-teak);
 }
 
-.signUp-label-title {
-  color: black;
-  font-weight: bold;
-}
 
-.form-background, .signUp-form-background {
-  /* opacity: .5; */
+.form-background, .sign-up-form-background {
   z-index: 10;
   width: 35rem;
   display: flex;
@@ -185,7 +172,30 @@ element.style {
   background-color: rgba(255, 255, 255, 0.2); 
 }
 
-.signUp-form-background {
+.login-forms, .sign-up-forms {
+  /* border: 2px solid red; */
+  width: 30rem;
+}
+
+.login-sign-up-section {
+  margin: 0 auto;
+  text-align: center;
+  /* border: 2px solid blue; */
+}
+
+
+
+
+
+/* Sign up */
+.sign-up-container {
+  position: relative;
+  width: 100vw; 
+  height: 100vh;
+  overflow: hidden; 
+}
+
+.sign-up-form-background {
   z-index: 10;
   width: 35rem;
   display: flex;
@@ -196,34 +206,8 @@ element.style {
   margin-top: 5rem;
   padding-left: 3rem;
   border-radius: 2px;
-  background-color: rgba(255, 255, 255, 0.5); 
-}
-
-.login-forms, .signUp-forms {
   /* border: 2px solid red; */
-  width: 30rem;
-  /* margin-top: 1rem; */
-}
-
-.login-signUp-section {
-  margin: 0 auto;
-  text-align: center;
-  /* border: 2px solid blue; */
-}
-
-
-
-
-
-
-
-
-/* Sign up */
-.sign-up-container {
-  position: relative;  /* use relative instead of fixed */
-  width: 100vw; 
-  height: 100vh;
-  overflow: hidden; /* Ensures the content is not going outside the container */
+  background-color: rgba(255, 255, 255, 0.5); 
 }
 
 .sign-up-container::before {
@@ -233,17 +217,13 @@ element.style {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: -4; /* this ensures that the image stays behind the text content */
+  z-index: -4;
 
-  /* Add your image */
   background: url('../components/assets/images/signUp.jpg') no-repeat center center; 
-  /* Centering the image */
-  
-  /* Cover the entire div */
   background-size: cover;
 }
 
-.signUp-buttons {
+.sign-up-buttons {
   display: inline-block;
   padding: .5rem .5rem;
   text-decoration: none;
@@ -251,22 +231,66 @@ element.style {
   color: var(--gingerbread);             
   border-radius: 5px;
   text-align: center;
-  /* margin: 1rem; */
-  /* font-weight: bold; */
   border: 2px solid var(--gingerbread);
 }
 
-.signUp-buttons:hover {
+.sign-up-buttons:hover {
   color: var(--white-ash);
   background-color: var(--gingerbread);
 }
 
+.sign-up-label-title {
+  color: black;
+  font-weight: bold;
+}
 
+@media (max-width: 900px) {
+  .login-form-container, .sign-up-container, .sign-up-form {
+    padding-left: 0rem;
+  }
+  .form-background, .sign-up-form-background {
+    margin: 0 auto;
+  }
+}
 
+@media (max-width: 600px) {
+  .form-background, .sign-up-form-background {
+    width: 30rem;
+    /* border: 2px solid green; */
+  }
 
+  .login-forms input {
+    width: 80%;
+    /* border: 2px solid blue; */
+    margin: 0rem 0rem;
+  }
 
+  .sign-up-forms input {
+    width: 80%;
+    /* border: 2px solid blue; */
+    margin: 0rem 0rem;
+  }
+}
 
+@media (max-width: 500px) {
+  .form-background, .sign-up-form-background {
+    width: 20rem;
+    /* border: 2px solid red; */
+    padding-left: 1rem;
+  }
 
+  .login-forms input,
+  .sign-up-forms input
+   {
+    width: 50%;
+    /* border: 2px solid blue; */
+    margin: 0rem 0rem;
+  }
+
+  .welcome-to-nile {
+    text-align: center;
+  }
+}
 
 
 
@@ -281,7 +305,7 @@ element.style {
 
 .profile-h2 {
   margin-top: 3rem;
-  color: var(--light-teak);
+  color: var(--gingerbread);
   border-bottom: 2px solid var(--light-teak);
 }
 
@@ -307,7 +331,6 @@ element.style {
 .add-to-cart-button:hover
 {
   cursor: pointer;
-  /* text-decoration: underline; */
   color: var(--light-teak); 
   transform: scale(1.05);
 }
@@ -316,20 +339,34 @@ element.style {
 
 
 
-
-
 /* Profile / Account */
-
 .account-container {
   display: flex;
 }
 
+@media (max-width: 780px) {
+  .account-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .form-container {
+    margin-left: 0rem;
+    padding: 0rem 0rem !important;
+    width: auto;
+    /* border: 2px solid green; */
+    color: blue;
+  }
+}
+
+@media (max-width: 470px) {
+  .form-container input {
+    width: 15rem !important;
+  }
+}
+
 .form-container {
   padding: 3rem 8.5rem;
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column; */
   /* border: 2px solid green; */
   height: 45rem;
   width: 70%;
@@ -347,6 +384,10 @@ element.style {
   font-weight: bold;
   padding-top: 1rem;
   /* border: 2px solid green; */
+}
+
+.account-form input {
+  width: 20rem;
 }
 
 .account-password-button {
@@ -373,12 +414,17 @@ element.style {
 .profile-image-container {
   /* border: 2px solid blue; */
   width: 30%;
-  /* padding: 1rem 2rem; */
   margin-right: 7rem;
   display: flex;
-  /* justify-content: center; */
   align-items: center;
   flex-direction: column;
+}
+
+@media (max-width: 780px) {
+  .profile-image-container {
+    margin: 0 auto;
+    width: 25rem;
+  }
 }
 
 .profile-image-label {
@@ -406,6 +452,7 @@ element.style {
   border-bottom: 2px solid var(--light-teak);
   padding-top: 3rem;
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .update-profile-button {
@@ -420,6 +467,18 @@ element.style {
   color: var(--light-teak);
   margin-bottom: 10rem;
   /* border: 2px solid red; */
+}
+
+@media (max-width: 520px ) {
+  .update-profile-button-container {
+    width: 10rem;
+    /* border:2px solid green; */
+  }
+  .update-profile-button {
+    /* border: 2px solid blue; */
+    width: 100%;
+    font-size: 1rem;
+  }
 }
 
 .update-profile-button-container {
@@ -465,7 +524,6 @@ element.style {
   align-items: flex-start;
   /* border: 2px solid red; */
   align-self: flex-start;
-  /* margin-top: 1rem; */
   margin-bottom: 2.5rem;
 }
 
@@ -477,31 +535,20 @@ element.style {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
-
 .individual-order h2, 
 .individual-order h3 {
   color: var(--light-teak)
 }
 
-/* .individual-order h3 {
-  border-top: 1px solid var(--grey-wood);
-} */
-
 .individual-order h3::before {
   content: "";
   display: block;
   height: 1px;
-  width: 50%;  /* Set width to desired percentage */
+  width: 50%;  
   background-color: var(--grey-wood);
-  margin-bottom:  0.625rem; /* Adjust as needed */
+  margin-bottom:  0.625rem; 
   margin: 0 auto;
 }
-
-/* .individual-order h2, 
-.individual-order p, 
-.individual-order h3 {
-  color: green;
-} */
 
 .orders-h2 {
     padding-top: 3rem;
@@ -539,6 +586,22 @@ element.style {
   margin-bottom: 1rem;
   border: 2px solid var(--light-teak);
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+@media (max-width: 500px) {
+  .orders-container {
+    margin: 0rem 0rem;
+  }
+  .orders-individual-orders {
+    width: 90%;
+  }
+  .orders-individual-orders p {
+    padding: 0rem .5rem;
+    font-size:.8rem;
+  }
+  .individual-order {
+    width: 100%;
+  }
 }
 
 .orders-button-link {
@@ -587,40 +650,28 @@ element.style {
 
 
 /* Hero section */
-
 .hero-section-container {
-    /* position: relative;
-    bottom: 5rem; */
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* align-items: center; */
-    /* min-width: 98.8vw;
-    max-width: 99vw; */
     width: 100%;
     height: 100vh;
-
     /* border: 3px solid red; */
     margin: 0 !important;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../components/assets/images/login.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../components/assets/images/HeroPage.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
 .hero-introduction-text {
-  margin-left: 5rem;
+  margin: 0rem 5rem;
 }
 
 
 
 
-
-
-
-
 /* Individual book */
-
 .book-container {
   display: flex;
   flex-wrap: wrap;
@@ -648,7 +699,6 @@ element.style {
 
 .missing-book-message-2 {
   color:var(--gingerbread);
-  /* margin-top: 10rem; */
   text-align: center;
   font-weight: bold;
   font-size:2rem;
@@ -725,16 +775,8 @@ element.style {
 
 
 
-
-
-
-
-
-
 /* Book Details Page */
-
 .book-details-page-container {
-  /* margin-left: 5rem; */
   /* border: 2px solid blue; */
   width: 100%;
   height: 100%;
@@ -744,7 +786,6 @@ element.style {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* flex-direction: column; */
 }
 
 .book-details-text-section {
@@ -801,21 +842,41 @@ element.style {
 }
 
 .book-details-image-section {
-  border: 2px solid purple;
+  /* border: 2px solid purple; */
   margin-left: 4rem;
 }
+
+
 
 .book-details-image {
   width: 15rem;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.3);
-
 }
+
+@media (max-width: 700px) {
+  .book-details-page-container {
+    flex-direction: column-reverse;
+  }
+  .book-details-image-section {
+    /* border: 2px solid purple; */
+    margin-left: 0rem;
+    padding-top: 1rem;
+
+  }
+  .book-details-image {
+    width: 10rem;
+  }
+  .individual-book-add-to-cart {
+    position:static;
+    margin: 0 auto;
+  }
+}
+
 
 
 
 
 /* Featured Section */
-
 .featured-novels-container {
   height: 40rem;
   background-color: var(--white-ash);
@@ -891,57 +952,47 @@ element.style {
 .carousel-control-prev, 
 .carousel-control-next {
   position: absolute;
-  width: auto;  /* Reset width */
-  height: auto;  /* Reset height */
+  width: auto; 
+  height: auto; 
   padding: 0;
-  bottom: 0;  /* Position at the bottom */
-  transform: translateY(-50%); /* Center vertically */
-  
+  bottom: 0; 
+  transform: translateY(-50%);
 }
 
 .carousel-control-prev {
-  left: 30rem;
-  top: 27.5rem;
-
+  left: 10%;
+  top: 95%;
 }
 
 .carousel-control-next {
-  right: 30rem;
-  top: 27.5rem;
-
+  right: 10%; 
+  top: 95%;
 }
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-  width: 2rem;  /* Adjust as needed */
-  height: 2rem;  /* Adjust as needed */
+  width: 2rem; 
+  height: 2rem; 
   position: relative;
-  /* top: 28rem; */
-  background-size: 100%, 100%;  /* Adjust as needed */
-  /* border: 2px solid red; */
+  background-size: 100%, 100%;  
   filter: invert(1) brightness(0.5) saturate(0); 
-  /* background-color: var(--dark-wood); */
 }
-
-
-
-
-
 
 
 
 
 
 /* Categories pages */
-
 .categories-page-container {
   background-color: var(--grey-wood);
   padding-bottom: 3rem;
+  border: 1px solid green
 }
 
 .browse-by-categories {
   padding: 3rem 0rem;
   text-align: center;
+  /* border:2px solid red; */
 }
 
 
@@ -949,9 +1000,16 @@ element.style {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  /* border: 2px solid blue */
 }
 
- .category-box {
+@media (max-width: 700px) {
+  .category-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.category-box {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -967,7 +1025,6 @@ element.style {
   overflow: hidden;
   box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2), 0px 1px 20px 0px rgba(0,0,0,0.3);
 } 
-
 
 .category-box:before {
   content: '';
@@ -1016,16 +1073,14 @@ element.style {
   text-align: center;
 }
 
-
-
 .slide-background {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   background-color: black;
-  transform: translateY(100%); /* Initially, push it down */
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Transition effect */
+  transform: translateY(100%); 
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
 .category-box:hover .slide-background {
@@ -1043,27 +1098,11 @@ element.style {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Categories */
-
 .book-container-categories {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  /* flex-direction: row; */
 }
 
 .books-category {
@@ -1142,6 +1181,24 @@ element.style {
   padding: 2rem 4rem;
 }
 
+@media (max-width: 700px) {
+  .footer-container {
+    flex-direction: column;
+  }
+  .footer-column {
+    margin: 0 auto;
+  }
+  .footer-column a {
+    margin: 0 auto;
+  }
+  .footer-column-credit-cards {
+    margin: 0 auto;
+    text-align: center;
+    align-items: center;
+    /* border: 2px solid green; */
+  }
+}
+
 .footer-p {
   font-size: .9rem;
   margin-top: 1rem;
@@ -1176,9 +1233,6 @@ element.style {
   /* border: 2px solid red; */
 }
 
-.footer-column-credit-cards {
-  /* border: 2px solid red; */
-}
 .secured-payments {
   text-align: center;
 }
@@ -1191,11 +1245,7 @@ element.style {
 
 
 
-
-
-
 /* Shopping Cart */
-
 .shopping-cart-container {
   margin-left: 3rem;
   /* border: 2px solid green; */
@@ -1206,7 +1256,6 @@ element.style {
   justify-content: space-evenly;
   /* border: 2px solid blue; */
   flex-wrap: wrap;
-  /* position: relative; */
 }
 
 .shopping-cart-header-author-container {
@@ -1236,17 +1285,14 @@ element.style {
   max-width: 15rem;
   height: 30rem;
   display: flex;
-  /* justify-content: center; */
   align-items: center;
   flex-direction: column;
   margin:1rem 1rem;
-  /* padding: 1rem 1rem; */
   position: relative;
 }
 
 .shopping-cart-book img {
   width: 8rem;
-  /* padding-top: -2rem; */
 }
 
 .shopping-cart-rendered-price {
@@ -1265,7 +1311,6 @@ element.style {
   color: var(--gingerbread);             
   border-radius: 10px;
   text-align: center;
-  /* margin-top: 4rem; */
   font-weight: bold;
   border: 2px solid var(--gingerbread);
   bottom: 1rem;
@@ -1299,7 +1344,6 @@ element.style {
   border-bottom: 2px solid var(--grey-wood);
 }
 
-
 /* Empty Shopping Cart */
 .shopping-cart-empty-message {
   text-align: center;
@@ -1311,10 +1355,7 @@ element.style {
 
 
 
-
-
 /* Checkout  */
-
 .checkout-container {
   /* border: 2px solid green; */
   padding: 5rem 3rem;
@@ -1336,17 +1377,12 @@ element.style {
   text-align: center;
 }
 
-.credit-card-container {
-  /* border: 2px solid red; */
-  /* padding: 0rem 3rem; */
-}
-
 .checkout-form-field {
   /* border: 2px solid blue; */
   display: flex;
   justify-content: flex-start;
-  /* align-items: center; */
-  /* flex-direction: column; */
+  align-items: center;
+  flex-direction: column;
 }
 
 .form-field {
@@ -1404,16 +1440,30 @@ element.style {
   background-color: var(--light-teak);
 }
 
+@media (max-width: 840px) {
+  .form-field {
+    flex-direction: column;
+    width:30rem;
+  }
+
+  .form-field input {
+    width: 22.5rem;
+    margin: 0rem 0rem;
+  }
+
+  .checkout-warning {
+    width: 20rem;
+  }
+}
+
 
 .checkout-total-section {
-  border: 1px solid white;
+  /* border: 2px solid green; */
   width: 22.5rem;
-  margin: 0 auto;
+  margin: 1rem auto;
   text-align: center;
   height: 15rem;
   padding-top: 1rem;
-  position: fixed;
-  right: 3rem;
   z-index: 100;
   background-color: var(--white-ash);
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
@@ -1428,27 +1478,62 @@ element.style {
   font-weight: bold;
 }
 
+.card-element-wrapper {
+  width: 30rem;
+  /* border: 2px solid green; */
+}
+@media (max-width: 840px) {
+  .card-element-wrapper {
+    width: 25rem;
+  }
+}
 
+@media (max-width: 490px) {
+  .form-field {
+    width: 100%;
+    margin: 0rem 0rem;
+  }
+  .form-field input {
+    width: 230%;
+  }
 
+  .checkout-warning {
+    width: 230%;
+  }
 
+  .card-element-wrapper {
+    width: 100%;
+  }
+
+  .checkout-total-section {
+    width: 100%;
+  }
+
+  .checkout-book-total-container  {
+    width:  100%;
+    border: 2px solid green;
+  }
+
+  .checkout-individual-book {
+    width: 100% !important;
+    margin: 0rem 0rem !important;
+    /* border: 2px solid blue; */
+  }
+}
 
 .checkout-book-total-container {
   display: flex;
   /* border: 2px solid green; */
-  position: relative;
 }
 
 .checkout-individual-book-section {
   /* border: 2px solid blue; */
-  /* margin-left: 4rem; */
-  /* width: 40rem; */
-  width: 75%;
-  /* max-width: 53rem; */
-  display: inline-flex;
-  margin-bottom: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
   flex-wrap: wrap;
   padding: 0rem 2rem;
-  /* z-index: -10; */
 }
 
 .checkout-individual-book {
@@ -1469,7 +1554,6 @@ element.style {
   transition: all 0.3s ease-out;
 }
 
-
 .checkout-individual-book h4 {
   text-decoration: underline;
   color: var(--dark-wood)
@@ -1484,8 +1568,10 @@ element.style {
 }
 
 
-/* Thank you */
 
+
+
+/* Thank you */
 .thank-you-container {
   /* border: 2px solid red; */
   margin: 0 3rem;
@@ -1513,4 +1599,3 @@ element.style {
   width: 80%;
   margin: 0 auto;
 }
-

@@ -2,11 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../contexts/UserContext";
+import Loading from '../Loading'
 
 const ThankYou = () => {
     const { userId } = useParams();
     const [order, setOrder] = useState(null);
-    const [user, setUser] = useContext(UserContext);
+    const [user,] = useContext(UserContext);
 
     const [isReceiptRequested, setIsReceiptRequested] = useState(false);
 
@@ -15,23 +16,17 @@ const ThankYou = () => {
     };
 
     useEffect(() => {
-        console.log(user);
-    });
-
-    useEffect(() => {
         const fetchOrder = async () => {
-            console.log("Fetch order useEffect?");
             const response = await axios.get(
                 `/api/orders/order/${userId}/last`
             );
             setOrder(response.data);
-            console.log(response.data);
         };
         fetchOrder();
-    }, [user]);
+    }, [user, userId]);
 
     if (!order) {
-        return <p>Loading...</p>;
+        return <Loading />;
     }
 
     return (

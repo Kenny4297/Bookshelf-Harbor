@@ -4,13 +4,33 @@ import { Card, Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { HiArrowRight, HiArrowLeft } from "react-icons/hi";
 
-const FeaturedBooks = () => {
-    const [books, setBooks] = useState([]);
+const useWindowSize = () => {
+    const [windowSize, setWindowSize] = useState({
+        width: window.innerWidth,
+    });
 
     useEffect(() => {
-        console.log("UseEffect is running!");
+        const handleResize = () => {
+            setWindowSize({
+                width: window.innerWidth,
+            });
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return windowSize;
+};
+
+const FeaturedBooks = () => {
+    const [books, setBooks] = useState([]);
+    const windowSize = useWindowSize();
+
+    useEffect(() => {
         fetchBooks(12);
     }, []);
+
 
     // Fetching the books for the FeaturedProducts component
     const fetchBooks = async (count) => {
@@ -53,12 +73,20 @@ const FeaturedBooks = () => {
     };
 
     const carouselItems = [];
+    let booksPerSlide;
+    if (windowSize.width <= 630) {
+        booksPerSlide = 1;
+    } else if (windowSize.width <= 900) {
+        booksPerSlide = 2;
+    } else {
+        booksPerSlide = 3;
+    }
     
-    for (let i = 0; i < books.length; i += 3) {
+    for (let i = 0; i < books.length; i += booksPerSlide) {
         carouselItems.push(
             <Carousel.Item key={i}>
                 <div className="d-flex justify-content-around flex-wrap">
-                    {books.slice(i, i + 3).map((book) => (
+                    {books.slice(i, i + booksPerSlide).map((book) => (
                         <Card key={book.key} className="featured-novels-card">
                             <Link to={`/books${book.key}`}>
                                 <Card.Img
@@ -91,6 +119,7 @@ const FeaturedBooks = () => {
             {books.length > 0 ? (
                 <Carousel
                     style={{ height: "30rem" }}
+                    className="carousel-featured"
                     indicators={false}
                     nextIcon={
                         <HiArrowRight

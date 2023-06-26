@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import image from "../assets/images/signUp.jpg";
+import image from "../assets/images/background-sign-up.jpg";
 import Loading from "../Loading";
 import axios from "axios";
 

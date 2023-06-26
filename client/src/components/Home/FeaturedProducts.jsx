@@ -12,6 +12,7 @@ const FeaturedBooks = () => {
         fetchBooks(12);
     }, []);
 
+    // Fetching the books for the FeaturedProducts component
     const fetchBooks = async (count) => {
         try {
             // Check if books are already stored in localStorage
@@ -43,6 +44,7 @@ const FeaturedBooks = () => {
                 "books",
                 JSON.stringify(books.slice(0, count))
             );
+            // We store the books in local storage so they don't have to be fetched again until tomorrow
             localStorage.setItem("booksDate", currentDate);
             setBooks(books.slice(0, count));
         } catch (error) {
@@ -51,6 +53,7 @@ const FeaturedBooks = () => {
     };
 
     const carouselItems = [];
+    
     for (let i = 0; i < books.length; i += 3) {
         carouselItems.push(
             <Carousel.Item key={i}>

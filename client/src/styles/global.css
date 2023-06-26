@@ -1,7 +1,7 @@
 
 /* === typography ====== */ 
 
-h1, h2, h3, h4, h5, h6, p, li, td, th, blockquote, label, input, textarea, select, span {
+h1, h2, h3, h4, h5, h6, p, li, td, th, blockquote, label, textarea, select, span {
   color: white;
 }
 
@@ -49,12 +49,24 @@ element.style {
 
 
 /* Header */
-.navbar * {
-  color: var(--white-ash);
+
+.header-search-bar:focus {
+  color: black;
 }
+
+.header-search-bar:active {
+  color: black;
+}
+
+.header-search-bar:visited {
+  color: black;
+}
+
 
 .nav-link {
   position: relative;
+  font-weight: 600;
+  color: var(--white-ash)
 }
 
 .nav-link:hover {
@@ -119,18 +131,12 @@ element.style {
   right: 0;
   bottom: 0;
   z-index: -1;
-
-  /* Add your image */
   background: url('../components/assets/images/NileHero.jpg') no-repeat left; 
-
-  /* Cover the entire div */
   background-size: cover;
-
-  /* Mirror the image */
   transform: scaleX(-1);
 }
 
-.login-form-container, .signup-form {
+.login-form-container, .signUp-form {
   width: 100%;
   padding-left: 10rem;
   margin-top: 4rem;
@@ -138,14 +144,14 @@ element.style {
   /* opacity: 1; */
 }
 
-.welcome-to-nile, .signup-page-title {
+.welcome-to-nile, .signUp-page-title {
   color: black;
   font-size: 2.5rem;
   margin: 0 auto;
   border-bottom: 2px solid var(--white-ash);
 }
 
-.signup-page-title {
+.signUp-page-title {
   border-bottom: 2px solid black;
 
 }
@@ -159,12 +165,12 @@ element.style {
   color: var(--light-teak);
 }
 
-.signup-label-title {
+.signUp-label-title {
   color: black;
   font-weight: bold;
 }
 
-.form-background, .signup-form-background {
+.form-background, .signUp-form-background {
   /* opacity: .5; */
   z-index: 10;
   width: 35rem;
@@ -179,7 +185,7 @@ element.style {
   background-color: rgba(255, 255, 255, 0.2); 
 }
 
-.signup-form-background {
+.signUp-form-background {
   z-index: 10;
   width: 35rem;
   display: flex;
@@ -193,13 +199,13 @@ element.style {
   background-color: rgba(255, 255, 255, 0.5); 
 }
 
-.login-forms, .signup-forms {
+.login-forms, .signUp-forms {
   /* border: 2px solid red; */
   width: 30rem;
   /* margin-top: 1rem; */
 }
 
-.login-signup-section {
+.login-signUp-section {
   margin: 0 auto;
   text-align: center;
   /* border: 2px solid blue; */
@@ -230,14 +236,14 @@ element.style {
   z-index: -4; /* this ensures that the image stays behind the text content */
 
   /* Add your image */
-  background: url('../components/assets/images/signup.jpg') no-repeat center center; 
+  background: url('../components/assets/images/signUp.jpg') no-repeat center center; 
   /* Centering the image */
   
   /* Cover the entire div */
   background-size: cover;
 }
 
-.signup-buttons {
+.signUp-buttons {
   display: inline-block;
   padding: .5rem .5rem;
   text-decoration: none;
@@ -250,7 +256,7 @@ element.style {
   border: 2px solid var(--gingerbread);
 }
 
-.signup-buttons:hover {
+.signUp-buttons:hover {
   color: var(--white-ash);
   background-color: var(--gingerbread);
 }
@@ -389,7 +395,7 @@ element.style {
   width: 20rem;
   height: 20rem;
   border: 2px solid black;
-  border-radius: 200px;
+  border-radius: 12.5rem;
   object-fit: cover;
 }
 
@@ -487,7 +493,7 @@ element.style {
   height: 1px;
   width: 50%;  /* Set width to desired percentage */
   background-color: var(--grey-wood);
-  margin-bottom: 10px; /* Adjust as needed */
+  margin-bottom:  0.625rem; /* Adjust as needed */
   margin: 0 auto;
 }
 
@@ -544,7 +550,7 @@ element.style {
   border-radius: 5px;
   color: #000;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .orders-button-link:hover {
@@ -632,6 +638,22 @@ element.style {
   color: var(--grey-wood)
 }
 
+.missing-book-message {
+  color:var(--gingerbread);
+  margin-top: 10rem;
+  text-align: center;
+  font-weight: bold;
+  font-size:2rem;
+}
+
+.missing-book-message-2 {
+  color:var(--gingerbread);
+  /* margin-top: 10rem; */
+  text-align: center;
+  font-weight: bold;
+  font-size:2rem;
+}
+
 .book-grid {
   display: flex;
   flex-wrap: wrap;
@@ -671,13 +693,13 @@ element.style {
   max-height: 10rem;
   min-width: 7rem;
   max-width: 11rem;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
   box-shadow: 0 10px 20px 0 rgba(0,0,0,0.2), 0 18px 32px 0 rgba(0,0,0,0.19);
 }
 
 .book-card-title {
   margin: 0;
-  margin-bottom: 10px;
+  margin-bottom: 0.625rem;
   text-align: center;
   font-size: 1.2em;
   text-decoration: underline;
@@ -1059,12 +1081,12 @@ element.style {
 
 .card-categories {
   border-radius: 5px;
-  padding: 15px;
-  margin: 10px;
-  width: 200px;
+  padding: 1rem;
+  margin: 0.625rem;
+  width: 12.5rem;
   height: auto;
-  min-height: 350px; 
-  max-height: 350px; 
+  min-height: 21.875rem; 
+  max-height: 21.875rem; 
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -1084,18 +1106,18 @@ element.style {
   max-height: 10rem;
   min-width: 7rem;
   max-width: 11rem;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 
 .book-title-categories {
   margin: 0;
-  margin-bottom: 10px;
+  margin-bottom: 0.625rem;
   text-align: center;
   font-size: 1.2em;
 }
 
 .book-author-categories {
-  font-size: 16px;
+  font-size: 1rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

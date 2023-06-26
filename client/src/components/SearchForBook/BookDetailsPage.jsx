@@ -1,9 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import axios from "axios";
-import Loading from "../components/Loading";
+import Loading from "../Loading";
 
+/* Many book descriptions contain information that is not relevant to the description of the book, such as markdown, notes to the developer, and a lot of strange symbols. The following function tried to remove any strange instances that do not pertain to the books description*/
 const cutOffAtSpecialCharacter = (text) => {
     if (!text) {
         return "";
@@ -46,7 +47,7 @@ const BookDetailsPage = () => {
     const [firstPublishDate, setFirstPublishDate] = useState(null);
     const [description, setDescription] = useState("");
     const [cover, setCover] = useState(null);
-    const [user, setUser] = useContext(UserContext);
+    const user = useContext(UserContext);
     const [cartItems, setCartItems] = useState(user?.shoppingCart?.books || []);
     const [isAddedToCart, setIsAddedToCart] = useState(false);
 
@@ -62,16 +63,6 @@ const BookDetailsPage = () => {
     };
 
     useEffect(() => {
-        if (book && book.description) {
-            let bookDescription =
-                typeof book.description === "object"
-                    ? book.description.value
-                    : book.description;
-            setDescription(cutOffAtSpecialCharacter(bookDescription));
-        }
-    }, [book]);
-
-    useEffect(() => {
         const url = key.startsWith("/works/")
             ? `https://openlibrary.org${key}.json`
             : `https://openlibrary.org/works/${key}.json`;
@@ -83,95 +74,66 @@ const BookDetailsPage = () => {
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
                 if (data) {
                     setBook(data);
                 }
             })
             .catch((error) => console.log(error));
     }, [key]);
-
+    
     useEffect(() => {
         setCartItems(user?.shoppingCart?.books || []);
     }, [user]);
-
+    
     useEffect(() => {
-        if (book && book.created) {
-            const createdDate = new Date(book.created.value);
-            const options = { month: "long", day: "numeric", year: "numeric" };
-            const formattedDate = createdDate.toLocaleDateString(
-                "en-US",
-                options
-            );
-            setFirstPublishDate(formattedDate);
-        }
-    }, [book]);
-
-    useEffect(() => {
-        if (book && book.authors) {
-            const fetchAuthor = (author) => {
-                const authorKey = author.author.key;
-                return fetch(`https://openlibrary.org${authorKey}.json`)
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error("Network response was not ok");
-                        }
-                        return response.json();
+        if (book) {
+            if (book.created) {
+                const createdDate = new Date(book.created.value);
+                const options = { month: "long", day: "numeric", year: "numeric" };
+                const formattedDate = createdDate.toLocaleDateString(
+                    "en-US",
+                    options
+                );
+                setFirstPublishDate(formattedDate);
+            }
+    
+            if (book.authors) {
+                const fetchAuthor = (author) => {
+                    const authorKey = author.author.key;
+                    return fetch(`https://openlibrary.org${authorKey}.json`)
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error("Network response was not ok");
+                            }
+                            return response.json();
+                        })
+                        .catch((error) => console.log(error));
+                };
+    
+                Promise.all(book.authors.map(fetchAuthor))
+                    .then((authors) => {
+                        setAuthors(authors.filter(Boolean));
                     })
                     .catch((error) => console.log(error));
-            };
-
-            Promise.all(book.authors.map(fetchAuthor))
-                .then((authors) => {
-                    setAuthors(authors.filter(Boolean));
-                })
-                .catch((error) => console.log(error));
-        }
-    }, [book]);
-
-    useEffect(() => {
-        if (book && book.description) {
-            setDescription(book.description);
-            console.log("The book description is:", book.description);
-        }
-    }, [book]);
-
-    useEffect(() => {
-        console.log(user);
-    }, [user]);
-
-    useEffect(() => {
-        if (!book) {
-            return;
-        } else {
+            }
+    
+            if (book.description) {
+                let bookDescription =
+                    typeof book.description === "object"
+                        ? book.description.value
+                        : book.description;
+                setDescription(cutOffAtSpecialCharacter(bookDescription));
+            }
+            
             const url = `https://openlibrary.org/search.json?title=${book.title}`;
             fetch(url)
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data);
                     setCover(data);
                 })
                 .catch((error) => {
                     console.error(error);
                 });
-        }
-    }, [book]);
-
-    useEffect(() => {
-        if (!cover) {
-            return;
-        } else {
-            console.log(cover.docs[0].cover_i);
-        }
-    }, [cover]);
-
-    useEffect(() => {
-        if (book && book.description) {
-            let bookDescription =
-                typeof book.description === "object"
-                    ? book.description.value
-                    : book.description;
-            setDescription(cutOffAtSpecialCharacter(bookDescription));
         }
     }, [book]);
 
@@ -232,12 +194,6 @@ const BookDetailsPage = () => {
                                         {index < authors.length - 1 ? ", " : ""}
                                     </span>
                                 ))}
-                        </p>
-                        <p className="book-details-title">
-                            Publication Date:{" "}
-                            <span className="individual-book-data-response">
-                                {firstPublishDate}
-                            </span>
                         </p>
                         <p className="book-details-title">
                             Description:{" "}

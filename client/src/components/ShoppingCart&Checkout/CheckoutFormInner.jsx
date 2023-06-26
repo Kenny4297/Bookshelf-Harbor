@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import { useParams, useNavigate } from "react-router-dom";
 import {
     calculateSalesTax,
     calculateTotalWithoutTax,
     calculateTotalWithTaxAndShipping,
     calculateShippingCost,
-} from "../utils/cartCalculations";
-import Loading from "./Loading";
+} from "../../utils/cartCalculations";
+import Loading from "../Loading";
 
 const CheckoutFormInner = () => {
     const stripe = useStripe();

@@ -8,6 +8,7 @@ const BookComponent = ({ category }) => {
     const [books, setBooks] = useState([]);
     const [page, setPage] = useState(0);
 
+    // Fetching books from the API based on the category the user selected
     useEffect(() => {
         const fetchBooks = async () => {
             try {
@@ -23,12 +24,6 @@ const BookComponent = ({ category }) => {
         };
         fetchBooks();
     }, [category, page]);
-
-    useEffect(() => {
-        if (books) {
-            console.log(books);
-        }
-    }, [books]);
 
     return (
         <>

@@ -1,44 +1,44 @@
 import { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
-import defaultImage from "../components/assets/images/defaultImage.jpg";
-import Loading from "../components/Loading";
+import { UserContext } from "../../contexts/UserContext";
+import defaultImage from "../assets/images/defaultImage.jpg";
+import Loading from "../Loading";
 
 function IndividualBook() {
     const location = useLocation();
     const searchTerm = location.state?.searchTerm;
-    const [book, setBook] = useState([]);
+    const [book, setBook] = useState(null);
     const [user, setUser] = useContext(UserContext);
     const [page, setPage] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        if (searchTerm) {
-            fetch(
-                `https://openlibrary.org/search.json?title=${searchTerm}&page=${
-                    page + 1
-                }&limit=20`
-            )
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    if (data.docs) {
-                        setBook(data.docs);
-                    }
-                })
-                .catch((error) => console.log(error));
-        }
-    }, [searchTerm, page]);
+    if (searchTerm) {
+        setIsLoading(true);
+        fetch(
+            `https://openlibrary.org/search.json?title=${searchTerm}&page=${
+                page + 1
+            }&limit=20`
+        )
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setBook(data.docs || []);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                console.log(error);
+                setBook([]); // Make sure 'book' is an empty array in case of an error
+                setIsLoading(false);
+            });
+    }
+}, [searchTerm, page]);
 
-    useEffect(() => {
-        if (book) {
-            console.log("The book object:", book);
-        }
-    }, [book]);
 
     const handleNextPage = () => {
         setPage(page + 1);
@@ -52,17 +52,25 @@ function IndividualBook() {
         }
     };
 
-    if (!book) {
-        return <div>Loading...</div>;
+    if (isLoading) {
+        return <Loading />;
+    }
+
+    if (book && book.length === 0) {
+        return <>
+        <p className="missing-book-message">Sorry, but the book you searched for doesn't exist in our system.</p>
+        <p className="missing-book-message-2">Try again with another book!</p>
+
+        </>
     }
 
     // Filter books without an image cover
-    const filteredBooks = book.filter((bookItem) => bookItem.cover_i);
+    const filteredBooks = book ? book.filter((bookItem) => bookItem.cover_i) : [];
 
     return (
         <>
-            {book.length === 0 ? (
-                <Loading />
+            {filteredBooks.length === 0 ? (
+                <p>Sorry, but the book you searched for doesn't exist in our system</p>
             ) : (
                 <section className="book-container" aria-label="Book results">
                     <h2 className="book-results-for-h2">

@@ -1,26 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { loadStripe } from '@stripe/stripe-js';
-import { Checkout, Header } from './components';
-import { 
-  CategoriesPage, 
-  HomePage, 
-  LoginPage, 
-  IndividualBook, 
-  ProfilePage, 
-  SignupPage, 
-  BookDetailsPage 
-} from './pages';
+import { Header, HomePage } from './components'
+import { ProfilePage } from './components/Profile'
+import { Login, SignUp } from './components/LoginOrSignUp'
 import { UserContext } from './contexts/UserContext';
-import { ShoppingCart, CheckoutForm, ThankYou } from './components';
+import { ShoppingCart, CheckoutForm, ThankYou } from './components/ShoppingCart&Checkout';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/global.css';
-import Account from './components/profile/Account';
-import Orders from './components/profile/Orders';
-import SpecificOrder from './components/profile/SpecificOrder'
-import CategoryComponent from './components/Categories/CategoryComponent'
-import Loading from './components/Loading'
+import Account from './components/Profile/Account';
+import Orders from './components/Profile/Orders';
+// import SpecificOrder from './components/profile/SpecificOrder'
+import { CategoriesPage, CategoryComponent } from './components/Categories'
+import Loading from './components/Loading';
+import { BookDetailsPage, IndividualBook } from './components/SearchForBook'
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -63,9 +56,9 @@ const App = () => {
         {!user ? (
             <>
               <Routes>
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignupPage />} />
-                <Route path="*" element={<LoginPage />} /> 
+                {/* <Route path="/login" element={<Login />} /> */}
+                <Route path="/signUp" element={<SignUp />} />
+                <Route path="*" element={<Login />} /> 
               </Routes>
             </>
         ) :(
@@ -76,7 +69,7 @@ const App = () => {
               <Route path="/profile/:userId" element={<ProfilePage />} />
               <Route path="/profile/account/:userId" element={<Account />} />
               <Route path="/profile/orders/:userId" element={<Orders />} />
-              <Route path="/specificOrder/:orderId" element={<SpecificOrder/>} />
+              {/* <Route path="/specificOrder/:orderId" element={<SpecificOrder/>} /> */}
 
               <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/books/works/:key" element={<BookDetailsPage />} />

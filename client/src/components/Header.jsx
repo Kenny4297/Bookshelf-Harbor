@@ -76,7 +76,7 @@ const Header = () => {
                             type="text"
                             placeholder="Search for a book"
                             style={{ width: "30vw" }}
-                            className="mr-sm-2"
+                            className="mr-sm-2 header-search-bar"
                             onChange={handleInputChange}
                             aria-label="Search input"
                         />
@@ -107,7 +107,7 @@ const Header = () => {
                         <Nav.Link href="/">Home</Nav.Link>
                         {!user ? (
                             <>
-                                <Nav.Link href="/signup">Signup</Nav.Link>
+                                <Nav.Link href="/signUp">SignUp</Nav.Link>
                                 <Nav.Link href="/login">Login</Nav.Link>
                             </>
                         ) : (

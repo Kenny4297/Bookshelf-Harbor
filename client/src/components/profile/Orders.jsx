@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { UserContext } from "../../contexts/UserContext";
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [user] = useContext(UserContext);
     const { userId } = useParams();
 
     useEffect(() => {

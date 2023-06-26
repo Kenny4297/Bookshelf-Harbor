@@ -1,48 +1,50 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import image from "../components/assets/images/signup.jpg";
-import Loading from "../components/Loading";
+import image from "../assets/images/signUp.jpg";
+import Loading from "../Loading";
+import axios from "axios";
 
-const SignupPage = (props) => {
+const SignUpPage = () => {
     const defForm = { name: "", email: "", password: "" };
     const [formData, setFormData] = useState(defForm);
-    const [signupResult, setSignupResult] = useState("");
+    const [signUpResult, setSignUpResult] = useState("");
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true); // Added this line
+    const [isLoading, setIsLoading] = useState(true);
+    const [isFormValid, setIsFormValid] = useState(false);
 
     const handleInputChange = (event) => {
-        setFormData({ ...formData, [event.target.name]: event.target.value });
+        const newFormData = { ...formData, [event.target.name]: event.target.value };
+        setFormData(newFormData);
+
+        // If none of the fields are empty, the form is valid
+        setIsFormValid(Object.values(newFormData).every((field) => field !== ''));
     };
 
     useEffect(() => {
         const img = new Image();
         img.src = image;
         img.onload = () => {
-            setIsLoading(false); // Image loaded, set loading state to false
-        }; // Image loaded
+            setIsLoading(false); 
+        }; 
         img.onerror = (error) => console.error("Failed to load image", error);
     }, []);
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        const query = await fetch("/api/user", {
-            method: "post",
-            body: JSON.stringify(formData),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
 
-        if (!query.ok) {
-            setSignupResult("fail");
-        } else {
-            const result = await query.json();
-            if (result && !result.err && result.data && result.data.token) {
-                setSignupResult("success");
-                localStorage.setItem("auth-token", result.data.token); // Set token to local storage
+        try {
+            const result = await axios.post("/api/user", formData);
+            const data = result.data;
+
+            if (data && !data.err && data.data && data.data.token) {
+                setSignUpResult("success");
+                localStorage.setItem("auth-token", data.data.token); // Set token to local storage
             } else {
-                setSignupResult("fail");
+                setSignUpResult("fail");
             }
+        } catch (error) {
+            console.error(error);
+            setSignUpResult("fail");
         }
     };
 
@@ -58,13 +60,13 @@ const SignupPage = (props) => {
         return (
             <>
                 <section className="sign-up-container">
-                    <form className="signup-form">
-                        <section className="signup-form-background">
-                            <h2 className="signup-page-title">Sign Up</h2>
+                    <form className="signUp-form" onSubmit={handleFormSubmit}>
+                        <section className="signUp-form-background">
+                            <h2 className="signUp-page-title">Sign Up</h2>
 
-                            <section className="signup-forms">
+                            <section className="signUp-forms">
                                 <label
-                                    className="signup-label-title"
+                                    className="signUp-label-title"
                                     htmlFor="name"
                                 >
                                     Name
@@ -77,12 +79,15 @@ const SignupPage = (props) => {
                                     className="form-control"
                                     value={formData.name}
                                     onChange={handleInputChange}
+                                    required
+                                    minLength={1}
+                                    
                                 />
                             </section>
 
-                            <section className="signup-forms">
+                            <section className="signUp-forms">
                                 <label
-                                    className="signup-label-title"
+                                    className="signUp-label-title"
                                     htmlFor="email"
                                 >
                                     Email Address
@@ -95,12 +100,13 @@ const SignupPage = (props) => {
                                     className="form-control"
                                     value={formData.email}
                                     onChange={handleInputChange}
+                                    required
                                 />
                             </section>
 
-                            <section className="signup-forms">
+                            <section className="signUp-forms">
                                 <label
-                                    className="signup-label-title"
+                                    className="signUp-label-title"
                                     htmlFor="password"
                                 >
                                     Password
@@ -112,13 +118,16 @@ const SignupPage = (props) => {
                                     className="form-control"
                                     value={formData.password}
                                     onChange={handleInputChange}
+                                    required
+                                    minLength={1}
                                 />
                             </section>
 
                             <div className="form-group mt-2">
                                 <button
-                                    className="signup-buttons"
-                                    onClick={handleFormSubmit}
+                                    type="submit"
+                                    className="signUp-buttons"
+                                    disabled={!isFormValid}
                                 >
                                     Sign Me Up!
                                 </button>
@@ -126,7 +135,8 @@ const SignupPage = (props) => {
 
                             <div className="form-group mt-2">
                                 <button
-                                    className="signup-buttons"
+                                    type="button"
+                                    className="signUp-buttons"
                                     onClick={handleFormSubmitLogin}
                                 >
                                     Login
@@ -135,16 +145,16 @@ const SignupPage = (props) => {
                         </section>
                     </form>
 
-                    {signupResult === "success" && (
+                    {signUpResult === "success" && (
                         <div className="alert alert-success" role="alert">
-                            Signup successful!
+                            SignUp successful!
                             {(window.location.href = "/")}
                         </div>
                     )}
 
-                    {signupResult === "fail" && (
+                    {signUpResult === "fail" && (
                         <div className="alert alert-danger" role="alert">
-                            Signup failed!
+                            SignUp failed!
                         </div>
                     )}
                 </section>
@@ -153,4 +163,4 @@ const SignupPage = (props) => {
     }
 };
 
-export default SignupPage;
+export default SignUpPage;

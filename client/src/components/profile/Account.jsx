@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Image } from "cloudinary-react";
 import Axios from "axios";
@@ -16,7 +16,7 @@ const Account = () => {
         address: "",
         profileImage: "",
     });
-    const [imageSelected, setImageSelected] = useState("");
+
     const [updateResult, setUpdateResult] = useState("");
     const [userUrl, setUserUrl] = useState(null);
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ const Account = () => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     };
 
-    const getUserData = async () => {
+    const getUserData = useCallback(async () => {
         const resp = await Axios.get(`/api/user/${userId}`);
         if (resp.data) {
             setFormData(resp.data);
@@ -42,7 +42,7 @@ const Account = () => {
                 setUserUrl(resp.data.profileImage);
             }
         }
-    };
+    }, [userId]);
 
     const update = async (event) => {
         console.log("Update function firing");
@@ -73,8 +73,6 @@ const Account = () => {
     };
 
     const handleFileChange = async (event) => {
-        setImageSelected(event.target.files[0]);
-
         event.preventDefault();
 
         const formData = new FormData();
@@ -105,12 +103,8 @@ const Account = () => {
 
     useEffect(() => {
         getUserData();
-        console.log(user);
-    }, [userId]);
+    }, [getUserData]);
 
-    useEffect(() => {
-        console.log(userUrl);
-    }, [userUrl]);
 
     return (
         <>

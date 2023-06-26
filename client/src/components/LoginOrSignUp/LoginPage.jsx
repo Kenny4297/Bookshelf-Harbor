@@ -1,21 +1,24 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
-import image from "../components/assets/images/login.jpg";
-import Loading from "../components/Loading";
+import { UserContext } from "../../contexts/UserContext";
+import image from "../assets/images/login.jpg";
+import Loading from "../Loading";
+import axios from 'axios';
 
 const LoginPage = () => {
     const defForm = { email: "", password: "" };
     const [formData, setFormData] = useState(defForm);
     const [loginResult, setLoginResult] = useState("");
     const navigate = useNavigate();
-    const [user, setUser] = useContext(UserContext);
+    // I am not using the 'user' variable, so we deconstruct it (which leaves it out)
+    const {1: setUser} = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(true);
 
-    const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleInputChange = (event) => {
+        setFormData({ ...formData, [event.target.name]: event.target.value });
     };
 
+    // Making sure that the Image loads first, and then the content
     useEffect(() => {
         const img = new Image();
         img.src = image;
@@ -28,29 +31,27 @@ const LoginPage = () => {
     const handleFormSubmit = async (e) => {
         console.log(formData);
         e.preventDefault();
-        const query = await fetch("/api/user/auth", {
-            method: "post",
-            body: JSON.stringify(formData),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        const result = await query.json();
 
-        if (result && !result.err && result.data && result.data.token) {
-            setLoginResult("success");
-            localStorage.setItem("auth-token", result.data.token);
-            setUser(result.data.user);
-            navigate("/");
-        } else {
-            setLoginResult("fail");
+        try {
+            const result = await axios.post("/api/user/auth", formData);
+
+            if (result && result.data && !result.data.err && result.data.data && result.data.data.token) {
+                setLoginResult("success");
+                localStorage.setItem("auth-token", result.data.data.token);
+                setUser(result.data.data.user);
+                navigate("/");
+            } else {
+                setLoginResult("fail");
+            }
+        } catch (error) {
+            console.error("Failed to login", error);
         }
     };
 
     const handleFormSubmitSignUp = (event) => {
         event.preventDefault();
 
-        navigate("/signup");
+        navigate("/signUp");
     };
 
     if (isLoading) {
@@ -111,7 +112,7 @@ const LoginPage = () => {
 
                         <div className="form-group mt-2">
                             <button
-                                className="signup-buttons"
+                                className="signUp-buttons"
                                 onClick={handleFormSubmit}
                                 aria-label="Login button"
                             >
@@ -119,11 +120,11 @@ const LoginPage = () => {
                             </button>
                         </div>
 
-                        <nav className="login-signup-section">
+                        <nav className="login-signUp-section">
                             <p>Not a user? Sign up!</p>
                             <div className="form-group mt-2">
                                 <button
-                                    className="signup-buttons"
+                                    className="signUp-buttons"
                                     onClick={handleFormSubmitSignUp}
                                     aria-label="Sign up button"
                                 >

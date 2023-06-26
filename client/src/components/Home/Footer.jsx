@@ -46,6 +46,7 @@ const Footer = () => {
                 <p className="footer-p">Privacy Policy</p>
                 <p className="footer-p">Terms and Conditions</p>
             </div>
+            
             <div className="footer-column-credit-cards">
                 <p className="footer-p secured-payments">
                     Secured payment gateways:

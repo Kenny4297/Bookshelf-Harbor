@@ -3,12 +3,14 @@ import { UserContext } from "../contexts/UserContext";
 import axios from "axios";
 import styled from "styled-components";
 import login from "../components/assets/images/login.jpg";
-import FeaturedProducts from "../components/Home/FeaturedProducts";
-import CategoriesPage from "./CategoriesPage";
-import Footer from "../components/Home/Footer";
+import FeaturedProducts from "./Home/FeaturedProducts";
+import CategoriesPage from "./Categories/CategoriesPage";
+import Footer from "./Home/Footer";
+import Loading from './Loading';
 
 const HomePage = () => {
     const [user, setUser] = useContext(UserContext);
+    const [isImageLoaded, setImageLoaded] = useState(false);
 
     // This useEffect is used for debugging purposes. It only runs when the component is mounted (the first time it is rendered) and if the user variable changes.
     useEffect(() => {
@@ -47,7 +49,16 @@ const HomePage = () => {
         }
     }, [user && user._id]);
 
-    return (
+    useEffect(() => {
+        const img = new Image();
+        img.src = login;
+        img.onload = () => setImageLoaded(true);
+    }, []);
+
+    if (!isImageLoaded) {
+        return <Loading />;
+    } else {
+        return (
         <>
             <HeroContainer aria-label="Hero section with welcome message">
                 <div className="hero-introduction-text">
@@ -67,6 +78,7 @@ const HomePage = () => {
             <Footer aria-label="Footer section" />
         </>
     );
+        }
 };
 
 export default HomePage;
@@ -78,8 +90,7 @@ const HeroContainer = styled.section`
     flex-direction: column;
     justify-content: center;
     /* align-items: center; */
-    min-width: 100vw;
-    max-width: 100vw;
+    width: 100%;
     height: 100vh;
 
     /* border: 3px solid red; */

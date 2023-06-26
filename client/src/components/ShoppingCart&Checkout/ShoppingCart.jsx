@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
-import Loading from '../components/Loading'
+import { UserContext } from "../../contexts/UserContext";
+import Loading from '../Loading'
 
 const ShoppingCart = () => {
     const [cartItems, setCartItems] = useState([]);

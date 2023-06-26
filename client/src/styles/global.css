@@ -218,8 +218,7 @@ element.style {
   right: 0;
   bottom: 0;
   z-index: -4;
-
-  background: url('../components/assets/images/signUp.jpg') no-repeat center center; 
+  background: url('../components/assets/images/background-sign-up.jpg') no-repeat center center; 
   background-size: cover;
 }
 

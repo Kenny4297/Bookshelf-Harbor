@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Header, HomePage } from './components'
-import { ProfilePage } from './components/Profile'
+import { ProfilePage } from './components/Profile_test'
 import { Login, SignUp } from './components/LoginOrSignUp'
 import { UserContext } from './contexts/UserContext';
 import { ShoppingCart, CheckoutForm, ThankYou } from './components/ShoppingCart&Checkout';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/global.css';
-import Account from './components/Profile/Account';
-import Orders from './components/Profile/Orders';
+import Account from './components/Profile_test/Account';
+import Orders from './components/Profile_test/Orders';
 import { CategoriesPage, CategoryComponent } from './components/Categories'
 import Loading from './components/Loading';
 import { BookDetailsPage, IndividualBook } from './components/SearchForBook'

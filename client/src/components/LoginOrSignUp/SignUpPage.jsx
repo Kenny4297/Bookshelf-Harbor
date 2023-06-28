@@ -10,7 +10,6 @@ const SignUpPage = () => {
     const [signUpResult, setSignUpResult] = useState("");
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
-    // const [isFormValid, setIsFormValid] = useState(false);
     const [emailExists, setEmailExists] = useState('');
     const [nameError, setNameError] = useState('');
 
@@ -18,9 +17,6 @@ const SignUpPage = () => {
     const handleInputChange = (event) => {
         const newFormData = { ...formData, [event.target.name]: event.target.value };
         setFormData(newFormData);
-
-        // If none of the fields are empty, the form is valid
-        // setIsFormValid(Object.values(newFormData).every((field) => field !== ''));
     };
 
     useEffect(() => {

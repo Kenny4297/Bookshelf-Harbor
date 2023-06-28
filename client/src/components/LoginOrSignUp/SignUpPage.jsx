@@ -11,6 +11,7 @@ const SignUpPage = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [isFormValid, setIsFormValid] = useState(false);
+    const [emailExists, setEmailExists] = useState('')
 
     const handleInputChange = (event) => {
         const newFormData = { ...formData, [event.target.name]: event.target.value };
@@ -31,23 +32,34 @@ const SignUpPage = () => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-
+    
         try {
             const result = await axios.post("/api/user", formData);
-            const data = result.data;
-
-            if (data && !data.err && data.data && data.data.token) {
-                setSignUpResult("success");
-                localStorage.setItem("auth-token", data.data.token);
-            } else {
-                setSignUpResult("fail");
+    
+            if (result.status === 200) {
+                const data = result.data;
+    
+                if (data && !data.err && data.data && data.data.token) {
+                    setSignUpResult("success");
+                    localStorage.setItem("auth-token", data.data.token);
+                    setEmailExists("");
+                } else {
+                    setSignUpResult("fail");
+                    setEmailExists("");
+                }
             }
         } catch (error) {
             console.error(error);
-            setSignUpResult("fail");
+            if (error.response && error.response.status === 400) {
+                setSignUpResult("duplicate");
+                setEmailExists("Sorry, but a user already exists with this email!");
+            } else {
+                setSignUpResult("fail");
+                setEmailExists("");
+            }
         }
     };
-
+    
     const handleFormSubmitLogin = (event) => {
         event.preventDefault();
 
@@ -123,7 +135,9 @@ const SignUpPage = () => {
                                 />
                             </section>
 
-                            <div className="form-group mt-2">
+                            <p className="sign-up-duplicate-message">{emailExists}</p>
+
+                            <div className="form-group mt-2 sign-up-duplicate-message-section">
                                 <button
                                     type="submit"
                                     className="sign-up-buttons"
@@ -149,6 +163,12 @@ const SignUpPage = () => {
                         <div className="alert alert-success" role="alert">
                             SignUp successful!
                             {(window.location.href = "/")}
+                        </div>
+                    )}
+
+                    {signUpResult === "duplicate" && (
+                        <div className="alert alert-warning" role="alert">
+                            User with this email already exists!
                         </div>
                     )}
 

@@ -24,6 +24,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Roboto Slab', serif; 
 }
 
 element.style {
@@ -95,13 +96,33 @@ element.style {
   border: 2px solid var(--white-ash);
 }
 
-@media (max-width: 794px) {
+
+
+@media (max-width: 810px) {
   .header-links {
     font-size:.82rem;
     position: relative;
     top:.1rem;
   }
 }
+
+@media (max-width: 767.5px) {
+  .profile-pic {
+    display: none;
+  }
+  .nav-link {
+    font-size: 2rem;
+  }
+  .navbar-collapse {
+    /* background-color: blue; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
 
 
 
@@ -291,7 +312,17 @@ element.style {
   }
 }
 
+.sign-up-duplicate-message-section {
+  display: flex;
+}
 
+.sign-up-duplicate-message {
+  font-weight: bold;
+  color: black;
+  font-size: 1rem;
+  position: relative;
+  top: .8rem;
+}
 
 
 
@@ -407,7 +438,6 @@ element.style {
   color: var(--light-teak);
   /* border: 2px solid red; */
   margin-top: -2rem;
-
 }
 
 .profile-image-container {
@@ -417,6 +447,17 @@ element.style {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+.remove-image-button {
+  width: 15rem;
+  margin: 1rem 0rem;
+  background-color: white;  
+  border: 2px solid var(--light-teak);
+  border-radius: 5px;
+  color: var(--light-teak);
+  /* border: 2px solid red; */
+  /* margin-top: -2rem; */
 }
 
 @media (max-width: 780px) {

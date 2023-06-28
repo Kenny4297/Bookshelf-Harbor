@@ -122,6 +122,7 @@ const Header = () => {
                                             border: "1px solid var(--dark-wood)",
                                             marginRight: "2rem",
                                         }}
+                                        className="profile-pic"
                                     />
                                 )}
                             </>

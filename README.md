@@ -17,7 +17,7 @@
 This project is licensed under the MIT license.
 
 ## **Project Overview**
-Nile is a state-of-the-art e-commerce platform where book-lovers can search, filter, and "buy" books from a vast range of titles.  Showcasing elements like a daily-refreshed 'featured books' section, secure Stripe payments, and a user profile with image upload and order history, Nile fuses engaging user experience with modern web development practices. Engaging and efficient, Nile is a testament to modern e-commerce.
+Nile is a state-of-the-art e-commerce platform where book-lovers can explore and 'buy' from a vast range of titles. Each day, users are introduced to an array of 'featured books', providing a dynamic and engaging experience. Nile prioritizes inclusivity and efficiency by adhering to Web Content Accessibility Guidelines (WCAG) and use of semantic HTML. Moreover, Nile ensures secure transactions with Stripe payments and offers personalized user experiences, including profile image upload and order history tracking. Nile is not just an e-commerce platform; it's a testament to how modern web development can merge with user-centric design to create compelling digital experiences.
 
 ## **Login Page**
 ![](./client/src/components/assets/images/loginScreenshot.png)

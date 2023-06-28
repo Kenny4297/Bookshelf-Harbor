@@ -159,7 +159,6 @@ const BookDetailsPage = () => {
         axios
             .post(`/api/user/${user._id}/cart`, bookToAdd)
             .then((response) => {
-                console.log(response);
                 setCartItems((prevItems) => [...prevItems, bookToAdd]);
                 setIsAddedToCart(true);
             })

@@ -90,6 +90,22 @@ const Account = () => {
         }
     };
 
+    const removeImage = async () => {
+        if(userUrl) {
+            let updatedData = { ...formData, profileImage: "" };  
+
+            const resp = await Axios.put(`/api/user/${userId}`, updatedData);
+
+            if (resp.status === 200) {
+                setUserUrl("");  
+                setFormData(updatedData);  
+                alert("Profile image removed successfully!");
+            } else {
+                alert("Failed to remove profile image. Please try again.");
+            }
+        }
+    };
+
     const handleResetPasswordClick = (event) => {
         event.preventDefault();
         setShowMessage(!showMessage);
@@ -264,6 +280,14 @@ const Account = () => {
                             aria-label="Upload File"
                         />
                     </label>
+
+                    <button 
+                        onClick={removeImage} 
+                        className="remove-image-button"
+                        aria-label="Remove Profile Image"
+                    >
+                        Remove Profile Image
+                    </button>
                 </section>
             </section>
         </>

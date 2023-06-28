@@ -10,15 +10,17 @@ const SignUpPage = () => {
     const [signUpResult, setSignUpResult] = useState("");
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [emailExists, setEmailExists] = useState('')
+    // const [isFormValid, setIsFormValid] = useState(false);
+    const [emailExists, setEmailExists] = useState('');
+    const [nameError, setNameError] = useState('');
+
 
     const handleInputChange = (event) => {
         const newFormData = { ...formData, [event.target.name]: event.target.value };
         setFormData(newFormData);
 
         // If none of the fields are empty, the form is valid
-        setIsFormValid(Object.values(newFormData).every((field) => field !== ''));
+        // setIsFormValid(Object.values(newFormData).every((field) => field !== ''));
     };
 
     useEffect(() => {
@@ -33,6 +35,19 @@ const SignUpPage = () => {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
     
+        setEmailExists("");
+        setNameError("");
+    
+        if (formData.name.trim() === "") {
+            setNameError("Please input a name to sign up!");
+            return; 
+        }
+    
+        if (formData.email.trim() === "" || formData.password.trim() === "") {
+            setEmailExists("Please make sure to fill in all fields!");
+            return; 
+        }
+    
         try {
             const result = await axios.post("/api/user", formData);
     
@@ -42,23 +57,28 @@ const SignUpPage = () => {
                 if (data && !data.err && data.data && data.data.token) {
                     setSignUpResult("success");
                     localStorage.setItem("auth-token", data.data.token);
-                    setEmailExists("");
                 } else {
                     setSignUpResult("fail");
-                    setEmailExists("");
                 }
             }
-        } catch (error) {
-            console.error(error);
-            if (error.response && error.response.status === 400) {
-                setSignUpResult("duplicate");
-                setEmailExists("Sorry, but a user already exists with this email!");
-            } else {
-                setSignUpResult("fail");
-                setEmailExists("");
-            }
-        }
+            } catch (error) {
+                    if (error.response && error.response.status === 400) {
+                        setSignUpResult("duplicate");
+                        setEmailExists("Sorry, but a user already exists with this email!");
+                    } else {
+                        setSignUpResult("fail");
+                        if(error.response){
+                            if(error.response.status !== 400){
+                                console.error(error);
+                            }
+                        }else{
+                            console.error(error);
+                        }
+                    }
+                }
     };
+    
+    
     
     const handleFormSubmitLogin = (event) => {
         event.preventDefault();
@@ -91,7 +111,6 @@ const SignUpPage = () => {
                                     className="form-control"
                                     value={formData.name}
                                     onChange={handleInputChange}
-                                    required
                                     minLength={1}
                                     
                                 />
@@ -135,13 +154,13 @@ const SignUpPage = () => {
                                 />
                             </section>
 
-                            <p className="sign-up-duplicate-message">{emailExists}</p>
+                            {emailExists && <p className="sign-up-duplicate-message">{emailExists}</p>}
+                            {nameError && <p className="sign-up-name-error-message">{nameError}</p>}
 
                             <div className="form-group mt-2 sign-up-duplicate-message-section">
                                 <button
                                     type="submit"
                                     className="sign-up-buttons"
-                                    disabled={!isFormValid}
                                 >
                                     Sign Me Up!
                                 </button>
@@ -175,6 +194,12 @@ const SignUpPage = () => {
                     {signUpResult === "fail" && (
                         <div className="alert alert-danger" role="alert">
                             SignUp failed!
+                        </div>
+                    )}
+
+                    {signUpResult === "noName" && (
+                        <div className="alert alert-warning" role="alert">
+                            Please input a name to sign up!
                         </div>
                     )}
                 </section>

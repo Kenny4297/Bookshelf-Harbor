@@ -312,11 +312,8 @@ element.style {
   }
 }
 
-.sign-up-duplicate-message-section {
-  display: flex;
-}
-
-.sign-up-duplicate-message {
+.sign-up-duplicate-message,
+.sign-up-name-error-message {
   font-weight: bold;
   color: black;
   font-size: 1rem;

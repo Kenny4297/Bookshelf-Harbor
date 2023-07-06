@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import image from "../assets/images/background-sign-up.jpg";
 import Loading from "../Loading";
 import axios from "axios";
+import { UserContext } from "../../contexts/UserContext";
 
 const SignUpPage = () => {
     const defForm = { name: "", email: "", password: "" };
@@ -12,7 +13,8 @@ const SignUpPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [emailExists, setEmailExists] = useState('');
     const [nameError, setNameError] = useState('');
-
+    const location = useLocation();
+    const [user, setUser] = useContext(UserContext);
 
     const handleInputChange = (event) => {
         const newFormData = { ...formData, [event.target.name]: event.target.value };
@@ -53,33 +55,33 @@ const SignUpPage = () => {
                 if (data && !data.err && data.data && data.data.token) {
                     setSignUpResult("success");
                     localStorage.setItem("auth-token", data.data.token);
+                    setUser(data.data.user); // Update the user context
+                    navigate(location.state?.from || '/'); // Use location state here
                 } else {
                     setSignUpResult("fail");
                 }
             }
-            } catch (error) {
-                    if (error.response && error.response.status === 400) {
-                        setSignUpResult("duplicate");
-                        setEmailExists("Sorry, but a user already exists with this email!");
-                    } else {
-                        setSignUpResult("fail");
-                        if(error.response){
-                            if(error.response.status !== 400){
-                                console.error(error);
-                            }
-                        }else{
-                            console.error(error);
-                        }
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                setSignUpResult("duplicate");
+                setEmailExists("Sorry, but a user already exists with this email!");
+            } else {
+                setSignUpResult("fail");
+                if(error.response){
+                    if(error.response.status !== 400){
+                        console.error(error);
                     }
+                }else{
+                    console.error(error);
                 }
+            }
+        }
     };
-    
-    
     
     const handleFormSubmitLogin = (event) => {
         event.preventDefault();
 
-        navigate("/login");
+        navigate("/login", { state: { from: location.state?.from } });
     };
 
     if (isLoading) {
@@ -168,9 +170,18 @@ const SignUpPage = () => {
                                     className="sign-up-buttons"
                                     onClick={handleFormSubmitLogin}
                                 >
-                                    Login
+                                    Back to Login
                                 </button>
                             </div>
+
+                            <button
+                                className="sign-up-buttons"
+                                onClick={() => navigate('/')}
+                                aria-label="Home button"
+                                style={{marginTop:'.5rem'}}
+                            >
+                                Home
+                            </button>
                         </section>
                     </form>
 

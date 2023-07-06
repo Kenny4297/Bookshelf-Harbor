@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import image from "../assets/images/login.jpg";
 import Loading from "../Loading";
@@ -10,15 +10,14 @@ const LoginPage = () => {
     const [formData, setFormData] = useState(defForm);
     const [loginResult, setLoginResult] = useState("");
     const navigate = useNavigate();
-    // I am not using the 'user' variable, so we deconstruct it (which leaves it out)
-    const {1: setUser} = useContext(UserContext);
+    const location = useLocation();
+    const [user, setUser] = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(true);
 
     const handleInputChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     };
 
-    // Making sure that the Image loads first, and then the content
     useEffect(() => {
         const img = new Image();
         img.src = image;
@@ -30,15 +29,15 @@ const LoginPage = () => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-
+    
         try {
             const result = await axios.post("/api/user/auth", formData);
-
+    
             if (result && result.data && !result.data.err && result.data.data && result.data.data.token) {
                 setLoginResult("success");
                 localStorage.setItem("auth-token", result.data.data.token);
                 setUser(result.data.data.user);
-                navigate("/");
+                navigate(location.state?.from || '/');
             } else {
                 setLoginResult("fail");
             }
@@ -50,7 +49,7 @@ const LoginPage = () => {
     const handleFormSubmitSignUp = (event) => {
         event.preventDefault();
 
-        navigate("/signUp");
+        navigate("/signUp", { state: { from: location.state?.from } });
     };
 
     if (isLoading) {
@@ -127,10 +126,16 @@ const LoginPage = () => {
                                 >
                                     Sign Up!
                                 </button></span></p>
-                            <div className="form-group mt-2">
-                                
-                            </div>
                         </nav>
+                            <div style={{margin:'0 auto'}}>
+                            <button
+                                className="sign-up-buttons"
+                                onClick={() => navigate('/')}
+                                aria-label="Home button"
+                            >
+                                Home
+                            </button>
+                            </div>
                     </section>
                 </form>
 

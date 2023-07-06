@@ -1,5 +1,4 @@
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
     Navbar,
     Nav,
@@ -7,23 +6,21 @@ import {
     Form
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useNavigate } from "react-router-dom";
 import React, { useContext, useState} from "react";
 import { UserContext } from "../contexts/UserContext";
 
 const Header = () => {
+    const navigate = useNavigate();
     const [user, setUser] = useContext(UserContext);
 
     const logout = () => {
         localStorage.removeItem("auth-token");
         setUser(null);
-        navigate("/login");
+        navigate("/");
     };
 
     //Here we are keeping track of the data in the search bar. If it changes, the state will be updated
     const [searchTerm, setSearchTerm] = useState("");
-
-    const navigate = useNavigate();
 
     const handleInputChange = (event) => {
         setSearchTerm(event.target.value);
@@ -35,6 +32,14 @@ const Header = () => {
         navigate(`/individual-book/${query}`, {
             state: { searchTerm: searchTerm.replace(/[+,]/g, "") },
         });
+    };
+
+    const navigateTo = (path) => {
+        if(user) {
+          navigate(path);
+        } else {
+          navigate("/login", { state: { from: path } });
+        }
     };
 
     return (
@@ -84,51 +89,72 @@ const Header = () => {
                     <Nav
                         className="ml-auto justify-content-end"
                         style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            flexGrow: "1",
+                        display: "flex",
+                        justifyContent: "center",
+                        flexGrow: "1",
                         }}
                         aria-label="Page navigation"
                     >
-                        <Nav.Link className="header-links" href="/">Home</Nav.Link>
-                        {!user ? (
+                        <Nav.Link className="header-links" onClick={() => navigate("/")}>Home</Nav.Link>
+
+                        <Nav.Link 
+                            className="header-links" 
+                            onClick={() => navigateTo(`/profile/${user?._id}`)}
+                        >
+                            Profile
+                        </Nav.Link>
+
+                        <Nav.Link 
+                            className="header-links" 
+                            onClick={() => navigateTo(`/checkout/${user?._id}`)}
+                        >
+                            Checkout
+                        </Nav.Link>
+
+                        <Nav.Link 
+                            className="header-links" 
+                            onClick={() => navigateTo(`/shoppingCart/${user?._id}`)}
+                        >
+                            Shopping Cart
+                        </Nav.Link>
+
+                        {user ? (
                             <>
-                                <Nav.Link className="header-links" href="/signUp">SignUp</Nav.Link>
-                                <Nav.Link href="/login">Login</Nav.Link>
-                            </>
-                        ) : (
-                            <>
-                                <Nav.Link className="header-links" href={`/profile/${user._id}`}>
-                                    Profile
-                                </Nav.Link>
                                 <Nav.Link
-                                    href="##"
                                     onClick={logout}
                                     aria-label="Logout"
                                     className="header-links"
                                 >
                                     Logout
                                 </Nav.Link>
-                                <Nav.Link className="header-links" href={`/shoppingCart/${user._id}`}>
-                                    Shopping Cart
-                                </Nav.Link>
-                                {user && user.profileImage && (
-                                    <img
-                                        src={user.profileImage}
-                                        alt="The user's profile pic"
-                                        style={{
-                                            width: "40px",
-                                            borderRadius: "20px",
-                                            border: "1px solid var(--dark-wood)",
-                                            marginRight: "2rem",
-                                        }}
-                                        className="profile-pic"
-                                    />
+                                {user.profileImage && (
+                                <img
+                                    src={user.profileImage}
+                                    alt="The user's profile pic"
+                                    style={{
+                                    width: "40px",
+                                    borderRadius: "20px",
+                                    border: "1px solid var(--dark-wood)",
+                                    marginRight: "2rem",
+                                    }}
+                                    className="profile-pic"
+                                />
                                 )}
+                            </>
+                        ) : (
+                            <>
+                                <Nav.Link className="header-links" onClick={() => navigate("/signUp")}>
+                                    Sign up
+                                </Nav.Link>
+                                <Nav.Link onClick={() => navigate("/login")}>
+                                    Login
+                                </Nav.Link>
                             </>
                         )}
                     </Nav>
                 </Navbar.Collapse>
+
+
             </Navbar>
         </header>
     );

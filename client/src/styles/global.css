@@ -50,7 +50,7 @@ element.style {
 /* Header Section */
 .header-search-bar:focus,
 .header-search-bar:active,
-.header-search-bar:visited,
+.header-search-bar:visited
 .nav-link:hover {
   color: black;
 }
@@ -76,6 +76,10 @@ element.style {
   right: 0; 
 }
 
+.nav-link:visited {
+  color: var(--white-ash)
+}
+
 .header-search-button {
   display: inline-block;
   padding: .25rem .5rem;
@@ -94,6 +98,18 @@ element.style {
   color: var(--white-ash);
   background-color: var(--gingerbread);
   border: 2px solid var(--white-ash);
+}
+
+.nav-link:focus,
+.nav-link:active,
+.nav-link:visited {
+  color: var(--white-ash);
+}
+
+.header-links:focus,
+.header-links:active,
+.header-links:visited {
+  color: var(--white-ash);
 }
 
 
@@ -180,7 +196,7 @@ element.style {
 
 
 .form-background, .sign-up-form-background {
-  z-index: 10;
+  /* z-index: 10; */
   width: 35rem;
   display: flex;
   justify-content: center;

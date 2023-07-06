@@ -120,15 +120,15 @@ const LoginPage = () => {
                         </div>
 
                         <nav className="login-sign-up-section">
-                            <p>Not a user? Sign up!</p>
-                            <div className="form-group mt-2">
-                                <button
+                            <p style={{color: 'black', fontWeight:'bold'}}>Not a user? <span><button
                                     className="sign-up-buttons"
                                     onClick={handleFormSubmitSignUp}
                                     aria-label="Sign up button"
                                 >
-                                    Sign Up
-                                </button>
+                                    Sign Up!
+                                </button></span></p>
+                            <div className="form-group mt-2">
+                                
                             </div>
                         </nav>
                     </section>

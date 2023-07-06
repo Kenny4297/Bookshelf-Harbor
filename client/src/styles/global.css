@@ -152,8 +152,8 @@ element.style {
 
 .login-form-container, .sign-up-form {
   width: 100%;
-  padding-left: 10rem;
-  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
   height: 100rem;
 }
 

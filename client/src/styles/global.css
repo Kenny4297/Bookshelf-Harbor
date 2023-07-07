@@ -58,7 +58,8 @@ element.style {
 .nav-link {
   position: relative;
   font-weight: 600;
-  color: var(--white-ash)
+  /* color: var(--white-ash); */
+  color: black;
 }
 
 .nav-link::after {
@@ -85,7 +86,7 @@ element.style {
   padding: .25rem .5rem;
   text-decoration: none;
   background-color: var(--white-ash);  
-  color: var(--gingerbread);             
+  color: black;
   border-radius: 3px;
   text-align: center;
   height: 2.5rem;
@@ -374,7 +375,8 @@ element.style {
   padding: 1rem 1rem;
   text-decoration: none;
   background-color: var(--white-ash);  
-  color: var(--gingerbread);             
+  /* color: var(--gingerbread);              */
+  color: black;
   border-radius: 3px;
   text-align: center;
   margin: 1rem;

@@ -122,7 +122,12 @@ const CheckoutFormInner = () => {
         style: {
             base: {
                 color: "black",
-                fontSize: '16px',
+                fontSize: '1.5rem',
+                padding: '20px',
+                height: '2rem',
+                backgroundColor: 'white',
+                border: '6px solid #7F7F7F', 
+                borderRadius: '5px', 
                 "::placeholder": {
                     color: "black",
                 },
@@ -133,6 +138,7 @@ const CheckoutFormInner = () => {
             },
         },
     };
+    
 
     useEffect(() => {
         const fetchShoppingCartData = async () => {

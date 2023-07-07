@@ -21,7 +21,7 @@ const cutOffAtSpecialCharacter = (text) => {
             if (char === "-") {
                 consecutiveDashesCount++;
                 if (consecutiveDashesCount >= 3) {
-                    pos = i - 2; // Remove the last two dashes
+                    pos = i - 2; 
                     break;
                 }
             } else {
@@ -29,7 +29,7 @@ const cutOffAtSpecialCharacter = (text) => {
                 break;
             }
         } else {
-            consecutiveDashesCount = 0; // Reset consecutive dashes count for other characters
+            consecutiveDashesCount = 0; 
         }
     }
 
@@ -52,8 +52,8 @@ const BookDetailsPage = () => {
     const [, setCartItems] = useState(user?.shoppingCart?.books || []);
     const [isAddedToCart, setIsAddedToCart] = useState(false);
 
-    const MIN_PRICE = 5.0; // $5.00
-    const MAX_PRICE = 20.0; // $20.00
+    const MIN_PRICE = 5.0; 
+    const MAX_PRICE = 20.0; 
 
     const calculateBookPrice = (title) => {
         const titleLength = title.length;
@@ -169,7 +169,6 @@ const BookDetailsPage = () => {
     };
     
     
-
     return (
         <>
             {!cover ? (

@@ -83,7 +83,6 @@ const LoginPage = () => {
                         className="form-background"
                         aria-label="Login form content"
                     >
-                        <h2 className="welcome-to-nile">Welcome to Nile</h2>
                         <h3 className="login-h3">Login</h3>
 
                         <section

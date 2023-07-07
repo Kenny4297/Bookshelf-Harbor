@@ -192,6 +192,8 @@ element.style {
 
 .label-title  {
   color: black;
+  margin-top: 1rem;
+
 }
 
 
@@ -211,7 +213,7 @@ element.style {
 
 .login-forms, .sign-up-forms {
   /* border: 2px solid red; */
-  width: 30rem;
+  width: 20rem;
 }
 
 .login-sign-up-section {
@@ -230,6 +232,7 @@ element.style {
   width: 100vw; 
   height: 100vh;
   overflow: hidden; 
+  /* border: 2px solid green; */
 }
 
 .sign-up-form-background {
@@ -279,7 +282,16 @@ element.style {
 .sign-up-label-title {
   color: black;
   font-weight: bold;
+  margin-top: 1rem;
 }
+
+  .sign-up-forms input {
+    width: 90%;
+    /* border: 2px solid blue; */
+    margin: 0rem 0rem;
+  }
+
+
 
 @media (max-width: 900px) {
   .login-form-container, .sign-up-container, .sign-up-form {

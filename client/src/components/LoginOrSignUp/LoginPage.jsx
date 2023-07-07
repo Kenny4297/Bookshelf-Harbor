@@ -13,6 +13,8 @@ const LoginPage = () => {
     const location = useLocation();
     const [user, setUser] = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(true);
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
 
     const handleInputChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -29,6 +31,19 @@ const LoginPage = () => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+
+        setEmailError("");
+        setPasswordError("");
+
+        if (formData.email.trim() === "") {
+            setEmailError("Please enter your email!");
+            return; 
+        }
+    
+        if (formData.password.trim() === "") {
+            setPasswordError("Please enter your password!");
+            return; 
+        }
     
         try {
             const result = await axios.post("/api/user/auth", formData);
@@ -79,7 +94,7 @@ const LoginPage = () => {
                                 Email Address
                             </label>
                             <input
-								id="email"
+                                id="email"
                                 type="text"
                                 name="email"
                                 placeholder="john@gmail.com"
@@ -88,6 +103,7 @@ const LoginPage = () => {
                                 onChange={handleInputChange}
                                 aria-label="Email input field"
                             />
+                            {emailError && <p className="login-error-message">{emailError}</p>}
                         </section>
 
                         <section
@@ -98,7 +114,7 @@ const LoginPage = () => {
                                 Password
                             </label>
                             <input
-								id="password"
+                                id="password"
                                 type="password"
                                 name="password"
                                 className="form-control"
@@ -106,6 +122,7 @@ const LoginPage = () => {
                                 onChange={handleInputChange}
                                 aria-label="Password input field"
                             />
+                            {passwordError && <p className="login-error-message">{passwordError}</p>}
                         </section>
 
                         <div className="form-group mt-2">

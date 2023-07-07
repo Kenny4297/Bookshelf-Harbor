@@ -88,7 +88,7 @@ const SignUpPage = () => {
         return <Loading />;
     } else {
         return (
-            <>
+            <div style={{border: '2px solid green'}}>
                 <section className="sign-up-container">
                     <form className="sign-up-form" onSubmit={handleFormSubmit}>
                         <section className="sign-up-form-background">
@@ -170,7 +170,7 @@ const SignUpPage = () => {
                                     className="sign-up-buttons"
                                     onClick={handleFormSubmitLogin}
                                 >
-                                    Back to Login
+                                    Go to Login
                                 </button>
                             </div>
 
@@ -183,6 +183,7 @@ const SignUpPage = () => {
                                 Home
                             </button>
                         </section>
+
                     </form>
 
                     {signUpResult === "success" && (
@@ -210,7 +211,7 @@ const SignUpPage = () => {
                         </div>
                     )}
                 </section>
-            </>
+            </div>
         );
     }
 };

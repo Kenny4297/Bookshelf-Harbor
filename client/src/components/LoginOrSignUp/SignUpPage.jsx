@@ -14,7 +14,7 @@ const SignUpPage = () => {
     const [emailExists, setEmailExists] = useState('');
     const [nameError, setNameError] = useState('');
     const location = useLocation();
-    const [user, setUser] = useContext(UserContext);
+    const [, setUser] = useContext(UserContext);
 
     const handleInputChange = (event) => {
         const newFormData = { ...formData, [event.target.name]: event.target.value };

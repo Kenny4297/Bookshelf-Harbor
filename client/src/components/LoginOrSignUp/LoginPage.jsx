@@ -11,7 +11,7 @@ const LoginPage = () => {
     const [loginResult, setLoginResult] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
-    const [user, setUser] = useContext(UserContext);
+    const [, setUser] = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(true);
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");

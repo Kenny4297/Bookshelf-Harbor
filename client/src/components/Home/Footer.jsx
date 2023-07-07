@@ -1,11 +1,8 @@
 import React from "react";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
 import Visa from "../assets/images/visa.png";
 import MasterCard from "../assets/images/mastercard.png";
 import AmEx from "../assets/images/american-express.png";
 import Discover from "../assets/images/discover.png";
-
-import { FaUser } from "react-icons/fa";
 
 const Footer = () => {
     return (

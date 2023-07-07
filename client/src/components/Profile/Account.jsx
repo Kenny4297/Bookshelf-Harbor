@@ -12,7 +12,7 @@ const Account = () => {
         email: "",
         password: "",
         name: "",
-        phone: "",
+        phoneNumber: "",
         address: "",
         profileImage: "",
     });
@@ -36,6 +36,7 @@ const Account = () => {
 
     const getUserData = useCallback(async () => {
         const resp = await Axios.get(`/api/user/${userId}`);
+        console.log(resp.data);
         if (resp.data) {
             setFormData(resp.data);
             if (resp.data.profileImage) {
@@ -169,18 +170,18 @@ const Account = () => {
                             />
 
                             <label
-                                htmlFor="phone"
+                                htmlFor="phoneNumber"
                                 className="account-form-label"
                             >
                                 Phone Number
                             </label>
                             <input
                                 type="text"
-                                id="phone"
+                                id="phoneNumber"
                                 className="form-control"
-                                name="phone"
+                                name="phoneNumber"
                                 placeholder={
-                                    formData.phone
+                                    formData.phoneNumber
                                 }
                                 onChange={handleInputChange}
                                 aria-label="Phone Number"

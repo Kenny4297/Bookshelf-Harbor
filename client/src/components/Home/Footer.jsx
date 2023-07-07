@@ -9,37 +9,7 @@ import { FaUser } from "react-icons/fa";
 
 const Footer = () => {
     return (
-        <footer className="footer-container">
-            <section className="footer-column">
-                <p className="footer-p">Developer: Kedgard Cordero</p>
-                <a
-                    href="https://kenny4297.github.io/Website/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Kedgard Cordero's website"
-                >
-                    <FaUser size={30} />
-                </a>
-
-                <a
-                    href="https://www.linkedin.com/in/kedgard-cordero/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Kedgard Cordero's LinkedIn profile"
-                >
-                    <FaLinkedin size={30} />
-                </a>
-
-                <a
-                    href="https://github.com/Kenny4297"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Kedgard Cordero's GitHub profile"
-                >
-                    <FaGithub size={30} />
-                </a>
-            </section>
-            
+        <footer className="footer-container">            
             <div className="footer-column-about-us">
                 <p className="footer-p">About us</p>
                 <p className="footer-p">Delivery Information</p>

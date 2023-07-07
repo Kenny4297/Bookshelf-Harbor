@@ -57,8 +57,6 @@ element.style {
 
 .nav-link {
   position: relative;
-  font-weight: 600;
-  /* color: var(--white-ash); */
   color: black;
 }
 
@@ -75,10 +73,6 @@ element.style {
 
 .nav-link:hover::after {
   right: 0; 
-}
-
-.nav-link:visited {
-  color: var(--white-ash)
 }
 
 .header-search-button {
@@ -102,15 +96,17 @@ element.style {
 }
 
 .nav-link:focus,
-.nav-link:active,
-.nav-link:visited {
-  color: var(--white-ash);
+.nav-link:active {
+  color: black;
 }
 
 .header-links:focus,
-.header-links:active,
-.header-links:visited {
-  color: var(--white-ash);
+.header-links:active {
+  color: black;
+}
+
+.nav-link:visited, .header-links:visited {
+  color: black;
 }
 
 
@@ -361,7 +357,7 @@ element.style {
 }
 
 .profile-h2 {
-  margin-top: 3rem;
+  margin-top: 6rem;
   color: var(--gingerbread);
   border-bottom: 2px solid var(--light-teak);
 }
@@ -1240,31 +1236,14 @@ element.style {
 /* Footer Section */
 .footer-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  /* justify-content: center; */
   padding: 1rem;
   background-color: var(--grey-wood);
   color: white;
   padding-bottom: 4rem;
   /* border: 2px solid green; */
   padding: 2rem 4rem;
-}
-
-@media (max-width: 700px) {
-  .footer-container {
-    flex-direction: column;
-  }
-  .footer-column {
-    margin: 0 auto;
-  }
-  .footer-column a {
-    margin: 0 auto;
-  }
-  .footer-column-credit-cards {
-    margin: 0 auto;
-    text-align: center;
-    align-items: center;
-    /* border: 2px solid green; */
-  }
 }
 
 .footer-p {
@@ -1277,17 +1256,13 @@ element.style {
   font-size:1.5rem;
 }
 
-.footer-column {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
 .footer-column-about-us {
-  text-align: center;
-  padding-top: 2rem;
-
+  /* text-align: center; */
+  /* padding-top: 2rem; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem; 
 }
 
 .footer-column a {
@@ -1309,6 +1284,28 @@ element.style {
   padding: 1rem 1rem;
 }
 
+.footer-p {
+      /* font-weight: bold; */
+    font-size:1.25rem;
+}
+
+@media (max-width: 700px) {
+  .footer-container {
+    flex-direction: column;
+  }
+  .footer-column {
+    margin: 0 auto;
+  }
+  .footer-column a {
+    margin: 0 auto;
+  }
+  .footer-column-credit-cards {
+    margin: 0 auto;
+    text-align: center;
+    align-items: center;
+    /* border: 2px solid green; */
+  }
+}
 
 
 

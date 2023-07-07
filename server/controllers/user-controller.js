@@ -118,10 +118,8 @@ module.exports = {
 
     // 'api/user/me'
     async getCurrentUserWithToken(req, res) {
-        // Extract the JWT token from the header
         const token = req.headers["auth-token"];
 
-        // If no token exists, return an error
         if (!token) {
             return res
                 .status(401)
@@ -130,10 +128,8 @@ module.exports = {
 
         let payload;
         try {
-            // If a token does exist, verify it and get the payload
             payload = jwt.verify(token, process.env.JWT_SECRET);
         } catch (error) {
-            // If the token is invalid (for instance, if it is expired), return an error
             return res
                 .status(401)
                 .json({
@@ -142,7 +138,6 @@ module.exports = {
                 });
         }
 
-        // The payload should contain an ID, if it doesn't, that's an error
         if (!payload || !payload.id) {
             return res
                 .status(401)
@@ -150,7 +145,6 @@ module.exports = {
         }
 
         try {
-            // Retrieve the user by their ID
             const user = await User.findById(payload.id)
                 .select("_id email shoppingCart profileImage")
                 .populate({
@@ -158,16 +152,13 @@ module.exports = {
                     populate: { path: "books" },
                 });
 
-            // If no user is found, return an error
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
 
-            // If a user is found, return their data
             res.json(user);
         } catch (error) {
-            // If there's an error while fetching the user, return it
-            console.error("Error while fetching the user: ", error); // Log the error
+            console.error("Error while fetching the user: ", error); 
             res.status(500).json({
                 message: "Server error",
                 error: error.message,
@@ -178,30 +169,24 @@ module.exports = {
     // the user is updated by the id
     // put('/api/user/:id')
     async updateUser({ body, params }, res) {
-        // Create the userToUpdate object directly from the request body
         let userToUpdate = { ...body };
 
-        // Remove password field from userToUpdate to avoid overwriting existing password
         delete userToUpdate.password;
 
         const user = await User.findOneAndUpdate(
-            // Find the user by the id
             { _id: params.id },
             userToUpdate,
-            // Return the updated user
             { new: true }
         );
 
-        // if the user is not updated, return an error
         if (!user)
             return res.status(400).json({ message: "Unable to update user" });
 
-        // Return the user
         res.status(200).json({
             _id: user._id,
             email: user.email,
             name: user.name,
-            phone: user.phone,
+            phoneNumber: user.phoneNumber,
             address: user.address,
             profileImage: user.profileImage,
         });
@@ -210,7 +195,6 @@ module.exports = {
     //post('/api/users/auth)
     // user login
     async authUser({ body }, res) {
-        // Find the user by the email address
         const user = await User.findOne({
             email: body.email,
         }).populate("shoppingCart");
@@ -220,7 +204,6 @@ module.exports = {
                 .status(400)
                 .json({ message: "Unable to authenticate user" });
 
-        // We want to verify the password & kick them out if it fails
         const isValid = await bcrypt.compare(body.password, user.password);
 
         if (!isValid)
@@ -346,7 +329,6 @@ module.exports = {
             description,
         } = body;
 
-        // Find the user by the id
         const user = await User.findById(userId).populate("shoppingCart");
 
         if (!user) {
@@ -354,7 +336,6 @@ module.exports = {
         }
 
         if (!user.shoppingCart) {
-            // No shopping cart associated with the user
             return res
                 .status(400)
                 .json({ message: "No shopping cart associated with the user" });
@@ -391,7 +372,6 @@ module.exports = {
                 .json({ message: "Invalid or missing cover_i" });
         }
 
-        // Check if the first_publish_year is a number or can be converted to a number
         const publishYear = Number(first_publish_year);
         if (isNaN(publishYear)) {
             return res
@@ -403,7 +383,6 @@ module.exports = {
             return res.status(400).json({ message: "Invalid or missing key" });
         }
 
-        // Construct the book object
         const newBook = {
             title,
             author,
@@ -414,10 +393,8 @@ module.exports = {
             description: description || "",
         };
 
-        // Add the book to the ShoppingCart
         user.shoppingCart.books.push(newBook);
 
-        // Save the shopping cart
         try {
             await user.shoppingCart.save();
         } catch (error) {
@@ -429,7 +406,6 @@ module.exports = {
                 });
         }
 
-        // Return the updated shopping cart
         res.status(200).json(user.shoppingCart);
     },
 
@@ -438,14 +414,12 @@ module.exports = {
     async removeFromCart({ body, params }, res) {
         const { bookId } = body;
 
-        // Data validation
         if (!bookId || typeof bookId !== "string") {
             return res
                 .status(400)
                 .json({ message: "Invalid or missing bookId" });
         }
 
-        // Find the user by the id
         const user = await User.findById(params.userId).populate(
             "shoppingCart"
         );
@@ -460,10 +434,9 @@ module.exports = {
                 .json({ message: "No shopping cart associated with the user" });
         }
 
-        // Find the book in the shopping cart
         const bookIndex = user.shoppingCart.books.findIndex(
             (book) => book._id.toString() === bookId
-        ); // changed
+        ); 
 
         if (bookIndex === -1) {
             return res
@@ -471,10 +444,8 @@ module.exports = {
                 .json({ message: "Book not found in the cart" });
         }
 
-        // Remove the book from the ShoppingCart
         user.shoppingCart.books.splice(bookIndex, 1);
 
-        // Save the shopping cart
         try {
             await user.shoppingCart.save();
         } catch (error) {
@@ -485,7 +456,6 @@ module.exports = {
                 });
         }
 
-        // Return the updated shopping cart
         res.status(200).json(user.shoppingCart);
     },
 
@@ -493,40 +463,31 @@ module.exports = {
     // user/:userId/cart/clear'
     async clearShoppingCart(req, res) {
         try {
-            // Assuming the user's id is being sent as a param in the request
             const userId = req.params.userId;
 
-            // Fetch the user from the database and populate the 'shoppingCart' field
             const user = await User.findById(userId).populate("shoppingCart");
 
-            // If user not found, return an error
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
 
-            // If the user doesn't have a shopping cart, return an error
             if (!user.shoppingCart) {
                 return res
                     .status(404)
                     .json({ message: "No shopping cart found for user" });
             }
 
-            // Clear the books from the ShoppingCart
             user.shoppingCart.books = [];
 
-            // Save the ShoppingCart
             const updatedCart = await user.shoppingCart.save();
 
-            // If the ShoppingCart is not updated, return an error
             if (!updatedCart)
                 return res
                     .status(400)
                     .json({ message: "Unable to update shopping cart" });
 
-            // Return the ShoppingCart
             res.status(200).json(updatedCart);
         } catch (error) {
-            // Log the error and send a server error status code
             console.error(error);
             res.status(500).json({ message: "Server error" });
         }
@@ -544,7 +505,6 @@ module.exports = {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Add this code
         if (!user.email) {
             console.log("User email not found");
             return res.status(400).json({ message: "User email is required" });

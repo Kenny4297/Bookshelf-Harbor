@@ -1,4 +1,3 @@
-const express = require("express");
 const mongoose = require("mongoose");
 const Orders = require("../models/Orders");
 
@@ -8,15 +7,12 @@ module.exports = {
         try {
             const userId = req.params.userId;
 
-            // Fetch all orders for the user from the database
             let orders = await Orders.find({ user: userId });
 
-            // If no orders found, return an empty array
             if (!orders) {
                 orders = [];
             }
 
-            // Return the orders
             res.status(200).json(orders);
         } catch (error) {
             console.error(error);
@@ -66,12 +62,10 @@ module.exports = {
         try {
             const userId = req.params.userId;
 
-            // Fetch the latest order for the user from the database
             let order = await Orders.findOne({ user: userId }).sort({
                 date: -1,
             });
 
-            // If no order found, return a not found response
             if (!order) {
                 return res
                     .status(404)

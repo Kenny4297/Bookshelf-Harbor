@@ -396,27 +396,7 @@ element.style {
 /* Profile / Account */
 .account-container {
   display: flex;
-}
-
-@media (max-width: 780px) {
-  .account-container {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  .form-container {
-    margin-left: 0rem;
-    padding: 0rem 0rem !important;
-    width: auto;
-    /* border: 2px solid green; */
-    color: blue;
-  }
-}
-
-@media (max-width: 470px) {
-  .form-container input {
-    width: 15rem !important;
-  }
+  margin-top:3rem;
 }
 
 .form-container {
@@ -485,9 +465,23 @@ element.style {
 }
 
 @media (max-width: 780px) {
-  .profile-image-container {
-    margin: 0 auto;
-    width: 25rem;
+  .account-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .form-container {
+    margin-left: 0rem;
+    padding: 0rem 0rem !important;
+    width: auto;
+    /* border: 2px solid green; */
+    color: blue;
+  }
+}
+
+@media (max-width: 470px) {
+  .form-container input {
+    width: 15rem !important;
   }
 }
 
@@ -533,18 +527,6 @@ element.style {
   /* border: 2px solid red; */
 }
 
-@media (max-width: 520px ) {
-  .update-profile-button-container {
-    width: 10rem;
-    /* border:2px solid green; */
-  }
-  .update-profile-button {
-    /* border: 2px solid blue; */
-    width: 100%;
-    font-size: 1rem;
-  }
-}
-
 .update-profile-button-container {
   display: flex;  
   flex-direction: end;
@@ -561,6 +543,24 @@ element.style {
   font-weight: bold;
 }
 
+@media (max-width: 520px ) {
+  .update-profile-button-container {
+    width: 10rem;
+    /* border:2px solid green; */
+  }
+  .update-profile-button {
+    /* border: 2px solid blue; */
+    width: 100%;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 780px) {
+  .profile-image-container {
+    margin: 0 auto;
+    width: 25rem;
+  }
+}
 
 
 

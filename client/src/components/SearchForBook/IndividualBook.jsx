@@ -10,6 +10,12 @@ function IndividualBook() {
     const [page, setPage] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
 
+    // Making sure that each new search is always on the first page
+    useEffect(() => {
+        setPage(0);
+    }, [searchTerm]);
+    
+
     useEffect(() => {
     if (searchTerm) {
         setIsLoading(true);

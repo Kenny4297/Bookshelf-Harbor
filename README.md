@@ -1,17 +1,15 @@
 # **Nile**
+<img src="./client/src/components/assets/images/fullPageScreenshot.png" alt="Screenshot for the Home page" width="1000"/>
 
-![Nile](./client/src/components/assets/images/fullPageScreenshot.png)
 ## **Table of Contents**
 - [License](#license)
 - [Login Page](#login-page)
-- [Lesson Example](#lesson-example)
 - [Shopping Cart](#shopping-cart)
 - [Checkout](#checkout)
 - [Purpose and Inspiration](#purpose-and-inspiration)
-- [Unique Technologies](#technologies)
+- [Unique Technologies](#unique-technologies)
 - [Technologies Used](#technologies-used)
 - [Deployment](#Deployment)
-- [Testing](#testing)
 
 ## **License**
 This project is licensed under the MIT license.
@@ -20,18 +18,21 @@ This project is licensed under the MIT license.
 Nile is a state-of-the-art e-commerce platform where book-lovers can explore and 'buy' from a vast range of titles. Each day, users are introduced to an array of 'featured books', providing a dynamic and engaging experience. Nile prioritizes inclusivity and efficiency by adhering to Web Content Accessibility Guidelines (WCAG) and use of semantic HTML. Moreover, Nile ensures secure transactions with Stripe payments and offers personalized user experiences, including profile image upload and order history tracking. Nile is not just an e-commerce platform; it's a testament to how modern web development can merge with user-centric design to create compelling digital experiences.
 
 ## **Login Page**
-![](./client/src/components/assets/images/loginScreenshot.png)
+<img src="./client/src/components/assets/images/loginScreenshot.png" alt="Screenshot for the login page" width="1000"/>
 
 ## **Shopping Cart**
-![](./client/src/components/Assets/images/shoppingCartScreenShot.png)
-The user can choose to remove, view, and proceed to the checkout page after selected books to be added to their shopping cart.
+<img src="./client/src/components/assets/images/shoppingCartScreenShot.png" alt="Screenshot for the shopping cart page" width="1000"/>
+
+Users can select books to add to their shopping cart, where they have the option to review their selection, remove items, or proceed to the checkout page.
 
 ## **Checkout**
-![](./client/src/components/Assets/images/checkoutScreenshot.png)
-Using Stripe, the user can enter their credit card information (which shouldn't bea real one!) and have Stripe take care of the processing. They are then routed to a "Thank You" page with their order number and the fake option of having an email receipt sent to them.
+<img src="./client/src/components/assets/images/checkoutScreenshot.png" alt="Screenshot for the checkout page" width="1000"/>
+
+Using Stripe, the user can enter their fake credit card information and have Stripe take care of the processing. They are then routed to a "Thank You" page with their order number and an option of having a fake email receipt sent to them.
 
 ## **Book Results**
-![](./client/src/components/Assets/images/bookResultsScreenshot.png)
+<img src="./client/src/components/assets/images/bookResultsScreenshot.png" alt="Screenshot for the book results" width="1000"/>
+
 The user can view all the books either by category or by title, and select the one that looks most appealing to them.
 
 ## **Purpose and Inspiration**
@@ -45,16 +46,23 @@ So, at the heart of it all, Nile is a reflection of learning, growth, and a lot 
 **Stripe**
 Stripe is a renowned global payment processing service known for its seamless and secure digital transactions. By integrating Stripe, we ensured that our platform could handle all the complexities of online payment, from securely storing card information to processing payments in real-time. It's also packed with features such as fraud detection and currency conversion, making it an invaluable tool for any e-commerce project. Notably, Stripe's detailed documentation and React-specific libraries made it a breeze to implement in our tech stack.
 
-## **Open Library API**
+**Open Library API**
 Open Library API is a freely available, open-source API that provided us access to a vast database of books. By leveraging this API, Nile offers its users a broad selection of titles to browse and purchase. Users can search for books based on different criteria like author name, book title, or subject. The Open Library API is also used for fetching book cover images and other detailed information about each book, enhancing the browsing experience for our users. Its easy-to-use endpoints and comprehensive documentation played a key role in building the book browsing feature of Nile.
 
 ## **Technologies Used**
+Front End
 * React.js
 * JavaScript
 * CSS
 * HTML
 * Stripe
 * Open Library API
+
+Back End
+* MongoDB
+* Mongoose ORM
+* bcrypt
+
 
 ## **Deployment**
 [Deployment Link](https://learn-c-plus-plus.netlify.app/)

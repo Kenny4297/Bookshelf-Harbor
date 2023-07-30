@@ -19,7 +19,7 @@ const Header = () => {
         navigate("/");
     };
 
-    //Here we are keeping track of the data in the search bar. If it changes, the state will be updated
+    // Here we are keeping track of the data in the search bar. If it changes, the state will be updated
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleInputChange = (event) => {

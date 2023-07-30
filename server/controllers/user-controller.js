@@ -506,7 +506,6 @@ module.exports = {
         }
 
         if (!user.email) {
-            console.log("User email not found");
             return res.status(400).json({ message: "User email is required" });
         }
 

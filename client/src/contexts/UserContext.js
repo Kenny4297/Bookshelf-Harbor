@@ -36,7 +36,6 @@ export const UserProvider = ({ children }) => {
                 }));
             } catch (error) {
                 console.error(error);
-                console.log("Yup it's this error!")
             }
         };
 

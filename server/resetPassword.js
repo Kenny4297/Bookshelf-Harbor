@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
 
+/* This file is to reset the password of the testing user, 'c'. */ 
+
 // MongoDB connection setup
 mongoose.connect('mongodb://127.0.0.1:27017/sampleapp', {
     useNewUrlParser: true,

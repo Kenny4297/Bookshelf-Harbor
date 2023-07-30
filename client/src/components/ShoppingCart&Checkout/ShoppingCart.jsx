@@ -51,13 +51,12 @@ const ShoppingCart = () => {
         };
 
         fetchShoppingCartData();
-    }, [userId, user?.shoppingCart]); // Adding the optional chaining operator '?'
+    }, [userId, user?.shoppingCart]); 
 
     const removeFromCart = (bookId) => {
         axios
             .post(`/api/user/${userId}/cart/remove`, { bookId })
             .then((response) => {
-                console.log("Response from server: ", response.data); // Add this line
 
                 // Filter out the removed book from your local state by comparing book ID
                 const updatedCartItems = cartItems.filter(

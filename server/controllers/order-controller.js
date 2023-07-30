@@ -71,9 +71,6 @@ module.exports = {
                     .status(404)
                     .json({ message: "No orders found for this user" });
             }
-
-            // Return the order
-            console.log("This is the last order:", order);
             res.status(200).json(order);
         } catch (error) {
             console.error(error);

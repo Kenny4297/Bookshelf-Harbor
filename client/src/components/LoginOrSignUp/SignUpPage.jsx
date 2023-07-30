@@ -55,8 +55,8 @@ const SignUpPage = () => {
                 if (data && !data.err && data.data && data.data.token) {
                     setSignUpResult("success");
                     localStorage.setItem("auth-token", data.data.token);
-                    setUser(data.data.user); // Update the user context
-                    navigate(location.state?.from || '/'); // Use location state here
+                    setUser(data.data.user); 
+                    navigate(location.state?.from || '/'); 
                 } else {
                     setSignUpResult("fail");
                 }

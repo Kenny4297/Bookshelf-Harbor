@@ -165,7 +165,7 @@ const CheckoutFormInner = () => {
         };
 
         fetchShoppingCartData();
-    }, [userId, user?.shoppingCart]); // Adding the optional chaining operator '?'
+    }, [userId, user?.shoppingCart]); 
 
     const totals = calculateTotals();
 

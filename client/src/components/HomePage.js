@@ -13,31 +13,33 @@ const HomePage = () => {
     const [isImageLoaded, setImageLoaded] = useState(false);
 
     useEffect(() => {
-        if (user && user._id) {
-            axios
-                .get(`/api/user/${user._id}/cart/data`)
-                .then((response) => {
-
+        const fetchCartData = async () => {
+            if (user && user._id) {
+                try {
+                    const response = await axios.get(`/api/user/${user._id}/cart/data`);
                     const { shoppingCart } = response.data;
                     if (shoppingCart === null) {
-                        // Check if shoppingCart is null
-                        // If the shopping cart doesn't exist, create a new one
-                        axios
-                            .post(`/api/user/${user._id}/cart/create`)
-                            .then((response) => {
-                                const { shoppingCart } = response.data;
-                                setUser({ ...user, shoppingCart });
-                            })
-                            .catch((error) => console.error(error));
+                        try {
+                            const response = await axios.post(`/api/user/${user._id}/cart/create`);
+                            const { shoppingCart } = response.data;
+                            setUser({ ...user, shoppingCart });
+                        } catch (error) {
+                            console.error(error);
+                        }
                     } else {
-                        // If shopping cart exists, set the shopping cart in the user context
                         setUser({ ...user, shoppingCart });
                     }
-                })
-                .catch((error) => console.error(error));
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         }
+    
+        fetchCartData();
+    
         // eslint-disable-next-line
     }, [user && user._id]);
+    
 
     useEffect(() => {
         const img = new Image();

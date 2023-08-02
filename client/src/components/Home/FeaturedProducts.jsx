@@ -4,6 +4,10 @@ import { Card, Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { HiArrowRight, HiArrowLeft } from "react-icons/hi";
 
+/*
+The 'featured books' will be stored in local storage due to the low amount of data and the absence of any personal information.
+*/
+
 const useWindowSize = () => {
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,

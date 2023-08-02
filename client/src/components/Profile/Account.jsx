@@ -36,7 +36,6 @@ const Account = () => {
 
     const getUserData = useCallback(async () => {
         const resp = await Axios.get(`/api/user/${userId}`);
-        console.log(resp.data);
         if (resp.data) {
             setFormData(resp.data);
             if (resp.data.profileImage) {

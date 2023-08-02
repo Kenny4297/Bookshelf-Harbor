@@ -6,6 +6,7 @@ import Loading from "../Loading";
 import axios from 'axios';
 
 const LoginPage = () => {
+    // I create a variable for the default state so I don't have to write it out each time the form resets
     const defForm = { email: "", password: "" };
     const [formData, setFormData] = useState(defForm);
     const [loginResult, setLoginResult] = useState("");

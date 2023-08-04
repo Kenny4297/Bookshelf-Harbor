@@ -5,7 +5,7 @@ const { ShoppingCart } = require("../models");
 require("dotenv").config();
 
 module.exports = {
-    //post('/api/user')
+    // post('/api/user')
     // create user
     async createUser({ body }, res) {
         const { email, password, name, phone, address, profileImage } = body;

@@ -1664,3 +1664,20 @@ element.style {
   width: 80%;
   margin: 0 auto;
 }
+
+/*  === Scroll Bar === */
+/* scroll bar style  */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--white-ash);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--light-teak);
+  border-radius: 50px;
+}

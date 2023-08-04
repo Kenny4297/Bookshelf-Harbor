@@ -4,7 +4,7 @@ import { UserContext } from "../../contexts/UserContext";
 import axios from "axios";
 import Loading from "../Loading";
 
-/* Many book descriptions contain information that is not relevant to the description of the book, such as markdown, notes to the developer, and a lot of strange symbols. The following function tried to remove any strange instances that do not pertain to the books description*/
+/* Many book descriptions contain information that is not relevant to the description of the book, such as markdown, notes to the developer, and a lot of strange symbols. The following function tries to remove any strange instances that do not pertain to the books description */
 const cutOffAtSpecialCharacter = (text) => {
     if (!text) {
         return "";
@@ -21,7 +21,7 @@ const cutOffAtSpecialCharacter = (text) => {
             if (char === "-") {
                 consecutiveDashesCount++;
                 if (consecutiveDashesCount >= 3) {
-                    pos = i - 2; 
+                    pos = i - 2;
                     break;
                 }
             } else {
@@ -29,7 +29,7 @@ const cutOffAtSpecialCharacter = (text) => {
                 break;
             }
         } else {
-            consecutiveDashesCount = 0; 
+            consecutiveDashesCount = 0;
         }
     }
 
@@ -52,8 +52,8 @@ const BookDetailsPage = () => {
     const [, setCartItems] = useState(user?.shoppingCart?.books || []);
     const [isAddedToCart, setIsAddedToCart] = useState(false);
 
-    const MIN_PRICE = 5.0; 
-    const MAX_PRICE = 20.0; 
+    const MIN_PRICE = 5.0;
+    const MAX_PRICE = 20.0;
 
     const calculateBookPrice = (title) => {
         const titleLength = title.length;
@@ -64,85 +64,90 @@ const BookDetailsPage = () => {
     };
 
     useEffect(() => {
-        const url = key.startsWith("/works/")
-            ? `https://openlibrary.org${key}.json`
-            : `https://openlibrary.org/works/${key}.json`;
-        fetch(url)
-            .then((response) => {
+        const fetchData = async () => {
+            const url = key.startsWith("/works/") ? `https://openlibrary.org${key}.json` : `https://openlibrary.org/works/${key}.json`;
+
+            try {
+                const response = await fetch(url);
+
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
-                return response.json();
-            })
-            .then((data) => {
+
+                const data = await response.json();
+
                 if (data) {
                     setBook(data);
                 }
-            })
-            .catch((error) => console.log(error));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchData();
     }, [key]);
-    
+
     useEffect(() => {
         setCartItems(user?.shoppingCart?.books || []);
     }, [user]);
-    
+
     useEffect(() => {
-        if (book) {
-            if (book.created) {
-                const createdDate = new Date(book.created.value);
-                const options = { month: "long", day: "numeric", year: "numeric" };
-                const formattedDate = createdDate.toLocaleDateString(
-                    "en-US",
-                    options
-                );
-                setFirstPublishDate(formattedDate);
-            }
+        const fetchData = async () => {
+            if (book) {
+                if (book.created) {
+                    const createdDate = new Date(book.created.value);
+                    const options = { month: "long", day: "numeric", year: "numeric" };
+                    const formattedDate = createdDate.toLocaleDateString("en-US", options);
+                    setFirstPublishDate(formattedDate);
+                }
     
-            if (book.authors) {
-                const fetchAuthor = (author) => {
-                    const authorKey = author.author.key;
-                    return fetch(`https://openlibrary.org${authorKey}.json`)
-                        .then((response) => {
+                if (book.authors) {
+                    const fetchAuthor = async (author) => {
+                        const authorKey = author.author.key;
+                        try {
+                            const response = await fetch(`https://openlibrary.org${authorKey}.json`);
                             if (!response.ok) {
                                 throw new Error("Network response was not ok");
                             }
                             return response.json();
-                        })
-                        .catch((error) => console.log(error));
-                };
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    };
     
-                Promise.all(book.authors.map(fetchAuthor))
-                    .then((authors) => {
+                    try {
+                        const authors = await Promise.all(book.authors.map(fetchAuthor));
                         setAuthors(authors.filter(Boolean));
-                    })
-                    .catch((error) => console.log(error));
-            }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
     
-            if (book.description) {
-                let bookDescription =
-                    typeof book.description === "object"
-                        ? book.description.value
-                        : book.description;
-                setDescription(cutOffAtSpecialCharacter(bookDescription));
-            }
-            
-            const url = `https://openlibrary.org/search.json?title=${book.title}`;
-            fetch(url)
-                .then((response) => response.json())
-                .then((data) => {
+                if (book.description) {
+                    let bookDescription = typeof book.description === "object" ? book.description.value : book.description;
+                    setDescription(cutOffAtSpecialCharacter(bookDescription));
+                }
+    
+                const url = `https://openlibrary.org/search.json?title=${book.title}`;
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
                     setCover(data);
-                })
-                .catch((error) => {
+                } catch (error) {
                     console.error(error);
-                });
-        }
+                };
+            }
+        };
+        
+        fetchData();
     }, [book]);
+    
 
     if (!book) {
         return <div style={{ color: "white" }}>Loading...</div>;
     }
 
-    const addToCart = () => {
+    const addToCart = async () => {
         const bookToAdd = {
             title: book.title,
             author: authors.map((author) => author.name),
@@ -150,93 +155,55 @@ const BookDetailsPage = () => {
             cover_i: cover.docs[0].cover_i,
             price: parseFloat(calculateBookPrice(book.title)),
             key: book.key.slice(7),
-            description:
-                typeof description === "object"
-                    ? description.value.split("Contains:")[0].trim()
-                    : description,
+            description: typeof description === "object" ? description.value.split("Contains:")[0].trim() : description,
         };
     
-        axios
-            .post(`/api/user/${user._id}/cart`, bookToAdd)
-            .then((response) => {
-                setCartItems((prevItems) => [...prevItems, bookToAdd]);
-                setIsAddedToCart(true);
-            })
-            .catch((error) => {
-                console.error(error);
-                alert("There was an error adding the book to the cart.");
-            });
+        try {
+            await axios.post(`/api/user/${user._id}/cart`, bookToAdd);
+            setCartItems((prevItems) => [...prevItems, bookToAdd]);
+            setIsAddedToCart(true);
+        } catch (error) {
+            console.error(error);
+            alert("There was an error adding the book to the cart.");
+        }
     };
     
-    
+
     return (
         <>
             {!cover ? (
                 <Loading />
             ) : (
-                <section
-                    className="book-details-page-container"
-                    aria-label="Book Details Page"
-                >
+                <section className="book-details-page-container" aria-label="Book Details Page">
                     <section className="book-details-text-section">
                         <h2 className="book-details-page-h2">{book.title}</h2>
                         <p className="book-details-title">
                             Author:{" "}
                             {authors.length > 0 &&
                                 authors.map((author, index) => (
-                                    <span
-                                        className="individual-book-data-response"
-                                        key={author.key}
-                                    >
+                                    <span className="individual-book-data-response" key={author.key}>
                                         {author.name}
                                         {index < authors.length - 1 ? ", " : ""}
                                     </span>
                                 ))}
                         </p>
                         <p className="book-details-title">
-                            Description:{" "}
-                            <span className="individual-book-data-response">
-                                {description || "No description available"}
-                            </span>
+                            Description: <span className="individual-book-data-response">{description || "No description available"}</span>
                         </p>
-                        <p className="book-details-title book-details-price">
-                            Book Price: ${calculateBookPrice(book.title)}
-                        </p>
+                        <p className="book-details-title book-details-price">Book Price: ${calculateBookPrice(book.title)}</p>
                     </section>
 
                     <section>
-                        <section
-                            className="book-details-image-section"
-                            aria-label="Cover Image"
-                        >
-                            {cover ? (
-                                <img
-                                    className="book-details-image"
-                                    src={`https://covers.openlibrary.org/b/id/${cover.docs[0].cover_i}-L.jpg`}
-                                    alt={`Cover for ${book.title}`}
-                                />
-                            ) : (
-                                <p>Loading cover image...</p>
-                            )}
+                        <section className="book-details-image-section" aria-label="Cover Image">
+                            {cover ? <img className="book-details-image" src={`https://covers.openlibrary.org/b/id/${cover.docs[0].cover_i}-L.jpg`} alt={`Cover for ${book.title}`} /> : <p>Loading cover image...</p>}
                         </section>
                     </section>
 
-                    <nav
-                        className="individual-book-add-to-cart"
-                        aria-label="Add to Cart Section"
-                    >
-                        <button
-                            className="add-to-cart-button"
-                            onClick={addToCart}
-                            aria-label="Add to Cart Button"
-                        >
+                    <nav className="individual-book-add-to-cart" aria-label="Add to Cart Section">
+                        <button className="add-to-cart-button" onClick={addToCart} aria-label="Add to Cart Button">
                             Add to Cart
                         </button>
-                        {isAddedToCart && (
-                            <p style={{ color: "var(--grey-wood)" }}>
-                                Book Added!
-                            </p>
-                        )}
+                        {isAddedToCart && <p style={{ color: "var(--grey-wood)" }}>Book Added!</p>}
                     </nav>
                 </section>
             )}

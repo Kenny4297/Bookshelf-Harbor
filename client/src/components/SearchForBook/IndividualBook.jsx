@@ -14,34 +14,28 @@ function IndividualBook() {
     useEffect(() => {
         setPage(0);
     }, [searchTerm]);
-    
 
     useEffect(() => {
-    if (searchTerm) {
-        setIsLoading(true);
-        fetch(
-            `https://openlibrary.org/search.json?title=${searchTerm}&page=${
-                page + 1
-            }&limit=20`
-        )
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
+        const fetchBooks = async () => {
+            if (searchTerm) {
+                setIsLoading(true);
+                try {
+                    const response = await fetch(`https://openlibrary.org/search.json?title=${searchTerm}&page=${page + 1}&limit=20`);
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    const data = await response.json();
+                    setBook(data.docs || []);
+                } catch (error) {
+                    console.log(error);
+                    setBook([]);
                 }
-                return response.json();
-            })
-            .then((data) => {
-                setBook(data.docs || []);
                 setIsLoading(false);
-            })
-            .catch((error) => {
-                console.log(error);
-                setBook([]); 
-                setIsLoading(false);
-            });
-        }
-    }, [searchTerm, page]);
+            }
+        };
 
+        fetchBooks();
+    }, [searchTerm, page]);
 
     const handleNextPage = () => {
         setPage(page + 1);
@@ -60,11 +54,12 @@ function IndividualBook() {
     }
 
     if (book && book.length === 0) {
-        return <>
-        <p className="missing-book-message">Sorry, but the book you searched for doesn't exist in our system.</p>
-        <p className="missing-book-message-2">Try again with another book!</p>
-
-        </>
+        return (
+            <>
+                <p className="missing-book-message">Sorry, but the book you searched for doesn't exist in our system.</p>
+                <p className="missing-book-message-2">Try again with another book!</p>
+            </>
+        );
     }
 
     // Filter books without an image cover. Wo don't want any books without a cover to be shown!
@@ -77,35 +72,15 @@ function IndividualBook() {
             ) : (
                 <section className="book-container" aria-label="Book results">
                     <h2 className="book-results-for-h2">
-                        Results for{" "}
-                        <span className="search-term-results">
-                            '{searchTerm}'
-                        </span>
+                        Results for <span className="search-term-results">'{searchTerm}'</span>
                     </h2>
                     <div className="book-grid" role="list">
                         {filteredBooks.map((bookItem, index) => (
-                            <Link
-                                to={`/books/works/${bookItem.key.replace(
-                                    "/works/",
-                                    ""
-                                )}`}
-                                className="book-card"
-                                key={index}
-                                role="listitem"
-                            >
+                            <Link to={`/books/works/${bookItem.key.replace("/works/", "")}`} className="book-card" key={index} role="listitem">
                                 <div className="book-card-content">
-                                    <img
-                                        className="book-card-image"
-                                        src={`https://covers.openlibrary.org/b/id/${bookItem.cover_i}-M.jpg`}
-                                        alt="book cover"
-                                    />
-                                    <h3 className="book-card-title">
-                                        {bookItem.title}
-                                    </h3>
-                                    <p className="book-card-author">
-                                        {bookItem.author_name &&
-                                            bookItem.author_name.join(", ")}
-                                    </p>
+                                    <img className="book-card-image" src={`https://covers.openlibrary.org/b/id/${bookItem.cover_i}-M.jpg`} alt="book cover" />
+                                    <h3 className="book-card-title">{bookItem.title}</h3>
+                                    <p className="book-card-author">{bookItem.author_name && bookItem.author_name.join(", ")}</p>
                                 </div>
                             </Link>
                         ))}
@@ -119,24 +94,13 @@ function IndividualBook() {
                         }}
                         aria-label="Page navigation"
                     >
-                        <button
-                            className="individual-book-button"
-                            onClick={handlePrevPage}
-                            disabled={page === 0}
-                            aria-label="Previous page"
-                        >
+                        <button className="individual-book-button" onClick={handlePrevPage} disabled={page === 0} aria-label="Previous page">
                             Previous Page
                         </button>
 
-                        <p style={{ color: "var(--grey-wood)" }}>
-                            page: {page + 1}
-                        </p>
+                        <p style={{ color: "var(--grey-wood)" }}>page: {page + 1}</p>
 
-                        <button
-                            className="individual-book-button"
-                            onClick={handleNextPage}
-                            aria-label="Next page"
-                        >
+                        <button className="individual-book-button" onClick={handleNextPage} aria-label="Next page">
                             Next Page
                         </button>
                     </nav>

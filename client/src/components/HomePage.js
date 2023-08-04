@@ -75,7 +75,7 @@ const HomePage = () => {
 
 export default HomePage;
 
-// I'm using styled-components here in order to more accurately show the full component when the image has loaded.
+// I'm using styled-components here in order to more accurately show the full component when the background image has loaded.
 
 const HeroContainer = styled.section`
     display: flex;

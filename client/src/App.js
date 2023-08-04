@@ -19,6 +19,7 @@ const RouterContent = ({ setSearchTerm, searchTerm }) => {
   
   return (
     <div>
+      {/* Making sure that the header is not shown on the login or sign up page */}
       {location.pathname !== '/login' && location.pathname !== '/signUp' && <Header setSearchTerm={setSearchTerm} />}
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -48,28 +49,28 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const authToken = localStorage.getItem("auth-token");
+    const fetchUser = async () => {
+      const authToken = localStorage.getItem("auth-token");
   
-    if (authToken && !user) {
-      axios
-        .get(`/api/user/me`, {
-          headers: {
-            "auth-token": authToken
-          }
-        })
-        .then((response) => {
+      if (authToken && !user) {
+        try {
+          const response = await axios.get(`/api/user/me`, {
+            headers: {
+              "auth-token": authToken
+            }
+          });
           setUser(response.data);
-          setIsLoading(false); 
-        })
-        .catch((error) => {
+        } catch (error) {
           console.error(error);
-          setIsLoading(false); 
-        });
-    } else {
-      setIsLoading(false); 
-    }
+        }
+      }
+      setIsLoading(false);
+    };
+  
+    fetchUser();
     // eslint-disable-next-line
   }, []);
+  
 
   if (isLoading) {
     return <Loading />;

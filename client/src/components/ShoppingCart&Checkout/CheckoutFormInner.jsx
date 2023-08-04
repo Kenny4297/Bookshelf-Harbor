@@ -57,6 +57,8 @@ const CheckoutFormInner = () => {
         };
     };
 
+    const totals = calculateTotals();
+
     const clearShoppingCart = async () => {
         try {
             const response = await axios.post(`/api/user/${userId}/cart/clear`);
@@ -167,7 +169,6 @@ const CheckoutFormInner = () => {
         fetchShoppingCartData();
     }, [userId, user?.shoppingCart]); 
 
-    const totals = calculateTotals();
 
     return (
         <section className="checkout-container" aria-labelledby="checkout-heading">

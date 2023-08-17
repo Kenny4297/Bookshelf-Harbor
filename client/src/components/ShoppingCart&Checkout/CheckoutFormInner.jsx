@@ -320,7 +320,7 @@ const CheckoutFormInner = () => {
                         </section>
                     </>
                 ) : (
-                    <p>Your shopping cart is empty.</p>
+                    <p style={{color: 'var(--dark-wood)', margin: '0 auto'}}>Your shopping cart is empty.</p>
                 )}
             </section>
         </section>

@@ -1050,7 +1050,7 @@ element.style {
 .categories-page-container {
   background-color: var(--grey-wood);
   padding-bottom: 3rem;
-  border: 1px solid green
+  /* border: 1px solid green; */
 }
 
 .browse-by-categories {

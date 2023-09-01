@@ -10,7 +10,7 @@ The 'featured books' will be stored in local storage due to the low amount of da
 
 const useWindowSize = () => {
     const [windowSize, setWindowSize] = useState({
-        width: window.innerWidth,
+        width: window.innerWidth
     });
 
     useEffect(() => {

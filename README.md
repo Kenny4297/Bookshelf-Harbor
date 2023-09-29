@@ -3,6 +3,7 @@
 
 ## **Table of Contents**
 - [License](#license)
+- [Project Overview](#project-overview)
 - [Login Page](#login-page)
 - [Shopping Cart](#shopping-cart)
 - [Checkout](#checkout)

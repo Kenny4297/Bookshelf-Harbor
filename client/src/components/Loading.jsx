@@ -14,14 +14,13 @@ const LoadingScreen = () => {
       <p
         style={{
           fontSize: "3rem",
-          // color: "var(--grey-wood)",
-          color:'blue',
+          color: "var(--grey-wood)",
           position: "absolute",
           top: "50%",
           transform: "translateY(-50%)",
         }}
       >
-        
+        Loading...
       </p>
     </div>
   );
